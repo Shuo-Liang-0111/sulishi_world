@@ -87,6 +87,39 @@ for ob in collection.objects:
             if node.type=='TEX_IMAGE' and node.image and not node.image.packed_file and not Path(bpy.path.abspath(node.image.filepath)).is_file():missing.append(node.image.name)
 assert not missing,missing
 rec={'version':scene['version'],'objects':len(collection.objects),'footprint_area_m2':float(area),'roof_ln02_m':float(ro[:,2].max()+400),'floor_ln02_m_inferred':float(fo[:,2].max()+400),'counter_support':counter_support,'hatch_clearance':clearance,'sink_aperture_clear':True,'staff_threshold_rise_m':float(threshold_rise),'cameras_on_rebuilt_ground':True,'original_photo_nodes_retained':2039,'missing_images':missing,'geometry_checks_passed':True,'natural_use_verified':False,'runtime_enabled':False,'visual_acceptance':False}
+if scene['version'] in ['G1_020r1','G1_020r2']:
+    seams=[]
+    for a,b in [(2,3),(3,4),(6,7)]:
+        def top(idx):
+            name=f'UR_COUNTER_{idx}_WORKTOP' if idx in [2,3,4] else f'UR_BACK_WORKTOP_{idx}'
+            return world_vertices(bpy.data.objects[name])[:4]
+        aa,bb=top(a),top(b)
+        gaps=[float(np.linalg.norm(aa[x]-bb[y])) for x,y in [(1,0),(2,3)]]
+        assert all(.0015<g<.0022 for g in gaps),(a,b,gaps)
+        seams.append({'edges':[a,b],'end_gap_m':gaps})
+    stays=[]
+    for idx in [2,3,4]:
+        pivot=bpy.data.objects[f'UR_HATCH_{idx}_PIVOT']
+        for side in [0,1]:
+            data=json.loads(pivot[f'stay_{side}'])
+            barrel=world_vertices(bpy.data.objects[f'UR_STAY_{idx}_{side}_BARREL'])
+            rod=world_vertices(bpy.data.objects[f'UR_STAY_{idx}_{side}_ROD'])
+            error=max(np.linalg.norm(barrel[:20].mean(0)-data['wall_anchor_local']),np.linalg.norm(rod[20:40].mean(0)-data['hatch_anchor_open_local']))
+            assert error<.0001,error
+            stays.append({'hatch':idx,'side':side,'anchor_error_m':float(error)})
+    cowl=bpy.data.objects['UR_ROOF_EXHAUST_COWL']
+    assert min(p.normal.z for p in list(cowl.data.polygons)[:64])>.99
+    cowl_support=[]
+    for idx in range(3):
+        ob=bpy.data.objects[f'UR_ROOF_COWL_STAY_{idx}'];vv=world_vertices(ob);xy=vv[:1,:2].mean(0)
+        hit,point,_,_=cowl.ray_cast(Vector((*xy,roof+1)),Vector((0,0,-1)))
+        assert hit
+        delta=float(vv[:,2].max()-point.z)
+        assert -.004<delta<.001,delta
+        assert all(p.area>1e-12 for p in ob.data.polygons)
+        cowl_support.append({'stay':idx,'top_relative_to_cowl_outer_surface_m':delta})
+    assert bpy.data.objects['UR_FRIDGE_BODY'].data.materials[0].name=='UR | aged warm pale enamel'
+    rec['refinement_checks']={'counter_seams':seams,'six_stay_anchor_checks':stays,'cowl_support':cowl_support,'cowl_top_faces_outward':True,'fridge_coating_not_weathered':True}
 out=ROOT/'evidence'/scene['version'];out.mkdir(exist_ok=True)
 (out/'kiosk_geometry_check.json').write_text(json.dumps(rec,indent=2),encoding='utf-8')
 print(json.dumps(rec))
