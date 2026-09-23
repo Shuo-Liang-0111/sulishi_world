@@ -150,3 +150,12 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 - [摄影者2013年天气记录](https://blog.thinkpunk.ch/category/fotos/)只作为历史墙面与孔洞参照，不把漏水事件带入日常场景。两张照片已记录URL及SHA256于`sources/references/quaibruecke/photo_receipt.json`，仅研究参照，不作为分发贴图。
 
 三个旧摄影低面点经原图集检查不能可靠归为地坪，全部排除。桥面257个空间支持单元用于独立稳健拟合；隐蔽槽底405.45m LN02、详细坡度、板/梁厚度、吊杆、涂层、座椅细分和排水为明确推断。新表面沿用已许可CC0沥青、混凝土、木材及原创程序化涂层，没有声称使用现场材料扫描。
+
+
+## Quaibrücke桥梁与水体024
+
+沿用AV33090桥梁、16660/21372河湖和39381桥下河道；岸侧28347/28358/12074仍视为暗渠，不渲染为露天水面。桥下39381的实际空间性质同时由已查看1985剖面和桥底照片约束，不能只凭图层名称推定。
+
+为补齐西侧桥墩33079，对[市政府2025年末地籍WFS](https://www.ogd.stadt-zuerich.ch/wfs/geoportal/Amtliche_Vermessungsdaten_Stadt_Zuerich_Jahresendstand_2025)作一次小范围请求，取得16条、143,320字节；与原有三墩重叠的几何一致。请求时间2026-09-23T21:56:03Z，文件与收据在sources/features/quaibruecke/av_ei_context_extension*，SHA256为6491bb6db71acc8c6eef3cf8440d32b7fe9091b4705bb5757e1c5a2bccf19850。数据状态日期与请求日期分开，不称为现场测量。
+
+1985文章纵断面的406.00m LN02均水位仅为历史依据；当前潮位/水位未经验证。水底395m是封闭渲染体积代理，不是水深数据。波纹、吸收、桥墩湿痕、支座、钢构细部和管线回路均明确推断。继续使用已有许可材料，不新增现场扫描声明。完整源身份、范围和限制见planning/QUAIBRUECKE_WATER_CONTEXT_CN.md。

@@ -6,7 +6,7 @@ import numpy as np
 from mathutils import Vector
 
 R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
-assert str(s['version']).startswith(('G1_021','G1_022','G1_023'))
+assert str(s['version']).startswith(('G1_021','G1_022','G1_023','G1_024'))
 p=json.loads((R/'derived/bellevue/riviera_quay/tree_build_input.json').read_text())
 c=bpy.data.collections['34_RIVIERA_TREES'];soilcol=bpy.data.collections['35_RIVIERA_TREE_PITS']
 assert len(c.objects)==27 and len(soilcol.objects)==9
