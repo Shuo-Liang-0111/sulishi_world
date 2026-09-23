@@ -123,3 +123,13 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 本批没有新增外部资料请求。已记录的Poly Haven `asphalt_03`、`oak_veneer_01`共8张内嵌图片原编码被保留到各自永久源目录；不是重新下载、重新压缩或重新估计尺寸。逐图SHA256、原路径、尺寸和色彩信息在`evidence/G1_020r4/permanent_surface_images.json`。原Blender检查点仍保留。
 
 `derived/materials/plane_trunk_patch`继承已有CC0 `bark_platanus`粗皮与项目原创的`platanus_flaking`表皮，生成三张4096²、8位工作图，名义图集尺度2.5×4.5m；新旧源指纹和生成方法在该目录`receipt.json`。覆盖率与每树周向相位均是为修复实图问题作出的推断，不是当地21棵树的扫描。旧图集与所有源贴图均保留，未改变树木官方身份、位置和库存高度。
+
+## Riviera主步道与滨河连接021
+
+沿用缓存的AV145、35398与八处岸墙轮廓，以及`av_ei_linienelement`内117条主梯线片段。状态日期多为2022-05-31，XY记录没有提供可直接使用的阶梯高程。183个原摄影近水平支持单元用于稳健地面拟合，并沿共享边接前版网格；0.165m级高、墙体竖向和材料均为推断。AV28347表述为暗渠水体，不能误作露天水面。完整依据及来源差异见`planning/RIVIERA_QUAY_CONSTRUCTION_CN.md`。
+
+- 市政府2020年阶梯更新公告：https://www.stadt-zuerich.ch/de/aktuell/medienmitteilungen/2020/12/201214a.html 。用于理解维护背景，不能当作今日完工测量。
+- Jakob Schilling原建筑师项目：https://www.jschilling.ch/projekte-forschung-oeffentliche-bauten-schweiz-ausland-work/uferpromenade-bellevue-zuerich 。历史照片和平面解释滨河通道与Quaibrücke下穿关系，不能冒充当前全部细部。缓存URL、图片与哈希在`sources/references/riviera_quay`，版权保留，只用于研究参照，不作分发贴图。
+- 局部SWISSIMAGE WMS确认铺装、阶梯分段和泊位大体关系。请求日期与请求像素间距不等于拍摄日期或原始分辨率。原图及收据同上。
+
+原始2039摄影块及20条选定地籍要素保留。已有CC0沥青、混凝土仅为材质代理；新结构没有声称采用当地实测材料扫描。

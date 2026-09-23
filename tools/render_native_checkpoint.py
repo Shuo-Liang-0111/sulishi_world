@@ -15,7 +15,7 @@ if len(args)==2:
         REVIEW_SAMPLES=48
         REVIEW_RESOLUTION=(1600,1050)
 s=bpy.context.scene
-assert s['version'].startswith(('G1_015','G1_016','G1_017','G1_018','G1_019','G1_020'))
+assert s['version'].startswith(('G1_015','G1_016','G1_017','G1_018','G1_019','G1_020','G1_021'))
 s.render.threads_mode='FIXED';s.render.threads=10
 s.render.use_sequencer=False
 s.render.use_compositing=False
@@ -30,10 +30,12 @@ if s['version'].startswith(('G1_016','G1_017')):
     exec(compile((R/'tools/blender_check_east_facilities.py').read_text(encoding='utf-8'),'check_east_contacts','exec'))
 if s['version'].startswith('G1_018r'):
     exec(compile((R/'tools/blender_check_fountain59.py').read_text(encoding='utf-8'),'check_fountain_connections','exec'))
-if s['version'].startswith('G1_020'):
+if s['version'].startswith(('G1_020','G1_021')):
     import runpy
     runpy.run_path(str(R/'tools/blender_check_utoquai_kiosk.py'))
-if s['version'].startswith(('G1_019','G1_020')):
+if s['version'].startswith('G1_021'):
+    runpy.run_path(str(R/'tools/blender_check_riviera_quay.py'))
+if s['version'].startswith(('G1_019','G1_020','G1_021')):
     exec(compile((R/'tools/blender_check_limmat_sidewalk.py').read_text(encoding='utf-8'),'check_limmat_geometry','exec'))
     # Temporary render process only: release encoded image copies only when an
     # external file has exactly identical bytes. Pixel data/resolution, all
