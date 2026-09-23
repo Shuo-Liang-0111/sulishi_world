@@ -39,3 +39,11 @@ G1_022从已重开核验的021r3继续。范围是AV40750弧形低位步道、AV
 可重现的版本顺序为：021r3存储基线→`prepare_riviera_lower_context.py`与`prepare_riviera_lower_build.py`→`prepare_riviera_lower_cut.py`→`blender_build_riviera_lower.py`→检查与`blender_save_riviera_lower.py`→022同机位实图和射线→`prepare_riviera_lower_cut.py --low-canopy`→`blender_refine_riviera_lower.py`→022r1五图。`blender_refine_riviera_lower_joints.py`保留首轮施工中坡道和支承的修复记录；最终builder已含相同修订，不能在后续版本盲目重跑历史修复。
 
 AV39461桥下段的具体剖面和通行尚未重建；现有官方等高桥体不能作真实碰撞上界。河侧船只/水面及外围摄影形体仍待施工。最新工作原生尚未匹配导出；默认007r5、候选018r3保留，不能用旧实时入口声称已体验022。
+
+## 022r2：按已识别物体完成摄影替换
+
+022r1新图的射线确认：近处竖片属于已重建60153树的低位摄影表面，距源树位约8.3–8.6m，超出地籍边界最多约0.7m。原图集取样支持绿叶归属，但背阴面会混入水色，不能把颜色阈值作为整个城市的自动删除规则。022r2限定到该树库存邻域、实际射线命中的两个源块与已建岸线近邻，处理262个完整三角面（含有限相邻背阴面），合计46.63015m²；原始源块保留。完整面替换避免在同一个已重建物体中再次制造竖直切边。
+
+楼梯尖片的原图采样为灰色，距地籍梯缘111mm，归为旧钢梯外缘摄影残留而非树冠。单独在梯缘220mm近邻内、已重建步道以上处理，避免用更大的树冠掩膜误伤结构。总共三个工作块变化，其余已建物体、材料和相机光照不改。
+
+022r2原生67,478,389字节、SHA256为`ad5939b163825b064dea47bfff2ef1bebb4df80b75fb4a0835fde6c99a00746c`。五个同机位保存文件实图全部看过、进程退出0：近处竖片消失、座椅背后清晰，大部分楼梯尖片移除；北侧远处和南向仍有明显碎片，楼梯图底沿仍有小尖片，河水、船只和桥下仍未达标。保留局部修订，整段拒收。新脚本为`probe_riviera_canopy_surface.py`、`prepare_riviera_canopy_object_cut.py`和`blender_complete_riviera_photo_objects.py`；下一批结合完整桥下连接处理剩余问题，参见`QUAIBRUECKE_PUBLIC_CONNECTION_CN.md`。
