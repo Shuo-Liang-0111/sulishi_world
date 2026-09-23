@@ -5,7 +5,7 @@ import numpy as np
 import bpy
 from mathutils import Vector
 R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
-assert s['version'].startswith('G1_021')
+assert s['version'].startswith(('G1_021','G1_022'))
 res=s.render.resolution_x,s.render.resolution_y;s.render.resolution_x=1280;s.render.resolution_y=840
 trees=json.loads((R/'sources/features/bauminventar.geojson').read_text())['features']
 authored={int(o['source_id'].split('.')[-1]) for name in ['31_LIMMAT_SIDEWALK_TREES','34_RIVIERA_TREES']
