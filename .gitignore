@@ -11,6 +11,10 @@
 /web/assets/
 /web/node_modules/
 /tools/vendor/
+/planning/*.png
+/planning/*.jpg
+/planning/*.pdf
+/tools/migrate_project_verified.py
 **/__pycache__/
 *.py[cod]
 *.blend*
@@ -26,4 +30,3 @@
 *.key
 Thumbs.db
 .DS_Store
-

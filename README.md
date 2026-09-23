@@ -6,7 +6,7 @@
 
 2026-09-21 已按用户批准的分阶段方案启动 G1，范围为 Bellevue—Sechseläutenplatz—Stadelhofen 连续街区，约0.312 km²。工程尚未完成；不要重复创建已存在的 Goal。最新状态以 [CURRENT_STATUS.md](CURRENT_STATUS.md)、[G1_SCOPE.md](G1_SCOPE.md) 和 [CONSTRUCTION_LOG.md](CONSTRUCTION_LOG.md) 为准。
 
-GitHub：<https://github.com/Shuo-Liang-0111/sulishi_world>。代码、来源清单和施工记录纳入版本管理；大型资产在本地完整项目中保存，范围及恢复限制见 [REPOSITORY.md](REPOSITORY.md)。2026-09-23 正在准备迁移到 H 盘，核验完成前仍以 F 盘原件为准。
+GitHub：<https://github.com/Shuo-Liang-0111/sulishi_world>。仅同步本项目构建代码、配置和必要说明；大型资产保存在 F 盘完整工程中，范围及恢复限制见 [REPOSITORY.md](REPOSITORY.md)。2026-09-23 用户取消完整资产迁移，H 盘仅保留轻量代码仓库副本。
 
 `native` 保留可编辑 Blender 版本，`sources` 保留来源，`derived` 保留转换结果，`evidence` 保留实际检查记录。`runtime/current_scene.json` 为已同步的默认工作版本；旧亭体室内候选见 `runtime/bellevue_working.json`，最新站区与相邻街面施工见 `runtime/station_road_working.json`。运行入口地址记录在 `runtime/review_server.json`。
 

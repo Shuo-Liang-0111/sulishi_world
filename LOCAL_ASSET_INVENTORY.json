@@ -43,5 +43,8 @@
   ],
   "github_contains_large_assets": false,
   "migration_verified": false,
-  "full_inventory_and_migration_receipt": "local migration journal; not scene acceptance"
+  "full_inventory_and_migration_receipt": "Former H-drive journal removed when user cleared H; this file is a preflight summary, not migration evidence",
+  "migration_mode": "Code only; full asset migration cancelled by user on 2026-09-23",
+  "full_project_location": "F:/MyWorld/ZurichWorld",
+  "code_mirror_location": "H:/MyWorld/ZurichWorld"
 }
