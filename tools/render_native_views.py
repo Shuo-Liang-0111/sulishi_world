@@ -16,7 +16,7 @@ args = sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
 assert len(args) >= 1 and len(args) == len(set(args))
 scene = bpy.context.scene
 version = scene['version']
-assert version.startswith(('G1_020','G1_021','G1_022'))
+assert version.startswith(('G1_020','G1_021','G1_022','G1_023'))
 native = Path(bpy.data.filepath)
 assert native.resolve().parent == root/'native'
 for camera in args:

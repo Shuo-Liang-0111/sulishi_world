@@ -6,7 +6,7 @@ import bpy
 from mathutils import Vector
 
 R=Path('F:/MyWorld/ZurichWorld');D=R/'derived/bellevue/riviera_quay';s=bpy.context.scene
-assert str(s['version']).startswith(('G1_021','G1_022'))
+assert str(s['version']).startswith(('G1_021','G1_022','G1_023'))
 p=json.loads((D/'build_input.json').read_text());C=bpy.data.collections['33_RIVIERA_QUAY']
 O=np.array(p['origin']);A=np.array(p['anchor']);T=np.array(p['along']);N=np.array(p['across'])
 assert len(C.objects)==len(p['parts'])

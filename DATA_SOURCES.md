@@ -139,3 +139,14 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 使用同一份已缓存2022树木表，AV145内的23522、37402、62437、79383、84969、88495、101985、106877、114015共9棵均记录为Sophora japonica（部分Regent），库存高度7–14m；位置、树种和高度直接保留。胸径、树冠、根颈、复叶分布和18.956407m²树池总开口为明确推断，不是新增实测。土面沿用Poly Haven forest_ground_05，树皮沿用bark_brown_02，两者为CC0通用扫描代理；未再采集同类贴图或重复搜索地点。
 
 源文件指纹、逐树参数与实际孔洞在`derived/bellevue/riviera_quay/tree_build_input.json`；两版摄影替换范围分别记录于`tree_cut_basis.json`和`tree_continuous_cut_basis.json`。后者依据021r1真实像素射线，仅连接两个已重建的铺面，保留源树相邻分界以及建筑、墙、台阶、泊位保护。所保留的锥形摄影残片尚无可靠身份判断，不记作已经确认的树、设备或障碍。
+
+## Quaibrücke公共下穿023
+
+继续使用已缓存AV39461、KUBA477/502/552及南侧AV6191钢梯、AV15891岸墙；南梯13条踏步线为4535—4547。不能将Hohlraum Bellevue结构空腔称为开放室内，也不能把暗渠水面图层当作露天水面。完整源身份、差异及推断见`planning/QUAIBRUECKE_PUBLIC_CONNECTION_CN.md`。
+
+- [1985年桥梁工程文章，Heierli等](https://espazium.s3.eu-central-1.amazonaws.com/files/2024-03/sbz-1985_Quaibruecke-Zuerich.pdf)：实际查看纵断面、横断面及桥底照片；这不是未能取得PDF的Marth/Schilling下穿专文。以历史构造关系为依据，不直接覆盖后续改造后的平面。
+- [WALO改造项目](https://www.walo.ch/de-ch/projekte/instandsetzung-quaibruecke-zuerich)确认2015—2016工程涉及桥梁及Bellevue侧结构空腔；其说明不能提供公共下穿的精确地坪。
+- [步行记录及第18张现场照片](https://www.alpine-wandergruppe.de/kurztrips/zuerichhorn_dolder/zuerichhorn_dolder.htm)实际看到了桥下弧形钢梁、加劲板、槽墙、深色步行面；拍摄日期未确定。
+- [摄影者2013年天气记录](https://blog.thinkpunk.ch/category/fotos/)只作为历史墙面与孔洞参照，不把漏水事件带入日常场景。两张照片已记录URL及SHA256于`sources/references/quaibruecke/photo_receipt.json`，仅研究参照，不作为分发贴图。
+
+三个旧摄影低面点经原图集检查不能可靠归为地坪，全部排除。桥面257个空间支持单元用于独立稳健拟合；隐蔽槽底405.45m LN02、详细坡度、板/梁厚度、吊杆、涂层、座椅细分和排水为明确推断。新表面沿用已许可CC0沥青、混凝土、木材及原创程序化涂层，没有声称使用现场材料扫描。
