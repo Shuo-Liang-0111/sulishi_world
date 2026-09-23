@@ -111,3 +111,9 @@ Bellevue东侧59号大喷泉：沿用水务objectid466真实位置；补充[Stad
 ### Fountain59 limited visual references
 
 Official identity/approximate dimensions remain in `sources/references/bellevue_fountain59/basis.json`. The official art page's image URLs returned403; no access-control workaround attempted. Three public photographs by Roland Fischer (Roland zh), CC BY-SA3.0, were obtained from their actual Commons file links and inspected: [overall2010](https://commons.wikimedia.org/wiki/File:Z%C3%BCrich_-_Bellevue_IMG_4445.JPG), [casting2010](https://commons.wikimedia.org/wiki/File:Z%C3%BCrich_-_Bellevue_IMG_4446.JPG), [overflow2011](https://commons.wikimedia.org/wiki/File:Bellevue_(Z%C3%BCrich)_2011-03-23_15-11-00.JPG). Dates are historical, not a claim of synchronized present-day observation. Receipt/hashes are in `commons_receipt.json`; images are references only, never surface textures. Repeated research stops here unless a concrete modelling ambiguity needs it.
+
+### 临河土面与南端亭体的定向补充
+
+- [Poly Haven Forest Ground05](https://polyhaven.com/a/forest_ground_05)：Charlotte Baglioni，CC0，官方标注2米物理尺度。实看预览后取得官方4K Blender材质及五个文件，逐项核对发布方MD5/大小并记录SHA256。MCP下载两次TLS失败，随后从相同官方URL正常HTTPS下载，未关闭TLS校验。原始贴图与收据在`sources/textures/polyhaven/forest_ground_05`。这是通用泥土扫描代理，不能当作苏黎世当地采样。
+- Utoquai2f：已缓存AV20161、地址39399、EGID302020548的官方101628屋面/107095墙/131378底面。八边形17.601514m²及屋面411.255m LN02固定；源底面405.322m不是入口地坪。补核[Imbiss Riviera运营方](https://imbiss-riviera.ch/)及[图库](https://imbiss-riviera.ch/gallery)；首页照片主要是食品和背景，不能支撑完整建筑构造。
+- 实际查看[2025年3月21日Bluewin报道配图](https://www.bluewin.ch/de/news/schweiz/wir-kaempfen-bis-zum-schluss-stadt-zuerich-will-den-riviera-imbiss-am-seebecken-nach-42-jahren-weghaben-2616008.html)：金属框、浅色面板、外翻售卖窗盖、不锈钢台面和可见室内。照片拍摄日期未确认，只用于有限外观参照，不作当前经营状态证明，不用作材质或发布资产。缓存及指纹在`sources/references/utoquai_2f/exterior_receipt.json`。尚未建亭体，门窗朝向和隐蔽面不能冒充照片直接证据。
