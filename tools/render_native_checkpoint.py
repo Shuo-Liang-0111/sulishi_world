@@ -35,6 +35,8 @@ if s['version'].startswith(('G1_020','G1_021')):
     runpy.run_path(str(R/'tools/blender_check_utoquai_kiosk.py'))
 if s['version'].startswith('G1_021'):
     runpy.run_path(str(R/'tools/blender_check_riviera_quay.py'))
+    if '34_RIVIERA_TREES' in bpy.data.collections:
+        runpy.run_path(str(R/'tools/blender_check_riviera_trees.py'))
 if s['version'].startswith(('G1_019','G1_020','G1_021')):
     exec(compile((R/'tools/blender_check_limmat_sidewalk.py').read_text(encoding='utf-8'),'check_limmat_geometry','exec'))
     # Temporary render process only: release encoded image copies only when an

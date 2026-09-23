@@ -133,3 +133,9 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 - 局部SWISSIMAGE WMS确认铺装、阶梯分段和泊位大体关系。请求日期与请求像素间距不等于拍摄日期或原始分辨率。原图及收据同上。
 
 原始2039摄影块及20条选定地籍要素保留。已有CC0沥青、混凝土仅为材质代理；新结构没有声称采用当地实测材料扫描。
+
+## Riviera河侧第二排树木021r1/r2
+
+使用同一份已缓存2022树木表，AV145内的23522、37402、62437、79383、84969、88495、101985、106877、114015共9棵均记录为Sophora japonica（部分Regent），库存高度7–14m；位置、树种和高度直接保留。胸径、树冠、根颈、复叶分布和18.956407m²树池总开口为明确推断，不是新增实测。土面沿用Poly Haven forest_ground_05，树皮沿用bark_brown_02，两者为CC0通用扫描代理；未再采集同类贴图或重复搜索地点。
+
+源文件指纹、逐树参数与实际孔洞在`derived/bellevue/riviera_quay/tree_build_input.json`；两版摄影替换范围分别记录于`tree_cut_basis.json`和`tree_continuous_cut_basis.json`。后者依据021r1真实像素射线，仅连接两个已重建的铺面，保留源树相邻分界以及建筑、墙、台阶、泊位保护。所保留的锥形摄影残片尚无可靠身份判断，不记作已经确认的树、设备或障碍。

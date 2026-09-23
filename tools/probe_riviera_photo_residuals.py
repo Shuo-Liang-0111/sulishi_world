@@ -5,11 +5,12 @@ import numpy as np
 import bpy
 from mathutils import Vector
 R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
-assert s['version']=='G1_021'
+assert s['version'].startswith('G1_021')
 res=s.render.resolution_x,s.render.resolution_y;s.render.resolution_x=1280;s.render.resolution_y=840
 trees=json.loads((R/'sources/features/bauminventar.geojson').read_text())['features']
-authored={int(o.name.split('_')[2]) for o in bpy.data.collections['31_LIMMAT_SIDEWALK_TREES'].objects}
-cases={'RQ_QA_ALONG':[(930,175),(760,435),(1090,485),(1260,200)],'RQ_QA_REVERSE':[(400,350),(1000,400)],'RQ_QA_STAIR':[(700,330)]}
+authored={int(o['source_id'].split('.')[-1]) for name in ['31_LIMMAT_SIDEWALK_TREES','34_RIVIERA_TREES']
+          if name in bpy.data.collections for o in bpy.data.collections[name].objects}
+cases=globals().get('PROBE_PIXELS',{'RQ_QA_ALONG':[(930,175),(760,435),(1090,485),(1260,200)],'RQ_QA_REVERSE':[(400,350),(1000,400)],'RQ_QA_STAIR':[(700,330)]})
 objects=list(bpy.data.collections['04_RETAINED_PHOTO_CONTEXT'].objects);records=[]
 for name,pixels in cases.items():
  c=bpy.data.objects[name];frame=c.data.view_frame(scene=s)
@@ -31,5 +32,5 @@ for name,pixels in cases.items():
      'nearest_inventory_trees':[{'id':t['properties']['objectid'],'distance_m':d,'authored':t['properties']['objectid'] in authored} for d,t in near]})
   hits.sort(key=lambda h:h['distance_m']);records.append({'camera':name,'pixel':[px,py],'hits':hits[:2]})
 s.render.resolution_x,s.render.resolution_y=res
-(R/'evidence/G1_021/photo_residual_rays.json').write_text(json.dumps(records,indent=2))
+(R/'evidence'/s['version']/'photo_residual_rays.json').write_text(json.dumps(records,indent=2))
 print(json.dumps([{'camera':r['camera'],'pixel':r['pixel'],'hit':r['hits'][0] if r['hits'] else None} for r in records]),flush=True)
