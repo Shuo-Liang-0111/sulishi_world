@@ -15,7 +15,7 @@ if len(args)==2:
         REVIEW_SAMPLES=48
         REVIEW_RESOLUTION=(1600,1050)
 s=bpy.context.scene
-assert s['version'].startswith(('G1_015','G1_016','G1_017','G1_018','G1_019'))
+assert s['version'].startswith(('G1_015','G1_016','G1_017','G1_018','G1_019','G1_020'))
 s.render.threads_mode='FIXED';s.render.threads=10
 s.render.use_sequencer=False
 s.render.use_compositing=False
@@ -30,7 +30,10 @@ if s['version'].startswith(('G1_016','G1_017')):
     exec(compile((R/'tools/blender_check_east_facilities.py').read_text(encoding='utf-8'),'check_east_contacts','exec'))
 if s['version'].startswith('G1_018r'):
     exec(compile((R/'tools/blender_check_fountain59.py').read_text(encoding='utf-8'),'check_fountain_connections','exec'))
-if s['version'].startswith('G1_019'):
+if s['version'].startswith('G1_020'):
+    import runpy
+    runpy.run_path(str(R/'tools/blender_check_utoquai_kiosk.py'))
+if s['version'].startswith(('G1_019','G1_020')):
     exec(compile((R/'tools/blender_check_limmat_sidewalk.py').read_text(encoding='utf-8'),'check_limmat_geometry','exec'))
     # Temporary render process only: release encoded image copies only when an
     # external file has exactly identical bytes. Pixel data/resolution, all
@@ -44,12 +47,21 @@ if s['version'].startswith('G1_019'):
         for child in col.children:visible_collection(child,hidden)
     visible_collection(s.collection)
     visible_meshes={ob.name:(len(ob.data.vertices),len(ob.data.polygons)) for ob in visible if ob.type=='MESH'}
-    hidden_refs=[]
-    for ob in list(s.objects):
-        if ob not in visible and ob.type=='MESH' and not ob.children:
-            mesh=ob.data;hidden_refs.append(ob.name);bpy.data.objects.remove(ob,do_unlink=True)
+    hidden_objects=[ob for ob in s.objects if ob not in visible and ob.type=='MESH' and not ob.children]
+    hidden_refs=[ob.name for ob in hidden_objects]
+    hidden_meshes=set(ob.data for ob in hidden_objects)
+    print('RENDER_PREP_RELEASE_INVISIBLE',len(hidden_objects),flush=True)
+    # One dependency update for the same invisible IDs avoids thousands of
+    # repeated scene invalidations. Visible IDs and mesh counts are checked.
+    if hasattr(bpy.data,'batch_remove'):
+        bpy.data.batch_remove(ids=hidden_objects)
+        bpy.data.batch_remove(ids=[mesh for mesh in hidden_meshes if mesh.users==0])
+    else:
+        for ob in hidden_objects:bpy.data.objects.remove(ob,do_unlink=True)
+        for mesh in hidden_meshes:
             if mesh.users==0:bpy.data.meshes.remove(mesh)
     assert visible_meshes=={name:(len(bpy.data.objects[name].data.vertices),len(bpy.data.objects[name].data.polygons)) for name in visible_meshes}
+    print('RENDER_PREP_VERIFY_PACKED_IMAGES',flush=True)
     released=[]
     for im in bpy.data.images:
         if not im.packed_file or not im.filepath:continue

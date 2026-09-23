@@ -2,7 +2,7 @@
 import bpy,json,numpy as np
 from pathlib import Path
 from mathutils import Vector
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith('G1_019')
+R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith(('G1_019','G1_020'))
 p=json.loads((R/'derived/bellevue/limmat_sidewalk/ground_input.json').read_text(encoding='utf-8'));E=R/'evidence'/s['version'];E.mkdir(exist_ok=True)
 ground=bpy.data.collections['30_LIMMAT_SIDEWALK_GROUND'];trees=bpy.data.collections['31_LIMMAT_SIDEWALK_TREES'];assert len(trees.objects)==45
 area=0
