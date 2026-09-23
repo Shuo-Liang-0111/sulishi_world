@@ -117,3 +117,9 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 - [Poly Haven Forest Ground05](https://polyhaven.com/a/forest_ground_05)：Charlotte Baglioni，CC0，官方标注2米物理尺度。实看预览后取得官方4K Blender材质及五个文件，逐项核对发布方MD5/大小并记录SHA256。MCP下载两次TLS失败，随后从相同官方URL正常HTTPS下载，未关闭TLS校验。原始贴图与收据在`sources/textures/polyhaven/forest_ground_05`。这是通用泥土扫描代理，不能当作苏黎世当地采样。
 - Utoquai2f：已缓存AV20161、地址39399、EGID302020548的官方101628屋面/107095墙/131378底面。八边形17.601514m²及屋面411.255m LN02固定；源底面405.322m不是入口地坪。补核[Imbiss Riviera运营方](https://imbiss-riviera.ch/)及[图库](https://imbiss-riviera.ch/gallery)；首页照片主要是食品和背景，不能支撑完整建筑构造。
 - 实际查看[2025年3月21日Bluewin报道配图](https://www.bluewin.ch/de/news/schweiz/wir-kaempfen-bis-zum-schluss-stadt-zuerich-will-den-riviera-imbiss-am-seebecken-nach-42-jahren-weghaben-2616008.html)：金属框、浅色面板、外翻售卖窗盖、不锈钢台面和可见室内。照片拍摄日期未确认，只用于有限外观参照，不作当前经营状态证明，不用作材质或发布资产。缓存及指纹在`sources/references/utoquai_2f/exterior_receipt.json`。020已按这些有限依据建立亭体；门窗朝向、未见面和厨房配置明确为推断，不能冒充照片直接证据。
+
+### 020r4已有表面资料的保留和派生
+
+本批没有新增外部资料请求。已记录的Poly Haven `asphalt_03`、`oak_veneer_01`共8张内嵌图片原编码被保留到各自永久源目录；不是重新下载、重新压缩或重新估计尺寸。逐图SHA256、原路径、尺寸和色彩信息在`evidence/G1_020r4/permanent_surface_images.json`。原Blender检查点仍保留。
+
+`derived/materials/plane_trunk_patch`继承已有CC0 `bark_platanus`粗皮与项目原创的`platanus_flaking`表皮，生成三张4096²、8位工作图，名义图集尺度2.5×4.5m；新旧源指纹和生成方法在该目录`receipt.json`。覆盖率与每树周向相位均是为修复实图问题作出的推断，不是当地21棵树的扫描。旧图集与所有源贴图均保留，未改变树木官方身份、位置和库存高度。

@@ -21,8 +21,11 @@ candidates=[]
 for ob in bpy.data.collections['04_RETAINED_PHOTO_CONTEXT'].objects:
     corners=[ob.matrix_world@Vector(p) for p in ob.bound_box];center=sum(corners,Vector())/8
     radius=max((p-center).length for p in corners);distance=max(1,(center-scene.camera.location).length-radius)
-    for mat in ob.data.materials:
-        if mat.name in records:candidates.append((distance,mat,records[mat.name]))
+    # Resolve object-level overrides too: linked meshes retain library material
+    # defaults, while the editable working scene uses local object materials.
+    for slot in ob.material_slots:
+        mat=slot.material
+        if mat and mat.name in records:candidates.append((distance,mat,records[mat.name]))
 candidates.sort(key=lambda x:x[0]);changed=[];counts={'full':0,'medium':0,'low':0};budget=0
 try:
     for distance,mat,record in candidates:

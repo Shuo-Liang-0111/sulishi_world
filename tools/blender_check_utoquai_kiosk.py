@@ -87,7 +87,7 @@ for ob in collection.objects:
             if node.type=='TEX_IMAGE' and node.image and not node.image.packed_file and not Path(bpy.path.abspath(node.image.filepath)).is_file():missing.append(node.image.name)
 assert not missing,missing
 rec={'version':scene['version'],'objects':len(collection.objects),'footprint_area_m2':float(area),'roof_ln02_m':float(ro[:,2].max()+400),'floor_ln02_m_inferred':float(fo[:,2].max()+400),'counter_support':counter_support,'hatch_clearance':clearance,'sink_aperture_clear':True,'staff_threshold_rise_m':float(threshold_rise),'cameras_on_rebuilt_ground':True,'original_photo_nodes_retained':2039,'missing_images':missing,'geometry_checks_passed':True,'natural_use_verified':False,'runtime_enabled':False,'visual_acceptance':False}
-if scene['version'] in ['G1_020r1','G1_020r2']:
+if scene['version'] in ['G1_020r1','G1_020r2','G1_020r3','G1_020r4']:
     seams=[]
     for a,b in [(2,3),(3,4),(6,7)]:
         def top(idx):
