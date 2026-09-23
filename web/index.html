@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZurichWorld · G1 施工检查</title>
+<style>
+[hidden]{display:none!important}
+aside{max-height:calc(100dvh - 125px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+*{box-sizing:border-box}body{margin:0;font:14px/1.55 system-ui,"Microsoft YaHei",sans-serif;color:#e8ecef;background:#81909a;overflow:hidden}canvas{display:block;width:100vw;height:100vh}aside{position:absolute;left:24px;top:24px;width:292px;background:#12232be8;backdrop-filter:blur(18px);border:1px solid #bdc9ca25;border-radius:12px;padding:22px;box-shadow:0 8px 35px #0002}h1{font-size:26px;letter-spacing:-.7px;margin:5px 0 4px;font-weight:600}.eyebrow{font-size:11px;color:#9bccbd;letter-spacing:2px}.place{font-size:12px;color:#c2cccc;margin-bottom:19px}.stage{border-left:3px solid #e3c685;padding:8px 12px;background:#ffffff06;color:#e4dcc4;font-size:12px}p{margin:12px 0;color:#b9c6ca;font-size:12px}button{font:inherit;border:1px solid #ffffff26;border-radius:6px;background:#ffffff09;color:#dde6e9;cursor:pointer;padding:10px 12px;text-align:left;transition:.15s}button:hover{background:#ffffff1c}button:disabled{opacity:.45;cursor:wait}.views{display:grid;gap:7px;margin-top:17px}.views button.active{border-color:#b7d9c4;background:#98ccb722;color:#e3f3e9}.row{display:flex;gap:6px;margin-top:10px}.row button{flex:1;font-size:11px;text-align:center;padding:7px}#inspect{font-size:11px;color:#d5e3e7;margin-top:16px;padding-top:14px;border-top:1px solid #ffffff20;overflow-wrap:anywhere}#notice{position:absolute;right:24px;top:24px;max-width:330px;background:#12232be8;border-radius:8px;padding:12px 16px;font-size:12px;color:#d9e1e4}.bottom{position:absolute;left:24px;bottom:20px;background:#12232bd9;padding:10px 14px;border-radius:7px;font-size:11px;color:#c1cfd2;max-width:calc(100vw - 48px)}a{color:#b9d9cd;text-decoration:none}#loading{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;background:#8c999ab3;font-size:16px}#loading.hidden{display:none}.status{font-size:11px;color:#a4bfc2;margin-top:15px}@media(max-width:700px){aside{left:12px;top:12px;width:240px;padding:15px}#notice{top:auto;bottom:80px;right:12px;max-width:220px}.bottom{left:12px;bottom:12px}h1{font-size:22px}}
+</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="world" aria-label="苏黎世三维施工场景"></canvas>
+<aside>
+<button id="panel-toggle" style="float:right;padding:3px 7px;font-size:10px;margin:-8px -8px 5px 5px">收起面板</button>
+<div class="eyebrow">ZURICHWORLD / G1</div>
+<h1>Bellevue → Stadelhofen</h1>
+<div class="place">歌剧院广场 · 站区 · 湖岸街道</div>
+<div class="stage" id="stage">测绘基底检查版<br>近景重建和自然交互尚未完成</div>
+<p id="source-note">位置与体量来自公开测绘。航拍地面用于对照；其中的车辆、树影仍属于照片参考。</p>
+<div class="views">
+<button data-view="overview" class="active" disabled>01　连续街区总览</button>
+<button data-view="top" disabled>02　俯视核对</button>
+<button data-view="plaza" disabled>03　广场人眼高度</button>
+<button data-view="bellevue" disabled>04　Bellevue 亭体</button>
+<button data-view="station" disabled>05　Stadelhofen 入口方向</button>
+</div>
+<div class="row"><button id="toggle-buildings" disabled>隐藏建筑参考</button><button id="reset" disabled>复位</button></div>
+<button id="toggle-source" style="width:100%;margin-top:8px;font-size:12px" disabled>摄影网格待导入</button>
+<button id="show-bellevue" style="width:100%;margin-top:8px;font-size:12px" disabled>Bellevue 实体施工版</button>
+<div class="row"><button data-be-view="BE_QA_STRUCTURE" disabled>亭体全貌</button><button data-be-view="BE_QA_INTERIOR" disabled>室内观察</button></div>
+<div class="row" id="station-views" hidden><button data-be-view="BE_QA_TRACK_NEAR" disabled>轨道近景</button><button data-be-view="BE_QA_STATION_STREETS" disabled>站区整体</button></div>
+<div class="row" id="crossing-views" hidden><button data-be-view="BE_QA_CROSSING_WEST" disabled>西侧过街近景</button></div>
+<div id="west-views" hidden>
+<div class="row"><button data-be-view="BE_QA_SOUTH_GROVE_EAST" disabled>南侧树群东望</button><button data-be-view="BE_QA_SOUTH_GROVE_WEST" disabled>南侧树群西望</button></div>
+<div class="row"><button data-be-view="BE_QA_SOUTH_GROVE_ROOT" disabled>树群根部接地</button></div>
+<div class="row"><button data-be-view="BE_QA_WEST_PLATFORM">西侧站棚</button><button data-be-view="BE_QA_WEST_PLATFORM_REVERSE">站棚反向</button></div>
+<div class="row"><button data-be-view="BE_QA_WEST_BENCH">候车设施</button><button data-be-view="BE_QA_WEST_TREE">悬铃木与站台</button></div>
+<div class="row"><button data-be-view="BE_QA_CORNER_FIXTURES">街角信息架</button><button data-be-view="BE_QA_WEST_END_FIXTURES">站台另一端</button></div>
+<div class="row"><button data-be-view="BE_QA_SOUTH_APPROACH">南侧公共空间</button><button data-be-view="BE_QA_SOUTH_WALK">南侧穿行近景</button></div>
+<div class="row"><button data-be-view="BE_QA_SOUTH_TREE_BASE">南侧树根与路面</button><button data-be-view="BE_QA_SOUTH_FACILITIES">南侧日常设施</button></div>
+<div class="row"><button data-be-view="BE_QA_SERVICE_FRONT">公共服务亭正面</button><button data-be-view="BE_QA_SERVICE_NORTH">候车长椅与北立面</button></div>
+<div class="row"><button data-be-view="BE_QA_SERVICE_ENTRY">服务亭入口近景</button><button data-be-view="BE_QA_SERVICE_INTERIOR">卫生间内部施工</button></div>
+<div class="row"><button data-be-view="BE_QA_SOUTH_EAST_INFO_WIDE" disabled>东侧信息架全貌</button><button data-be-view="BE_QA_SOUTH_EAST_REVERSE_WIDE" disabled>信息架反向</button></div>
+<div class="row"><button data-be-view="BE_QA_SOUTH_EAST_BIN_OPENING" disabled>东侧垃圾桶近景</button></div>
+</div>
+<div id="haus-views" hidden><div class="row"><button data-be-view="HB_QA_ALONG">Haus 沿街近景</button><button data-be-view="HB_QA_REVERSE">沿街反向</button></div><div class="row"><button data-be-view="HB_QA_ENTRY">Haus 入口细部</button><button data-be-view="HB_QA_FULL_FACADE">立面仰视</button><button data-be-view="HB_QA_CORNER">圆弧转角</button></div><div class="row"><button data-be-view="HB_QA_TREE">街角悬铃木</button><button data-be-view="HB_QA_TREE_BASE">树池近景</button></div></div>
+<button id="door-toggle" style="width:100%;margin-top:8px;font-size:12px" disabled>关闭亭体入口</button>
+<div id="fountain-views" hidden>
+<div class="row"><button data-be-view="BE_QA_FOUNTAIN_OVERVIEW" disabled>街角喷泉</button><button data-be-view="BE_QA_FOUNTAIN_REVERSE" disabled>喷泉反向</button></div>
+<div class="row"><button data-be-view="BE_QA_FOUNTAIN_RIM" disabled>石盆与小雕塑</button><button data-be-view="BE_QA_FOUNTAIN_OVERFLOW" disabled>水面与溢流口</button></div>
+</div>
+<div id="inspect">点击楼体可检查数据身份。</div>
+<div id="stats" class="status">读取同版本 Blender 导出…</div>
+</aside>
+<div id="notice">左键旋转 · 右键平移 · 滚轮缩放<br>当前为自由观察，尚未启用步行碰撞。</div>
+<div class="bottom">总览金线为 G1 施工边界；外侧为背景资料。<br>公开依据：<a href="https://data.stadt-zuerich.ch/" target="_blank" rel="noreferrer">Stadt Zürich OGD</a> · <a href="https://www.swisstopo.admin.ch/" target="_blank" rel="noreferrer">swisstopo SWISSIMAGE</a>　|　不同年代资料汇合，非单日实景快照。</div>
+<div id="loading">正在打开苏黎世地理基底…</div>
+<script type="module" src="./viewer.js"></script>
+</body></html>

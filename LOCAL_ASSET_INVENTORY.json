@@ -1,0 +1,47 @@
+{
+  "snapshot": "2026-09-23 before migration",
+  "file_count": 27040,
+  "total_bytes": 136912022961,
+  "directory_bytes": {
+    "CONSTRUCTION_LOG.md": 34000,
+    "CURRENT_STATUS.md": 20971,
+    "DATA_SOURCES.md": 18955,
+    "G1_SCOPE.md": 2313,
+    "GOAL.md": 3295,
+    "PHASED_GOALS_PROPOSAL_CN.md": 21803,
+    "PROJECT_CONTEXT.md": 6708,
+    "README.md": 2282,
+    "START_PROMPT.txt": 2284,
+    "WORKING_NOTES.md": 23657,
+    ".cache": 64716056,
+    ".venv": 367463188,
+    "derived": 1157134986,
+    "evidence": 350012798,
+    "native": 64156877765,
+    "planning": 6269306,
+    "runtime": 37458985988,
+    "sources": 706157549,
+    "tools": 4600858,
+    "web": 32639668199
+  },
+  "key_checkpoints": [
+    {
+      "path": "native/G1_019r2_limmat_clearance_working.blend",
+      "bytes": 1472619792,
+      "sha256": "63a3694f4c81eafa1bf99b62536ace7be8e1668e28985339de557ad46d741787"
+    },
+    {
+      "path": "native/G1_018r3_fountain_cast_finish_working.blend",
+      "bytes": 1066776317,
+      "sha256": "d8791f6caba466023cb24be200a674874d589f882841ff376f15d28ca5fd0bf7"
+    },
+    {
+      "path": "native/G1_007r5_station_roads_working.blend",
+      "bytes": 469020248,
+      "sha256": "4953f654698518513e926578fd3eb24fdeacdc954751d8be4202e05b249e0674"
+    }
+  ],
+  "github_contains_large_assets": false,
+  "migration_verified": false,
+  "full_inventory_and_migration_receipt": "local migration journal; not scene acceptance"
+}

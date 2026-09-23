@@ -1,0 +1,141 @@
+# 已有经验与本机线索
+
+这些是帮助你减少无效返工的线索，不是固定施工流程。
+
+用户最新调整：不需要为同一场景反复搜索、对照和积累真实数据。已有资料能约束位置、尺度、身份和关键结构时直接施工，把主要精力用于物体本身的形体厚度、构造、材料、表面特征及实际近景。只有影响布局或关键构造的具体疑点才补查；真实性不能由资料数量代替。保留轻量来源和推断说明即可。
+
+本轮以人在场景中的正常游览与日常使用验收，截止于真实场景及自然交互可用。研究任务的空间/道具布置、事件、目标与评分，以及后续Agent接入，均留到下一阶段；不要从外部旧记录重新引入这些工作。
+
+## 香港项目的经验
+
+原项目：`F:/AAAAAW`，只读使用。入口文件是 `PROJECT_DIRECTION_CN.md` 和 `CITY_BRANCH_CN.md`。参考已接受的 HK48-r04，特别是门厅、玻璃、铺装和相接空间。HK49 是未接受候选；历史“正式实时版”标签也不能直接当作已验收的最新运行世界。
+
+可以先实际查看这两张已存在的参考图：`F:/AAAAAW/runs/hk-tong-chong-hk48-r01/evidence/HK48-r04/HK48_DOOR_DETAIL.png` 与同目录的 `HK48_EAST_CLEAR.png`。它们是近景制作参考，不证明香港全城或运行时已通过验收。
+
+- 几何检查通过不意味着画面可信；原生渲染通过也不意味着目标实时引擎已经相同。分别记清原生、导出、运行与功能实际验证到哪一步。
+- 地面不是一张可以任意压平的皮。车行道、人行道、桥上桥下、楼板、入口、基座和屋顶具有不同角色；连续表面也可能坡度或用途错误。
+- 黑片、模糊、偏色先检查真实资源、UV、纹理分辨率、颜色空间、遮挡与导出差异。香港曾把原生缺口误诊为 GLB 错误；也曾有原图仍在却误用降采样纹理的问题。
+- 保留局部有效改进，但及时集成到整体运行世界。不要让几十轮精修仅存在于分散的 Blender 文件。
+- 做过的模型数、修订次数和表面积不代表地区完成。按实际可见空间和功能连接描述进展；保留尚未看过、尚未可走和未开放的部分。
+
+## 这轮苏黎世样本的实际发现
+
+2025 I3S 网格已经能下载、恢复坐标、进入 Blender、保存重开并渲染。主站附近街区与Bellevue一带的相邻叶节点样本已实看，屋顶、街道和照片外观能够形成连续基底；到近景仍有模糊立面、粘连树木和悬浮残片，必须主动修复。较新照片也可能保留当时的临时活动设施，需与选定世界日期对账。
+
+I3S 取样必须检查真正的叶节点和相邻分块，不能用一个中间 LOD 的低清图推断最高源质量。本轮转换还发现：该数据 UV 的 V 方向转到 Blender 时需要翻转；未处理会产生大量错贴的碎片状画面，不能误判为源城市几何破碎。具体数据格式变化时重新检查，不把这个经验套到所有格式。
+
+本轮原始渲染为了核查来源，保留了照片本身的光照，没有生成纹理或精修。这种诊断材质不是最终 PBR 场景的制作要求。
+
+施工中优先看正常光照、人眼高度和真实接近路径下的成品，并与地点参考对照。渲染效果改善应来自场景本身；调整曝光或机位时仍要能看清结构、材料和连接。步行、开门、乘车和设施操作需在实际运行入口验证，不能仅凭动画或静帧认定可交互。
+
+## 可复用的本地资料
+
+- 012的普通接近视角发现信息架反面空白；独立可达的设备需要检查正反面，不能只在建模坐标的“正面”摆文字。字体更新后再复制，应先更新依赖图或使用无父对象的即时matrix_basis，否则matrix_world可能仍旧，造成两面字朝同一方向。
+- 用bmesh重排/焊接/修法线后，不应按原始顶点/loop顺序填平面UV。012实际渲染的地图转了90度，改为按实体面板的水平轴和高度求UV才修好。编码、脚本成功都不能替代读取最终图面。
+
+- 自然物不能只靠更多网格改善。011r2用多边形分配两种树皮，实看出现方块边界；011r3改为连续PBR图集并重做连贯根颈，避免尖锥拼接。根脚浅色圈则来自负V重复到了图集顶部：先射线确认确实落地，再修UV，不盲目改标高。
+- 近景摄影裁剪须把相邻未重建设施与树团分开。保护缓冲留下的丑陋残片应作为下一项具体重建，不能简单擦除后称道路或站区完整。
+
+- 有了地点外观、轮廓和尺寸依据后，连续完成同一建筑的窗洞、阳台、檐口、转角与屋面，再从实际近景修错，比继续堆叠资料更有效。010首轮渲染暴露了跨玻璃的分缝和阳台摄影残片，修订依据是实际画面与已建构造。
+- 曲面屋顶不能逐三角形使用不同局部投影原点/方向，否则纹理会拼片；也不能对所有坡面只用一个水平轴，否则垂直于它的坡面会拉伸。010r3采用周向/分坡向连续坐标，同时检查贴图三角形UV面积。材质分区要在真实水平边界处分割几何，不能靠三角形质心分类造成锯齿。
+
+- 设施点可能是组合锚点：Bellevue长椅544与广告586共点，三广告点间距约1.2m。不可机械地把不同类别实体各自居中叠放；通过邻点轴线、摄影与安装资料解释，并保留推断。
+- Cycles玻璃后的漫反射纸面黑暗不一定是法线或粗糙度问题。008r3诊断显示只有恢复折射焦散才修复这套玻璃—纸面结构；旧室内的计算成本结论不能直接推广到新结构。保存后重查已有室内；实时零强度半球灯故障是另一条独立原因。
+- 残块清理以实际射线命中、源地物和有界替换体积为据。移除第一片后要在相同视角复查，不能据裁剪数量宣称修复；同时避免扩大掩膜误删邻接设施。
+- GLB资源打包应比较实际写出文件的非图像字节，不能仅比较同一份内存；RGBA纹理不可强制转RGB，否则后续树叶透明边界会被破坏。
+- 16位RGB PNG用Pillow读取后可能已变为8位RGB，“两次Pillow解码相同”不足以证明原始精度保留。008r8检查发现新树皮两张16位PNG受此影响，发布前已修复：16位原始IHDR和解压滤波扫描行逐字节保留，只重压IDAT，实际写出图像及非图像字节均核验。旧12张材料为8位，未受这次新发现影响。
+- 摄影树冠可能被拉伸至地面。按正常树干半径裁剪会留下大片低绿色墙；用实际射线确定残片范围，核对附近杆、设施和地面后才扩大有上下限的替换体积。69773在5.5m半径内清理，最近未重建立杆约6m，原始源始终保留。
+
+- 苏黎世新样本、转换与渲染脚本：`F:/MyWorld/research/city-reassessment-20260921`。
+- 已有 I3S 图层配置、WebScene、LoD2 与 GTFS 核查：`F:/MyWorld/research/goal-construction/zurich-source`。
+- 两城的完整审计资料在 `F:/MyWorld/research`，按需要读具体来源即可。旧版卢森堡施工计划和细致模板不属于本项目要求。
+- 已验证的 Blender 可执行文件：`F:/MyWorld/runtime/blender-4.5.13-windows-x64/blender.exe`。苏黎世项目 MCP 已配置并实际用于保存、渲染、材质取得；详见 `runtime/MCP_SETUP_CN.md`。新会话先检查现有连接，避免重复启动。
+
+## 保持记录轻量
+
+建议维护一份简短当前状态、一个来源清单，以及随有意义改动追加的施工记录。目录、文件名和记录形式由你决定。至少保留：为什么改、改了哪里、依据什么、从哪个版本开始、真实检查结果、接受或拒收及可得成本。自动能采集的字段自动采集；未知用空值，不伪造。
+
+保留可重开的当前最好版本，日志引用实际文件和版本。源数据/纹理与派生资产建立关联，实测事实、参考重建、推断和设计补全分别说明。无需为每轮施工写长报告，也无需预先建立庞大的检查体系。
+
+## 本轮新增可复用发现
+
+- G1_014r3的CUA已恢复，首次看到最新原生导出的实时北立面；颜色明显偏亮、遮蔽层次不足，切换也慢。身份/包围盒/HTTP全部通过不能替代实际渲染。保留原生几何与贴图，先修实时传递，不接受以降清晰度或删构件掩盖。
+- 近1GB的嵌入式GLB应与共享纹理分开：本轮从已验证runtime GLB逐字节拆出516MB几何、451MB PNG，以内容hash去重复用，重读实际文件验证全部非图像字节，纹理保持原编码。节点、材料与顶点未改。其收益是减少重复传输和内存复制，尚未量化帧率收益。
+- 官方GroundSurface底面不是自动可走楼板。服务亭AV160.966m²和屋盖高程保留；当前街面支持的楼板为推断，2015公共卫生间平面/照片有时效边界。窄带坡面应先规则网格剖分再裁剪，避免距离场在细长三角面产生陡坡；实际float32网格另核验。
+- GPU显存不足的Cycles任务会使Blender进程退出，MCP超时本身却不等于任务结束。应先查进程/产物；本轮从已保存版本恢复，CPU保留全部几何/近景纹理完成实图，避免盲目重复建模。
+
+最新补充优先于下面历史排查状态：006r2玻璃黑矩形现已定位并在完整场景复核修复。相同数据/灯/材质下，仅加入强度0的HemisphereLight即可复现；将该无贡献灯设为不可见排除出活动灯列表后消失。当前结论限定本机Intel/ANGLE+r180，底层驱动原因未确定。不要继续把已修复项当未解决，更不要将关折射当修复。
+
+007r5屋面和远处轨道的点状伪影属于亚像素几何采样问题：关闭阴影和提高近裁面未解决，暂隐折缝的诊断可消除；静止时32次真实子像素累积、保留全部几何后实际总览干净。控制移动、门状态、图层、贴图更新都要清历史，避免拖影；近景玻璃和关门也实际复核。`aa=raw`可做未经累计的对照，禁用几何的诊断参数不可当作交付入口。
+
+连续迭代应及时更新统一运行指针和轻量状态，避免最新原生与默认预览长期隔离。007r5原生/导出回读1421身份、19项包围盒最大误差约0.031mm；12张4K贴图解码像素一致，不是视觉/物理验收的替代。
+
+- 原生材质增强后要重新检查实时材质，特别是折射会传播其他表面的渲染异常。G1_006的金属各向异性诊断能减少大片黑色伪影；补UV与有限、单位长度切线并未完全解决。G1_006r2原生和导出改为同一套普通缎面钢参数后，展示玻璃和入口仍有黑色矩形，不能写成“已消失”。关闭阴影、MSAA、区域灯路径和改为单面玻璃均未完全排除；不折射诊断可消除展示玻璃黑块，但不折射不是接受的玻璃交付方案。仍须定位透射渲染问题，默认入口没有替换到这一候选。
+- Blender重开后，排除在视图层外的对象`matrix_world`可能尚未求值。本轮原始摄影对象都是无父对象，持久化`matrix_basis`与工作副本一致，不能把未求值的单位矩阵当坐标漂移。涉及父对象或约束时须重新求值，不能直接套此比较。
+- 本地GPU不能无限容纳2039块全分辨率摄影纹理和新增4K PBR。原生渲染为远处参考背景临时采用已有分级缓存，近景新建4K图与全部几何保留，渲染后恢复原始链接；原始资源不覆盖。每张渲染记录具体分级计数。浏览器和Cycles压力检查分开，避免两者相互挤占显存。
+- 交通几何要区分地籍轨道轴线与VBZ实际钢轨线。站台设备图层常是点位，不等于完整外形或可用状态。资料从来源坐标落实到实体后，仍须逐项观察路缘、高差和真实空间连接。
+- 狭窄、遮挡的道路采样不能任由局部拟合外推。本轮2451个近水平候选里，659个偏离稳健区域坡势超过20cm，仍保留为拒用样本。1792个支持点经区域梯度约束后，道路三角面最大坡度降到约6.85%；路面与轨槽共用分片平面格，避免细长三角面穿插。此为摄影支持的推断，不能冒充工程测量。
+- 平面覆盖不等于封闭表面。G1_007r1路缘处看似浅色斜面的区域，实际射线没有命中实体，是站台与道路间尚未封闭的侧面。补边必须保持真实平面边界，分别核对上/下标高、坡端和材料；不能以同色大面盖过去。
+
+
+### G1_015r1：树群根部和摄影残片修复
+
+保留七树真实锚位及库存高度。东侧实图射线命中CTX_I3S33492上方残片，按已建树139162/65530的局部上冠扩展替换，仅影响33276/33492工作节点；原始源不动。按既有土面边界补32mm高沥青切边，封闭12树穴共75.391m边缘，11232顶点与真实土/路面接缝检查通过。东/西/根部图实际查看，中央大残块和白色弧缝已消失，远近未建摄影部分仍不合格。
+
+交互Blender进程曾输出错误空景；实际场景射线和视口正常，独立新进程CPU渲染恢复可用，具体根因未确证，不将进程恢复说成场景几何修复。新的实时复查显示014r3仍偏亮/遮蔽不足，资源外置和日光方向同步没有解决视觉差距；继续定位。
+
+
+### G1_015r3：近景底面与印刷层校正
+
+真实浏览器检查暴露015r1檐底黑带，原生及glTF法线检查找到底面反向：162面朝上；015r2翻转，所有顶点坐标不变。首轮印刷后移导致文字埋入底板，原生实图拒收。015r3按真实表面间隙重排60个文字/图线，细线厚度变为0.096mm并保留宽度与可编辑曲线；逐件检查离底/离玻璃均>0.1mm，北侧实图文字恢复。首轮任意方向压缩矩阵在TRS分解中错误，检查拦截并恢复已保存文件；正确方法先对齐局部坐标再缩放。
+
+新光照烘焙使用独立进程，不保存原生改动。缺基础UV的纯色构件需补独立默认层，避免把光照UV误作材质UV。旧AO与烘焙失败记录不能当已完成全局光照。东侧4211/2717+2580/1173资料与建模脚本已准备，尚未建入场景。
+
+### 015r3光照编码诊断与016东端设施
+
+必要资料已足够定位本批对象。以现有构造与PBR材质继续制作东端信息组2717+2580、mast4211、bin1173，80构件已通过MCP建入G1_016并保存；实体视窗已看，正反侧渲染和自然使用待验。详见planning/BELLEVUE_EAST_FACILITIES.md。
+
+015r3实时已实看：3837构件载入，但第一份光照缓存颗粒、偏亮且玻璃下图文发糊。UV方向和临时几何对照排除错位；同一缓存放回Blender仍偏亮。16×16独立校准定位Image.save的颜色转换：线性0.6写HDR变成0.796875，保存后图像标签从Linear Rec.709变成sRGB；直接RGBE写出回读0.59765625。Render.write_still的天空HDR则保持正确线性。拒绝旧漫反射缓存，保留原数据，采用128采样和直接线性写出；新结果仍需实图检查。
+
+OIDN动态插件需要本进程PATH包含Blender shared目录；只加AddDllDirectory不足。随Blender分发的RTLightmap配置不可用，使用可运行的RT HDR并明确其近似和边缘复查要求。不能把降噪当作色彩空间修复。
+
+### 016r1表面修订与实时材质核验
+
+五张实际原生图已检查：信息架补充26mm全幅双侧机位，桶体补投入口方向；原有近景也保留。接地未见悬空、双面地图方向正确、投入口与内胆可见。反向图低处绿色残片经像素射线确认属于CTX_I3S_33492，仅移除71面0.8773m²，逐面下方为BS_ASPHALT/BS_CURB_TOP，悬浮约0.158–0.329m。十棵树的根部纹理在V1处被重复到高处，修订仅影响上部UV；2.925m以下、几何、树位与高度不变。同机位实图确认横带与悬浮片消失。
+
+015r3新线性HDR实图改善亮度/颗粒。两项额外定位：原生全景与Three方向相差90°，六个物理发光方向及GPU反射校准后转换；六块广告框在真实约1mm纸面间隙下不应套用无距离的透射模糊，改为按实际6mm外玻璃至纸面距离投影的近似，保留所有PBR参数。原生/实时的几何数值相同，不等于渲染行为相同。
+
+实时树穴仍出现三角拼片，查明旧BS_SOIL光照UV的2298条共边全部断开。016r1第一次烘焙主动终止；UV专用副本合并重复位置后2298共边全部连续，原生顶点及主材质UV不改。新版本重算光照，未将015r3旧图换标签复用。详见planning/BELLEVUE_RUNTIME_LIGHTING.md及evidence/G1_016r1。
+
+剩余：摄影树团、临时活动设施及周边未重建楼面仍严重；室内镜面需正确反射室内，活动门受光和自然使用待处理。当前设施构造细部、树冠/表皮与使用痕迹仍为有标注的推断，不称实测。
+
+### 2026-09-23：表面表现及树冠连续性
+- 用户明确要求减少重复资料搜索，真实性优先体现在构造、材料和表面。沿用已固定的位置/尺度，只有关键资料不足或矛盾才再查。
+- 016r1完整导出/回读通过3917身份、254项边界、10树UV和60印刷层；实际看七实时视角。连续UV消除树穴三角拼片；随后实看三张东侧修订图，玻璃内地图清晰度和金属反射改善。镜面与活动门受光、未建背景仍不合格。
+- 实图射线定位上部残片：地面475盲道/1173桶的保护区曾延伸到空中，另有原树冠裁剪半径边缘的碎片。017局部清理不足，保留；017r1改为已建12树连续上部范围，按全树木台账的近邻分区保护未建树、保护高屋面，LN02413.10以下不动。原始摄影2039块和所有自建物体保留；只改摄影工作副本。
+- 017r1原生无损压缩保存；三个相同机位正在独立进程重开渲染。东侧已实际看，近处悬浮大片消失；未称整体完成。之后需重新生成光照/反射和导出，不能复用016r1旧照明冒充新版。
+
+### 2026-09-23：017r1检查点已同步文件，实时实看待恢复
+- 原生东侧、北侧、反向三图和四张新反射全景已实际看；上方粘连/悬浮近景碎片消失，远处未建树团和建筑仍明显失真。全套新漫反射与导出完成：3917身份、254边界、10树UV、60印刷层和原生重开通过，37项编码图像解码像素一致。
+- station_preview已指向017r1，HTTP准备通过；默认007r5不变。CUA在后续外形参考页/清单调用中连续超时重置，应用打开文件与场景均返回queued。017r1尚无实际浏览器图，不冒充实时验收。没有暂停或完成G1。
+- 下一步恢复实际实时检查；继续物体构造与表面。另仅补一次必要公共设施档案：东侧wvz_brunnen.466是59号大喷泉，不能混用广场1284/1285或海鸥小泉。官方艺术目录556给出约4m池、0.78m池高、1.07m整体及三童骑鱼形体；水务/艺术记录合金与年代不同，已明确保留矛盾。公开图片链接已提取，但图片尚未真正看，未开始凭标题造型。详sources/references/bellevue_fountain59/basis.json。不要查询数据中不可公开访问的内部照片主机。
+
+### G1_018 fountain59 initial native construction
+
+Continued material/object-first work under the user's latest guidance. Required overall+casting+overflow photos inspected; data search stopped once shape was sufficiently understood. Forty-eight new authored objects,4m basin,0.78m rim, separate underside/support, original1m granite maps, three inferred editable cast sculptures, six inward ballistic streams and perforated overflow. Saved compressed native. Actual visual quality and runtime use remain unaccepted; three human-height full-scene renders running. A code review identifies a likely overflow-shell corner connectivity issue to inspect and repair after the first actual view. No reused photo texture or staged task.
+
+### Fountain surface review and revisions018→018r3
+
+Actual native views rejected the first rim UV shear and overly regular water ripples; changed to fixed-circumference mapping and one closed water mesh.54 overflow-side holes and22 cap holes were tested with independent rays, plus support contact and original source retention. Added an actual visible riser/flange under the strainer. Four018r2 views exposed plate-like fins and radial cap shading;018r3 replaces these with curved thickness and explicit perforated-sheet triangulation. The child-normal hypothesis was tested and rejected: all faces were already smooth, so no normal-repair benefit is claimed. Shape remains an inferred reconstruction.
+
+Memory lesson: the live Blender authoring process itself occupied about6GiB. Starting it beside the full-scene closeup worker caused malloc failure. Stop saved authoring process before fresh render batches. No geometric/texture downgrade used to hide the failed run.018r3 is not yet an exported or runtime-accepted version.
+
+018r3 actual rim/overflow/reverse views inspected. Cap radial highlight repaired; cast anatomy remains approximate, adjacent photo context unaccepted. Read-only native UV proxy adds3 stone receivers (565 total), preserves soil shared-edge continuity (0 jumps/2298), and verifies boundary-fixed1.8288mm water morph. Runtime pipeline in progress. G1_017 exact-byte Zstd compression verified by decoded SHA and native reopen before replacement; no checkpoint deletion.
+
+018r3 runtime candidate registered after full pipeline and CPU Three.js checks. Legacy MixRGB caused a real lost tint (unchanged source pixels + absent factor), repaired on export-only RGBA Mix, re-exported, then gate rerun. Do not reuse the rejected initial GLB. All exported identities3985, bounds317,max45.78µm,45 decoded images unchanged;565 diffuse receivers,5 native local probes. Water deforms only1.8288mm, native boundary/animation samples preserved. CPU checks are not WebGL or natural-use validation. CUA inventory remains unavailable. Default007r5 unchanged; next complete-area batch should address remaining distorted photographic trees/ground/adjacent facilities using existing AV/VBZ/tree data.
+
+### 2026-09-23：临河步道施工后，用户要求暂停
+
+019系列新增完整AV24105步道880.25038平方米与15棵源定位树，共52对象。019r1修正一处根颈土面开口和2926侧面UV退化三角面；五张实际渲染拒绝低处摄影遮挡与过规则程序树皮。019r2按实际射线清理有限范围的低处摄影残留，保留亭体、墙、楼梯和邻树；国槐改用CC0实拍树皮代理，几何与源位置不变。详见planning/LIMMAT_SIDEWALK_CONSTRUCTION_CN.md及evidence/G1_019r1、G1_019r2。
+
+019r2首轮渲染内存不足；重试只在临时渲染进程释放隐藏参考网格和与外部文件逐字节一致的已打包图片副本，保持可见几何、贴图分辨率和采样。北向、国槐根、悬铃木根、南向已输出；仅北向实际查看，周围摄影树团仍明显失真。用户因空间问题明确要求暂停，已将Goal设为paused并停止所属后台渲染批次；反向未完成。最新原生019r2已保存；无新导出或默认发布。恢复先检查磁盘空间，再完成剩余实图检查。runtime/tmp中上一作者进程23124的autosave与quit恢复副本尚在，正式检查点保留；未继续清理磁盘或施工。

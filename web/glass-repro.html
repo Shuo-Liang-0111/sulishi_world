@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>玻璃独立诊断</title>
+<style>body{margin:0;background:#789}canvas{display:block}aside{position:absolute;top:12px;left:12px;background:#fffd;padding:14px;font:14px sans-serif;max-width:300px}button{margin:4px;padding:8px}output{display:block;white-space:pre-wrap}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<aside><b>独立玻璃检查 · 非城市交付</b><p>保留原生展示柜几何，隔离背景与纹理。</p>
+<button id="samples">透射内部 MSAA 关闭</button><button id="front">使用单面</button><button id="lod">只采样 mip 0</button><button id="sky">原生天空环境</button><button id="actual">原生观察距离</button><button id="coords">恢复城市坐标</button><button id="reset">重新载入</button><output id="status">载入中</output></aside>
+<script type="module" src="./glass-repro.js"></script></html>

@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8"><title>原生全景方向校准</title>
+<style>body{background:#182127;color:#eee;font:16px system-ui;margin:24px}canvas{width:360px;height:360px}pre{white-space:pre-wrap}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<h1>原生全景方向校准</h1><p>六个物理发光方向 → 原生 HDR → 实际 Three.js 金属球反射</p><pre id="result">校准中</pre>
+<script type="module">
+import * as THREE from 'three';
+import {HDRLoader} from 'three/addons/loaders/HDRLoader.js';
+import {alignNativePanorama} from './native-panorama.js';
+const renderer=new THREE.WebGLRenderer({antialias:false});renderer.setSize(256,256);renderer.outputColorSpace=THREE.LinearSRGBColorSpace;document.body.appendChild(renderer.domElement);
+const hdr=alignNativePanorama(await new HDRLoader().loadAsync('./assets/diagnostics/panorama_axis_calibration.hdr'));
+const generator=new THREE.PMREMGenerator(renderer),env=generator.fromEquirectangular(hdr).texture;
+const scene=new THREE.Scene();scene.environment=env;scene.background=new THREE.Color(.06,.06,.06);
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(1,64,48),new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.06})));
+const camera=new THREE.PerspectiveCamera(35,1,.1,20),target=new THREE.WebGLRenderTarget(256,256,{type:THREE.UnsignedByteType});
+const axes=[['+X',[1,0,0],[1,0,0]],['-X',[-1,0,0],[0,1,1]],['+Y',[0,1,0],[0,0,1]],['-Y',[0,-1,0],[1,1,0]],['+Z',[0,0,1],[1,0,1]],['-Z',[0,0,-1],[0,1,0]]],results=[];
+for(const [name,axis,expected] of axes){
+ camera.position.fromArray(axis).multiplyScalar(5);camera.up.set(0,Math.abs(axis[1])>.9?0:1,Math.abs(axis[1])>.9?1:0);camera.lookAt(0,0,0);
+ renderer.setRenderTarget(target);renderer.render(scene,camera);const pixel=new Uint8Array(4);renderer.readRenderTargetPixels(target,128,128,1,1,pixel);
+ const rgb=[...pixel.slice(0,3)].map(x=>x/255),error=Math.max(...rgb.map((x,i)=>Math.abs(x-expected[i])));
+ results.push({axis:name,expected,actual:rgb,error,passed:error<.12});
+}
+renderer.setRenderTarget(null);renderer.render(scene,camera);
+document.querySelector('#result').textContent=`${results.filter(x=>x.passed).length}/6 方向通过\n`+JSON.stringify(results,null,2);
+hdr.dispose();generator.dispose();
+</script>

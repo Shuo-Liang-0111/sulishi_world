@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "Zurich_G1",
+  "origin": [
+    2683775,
+    1246700,
+    400
+  ],
+  "horizontal_crs": "EPSG:2056",
+  "vertical_crs": "EPSG:5728",
+  "native_axes": "X east, Y north, Z up; metres",
+  "scope": "planning/g1_scope.geojson",
+  "scope_area_m2": 312375.86090085685,
+  "scope_bounds": [
+    2683470.0,
+    1246391.547,
+    2684151.728,
+    1247065.014
+  ],
+  "source_context_bbox": [
+    2683420,
+    1246300,
+    2684200,
+    1247110
+  ],
+  "building_footprints": 296,
+  "source_feature_counts": {
+    "av_bo_boflaeche_a": 690,
+    "av_ei_flaechenelement_a": 449,
+    "av_ei_linienelement": 1403,
+    "av_geb_gebaeudeadresse_t": 371,
+    "tbl_routennetz": 557,
+    "bauminventar": 641,
+    "wvz_brunnen": 21
+  },
+  "epoch": {
+    "label": "Evidence-fused ordinary non-event built state",
+    "review_date": "2026-09-21",
+    "photomesh": "2025 acquisition",
+    "cadastral": "year-end 2025",
+    "station_plan": "2025-12",
+    "swissimage": "acquisition date unresolved",
+    "limitation": "Not a literal synchronized 2026-09-21 snapshot. Event tents are not permanent structures."
+  },
+  "quality_status": "survey_and_reference_stage_not_accepted",
+  "natural_open_places": [
+    "continuous outdoor public space",
+    "Stadelhofen public station concourse and stairs",
+    "one documented Bellevue pavilion public interior"
+  ],
+  "natural_facilities": [
+    "existing drinking fountain 1285",
+    "documented seating",
+    "doors of selected public interior"
+  ],
+  "excluded_this_goal": [
+    "research tasks",
+    "task props",
+    "scoring",
+    "embodied agent",
+    "complete transport operations"
+  ],
+  "closed_interiors": "unselected interiors remain closed; never represented as usable",
+  "scope_note": "Selection grew to preserve complete surveyed building footprints. Context data outside boundary is background only."
+}
