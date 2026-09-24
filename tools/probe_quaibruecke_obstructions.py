@@ -6,7 +6,7 @@ import bpy
 from mathutils import Vector
 
 R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
-assert s['version'].startswith('G1_023')
+assert s['version'].startswith(('G1_023','G1_024','G1_025'))
 oldres=(s.render.resolution_x,s.render.resolution_y)
 s.render.resolution_x=1280;s.render.resolution_y=840
 cases=globals().get('PROBE_CASES',{'QB_QA_NORTH':[(640,420),(320,300),(950,510)],

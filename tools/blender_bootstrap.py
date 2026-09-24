@@ -27,6 +27,11 @@ elif empty.exists():
     bpy.ops.wm.open_mainfile(filepath=str(empty))
     restored = empty
 scene = bpy.context.scene
+# This isolated author profile uses explicitly named, verified checkpoints.
+# Factory startup otherwise re-enables full-scene autosaves on the nearly
+# full project drive, duplicating hundreds of MB during every MCP session.
+bpy.context.preferences.filepaths.use_auto_save_temporary_files = False
+bpy.context.preferences.filepaths.save_version = 0
 scene.blendermcp_port = PORT
 scene.blendermcp_auto_start_server = True
 for key in ['polyhaven', 'hyper3d', 'hunyuan3d', 'sketchfab', 'polypizza']:

@@ -6,7 +6,7 @@ import numpy as np
 from mathutils import Vector
 
 R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
-assert s['version'].startswith(('G1_022','G1_023','G1_024'))
+assert s['version'].startswith(('G1_022','G1_023','G1_024','G1_025'))
 P=json.loads((R/'derived/bellevue/riviera_lower/build_input.json').read_text())
 C=bpy.data.collections['36_RIVIERA_LOWER_APPROACH'];O=np.array(P['origin'])
 assert C['construction_complete']

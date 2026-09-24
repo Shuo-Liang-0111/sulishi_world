@@ -159,3 +159,9 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 为补齐西侧桥墩33079，对[市政府2025年末地籍WFS](https://www.ogd.stadt-zuerich.ch/wfs/geoportal/Amtliche_Vermessungsdaten_Stadt_Zuerich_Jahresendstand_2025)作一次小范围请求，取得16条、143,320字节；与原有三墩重叠的几何一致。请求时间2026-09-23T21:56:03Z，文件与收据在sources/features/quaibruecke/av_ei_context_extension*，SHA256为6491bb6db71acc8c6eef3cf8440d32b7fe9091b4705bb5757e1c5a2bccf19850。数据状态日期与请求日期分开，不称为现场测量。
 
 1985文章纵断面的406.00m LN02均水位仅为历史依据；当前潮位/水位未经验证。水底395m是封闭渲染体积代理，不是水深数据。波纹、吸收、桥墩湿痕、支座、钢构细部和管线回路均明确推断。继续使用已有许可材料，不新增现场扫描声明。完整源身份、范围和限制见planning/QUAIBRUECKE_WATER_CONTEXT_CN.md。
+
+## Quaibrücke南侧上层步道025
+
+使用缓存AV36232人行面、13条与之相交的构造记录和2022树木库存。范围内12棵Platanus x hispanica保留源位、树种和18–26m记录高度；邻接两棵Aesculus仍未替换。源面1,417.323700m²，地下暗渠不作为露天水体。`prepare_bridgehead_bank_context.py`已重新从缓存层提取并与既有上下文逐项一致，源文件指纹记录于`derived/bellevue/bridgehead_bank/context_provenance.json`，未增加网络请求。
+
+地面读取已有SURVEY_TERRAIN；桥角的跨层错误另用023独立摄影桥面拟合约束，保留真实XY。树冠、胸径、每根枝条、树池、压顶、栏杆制造细部、隐蔽基础和材料磨损为推断。沿用已有CC0沥青、forest_ground_05土面、通用树皮和原创斑驳图集；没有新增现场扫描声明。此前已缓存并实际查看的建筑师历史河岸照片支持上下层、座椅与竖向栏杆关系，不能当作当前施工图。详细界限和重放顺序见`planning/BRIDGEHEAD_UPPER_BANK_CN.md`。

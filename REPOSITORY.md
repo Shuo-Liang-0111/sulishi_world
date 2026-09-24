@@ -22,3 +22,13 @@
 运行场景时继续从 F 盘完整工程启动。仅有 H 盘或 GitHub 代码时，必须先恢复匹配的本地资产及版本指针，再运行 `tools/start_blender.ps1` 或 `tools/serve_review.py`。部分历史制作脚本依赖明确的前置版本且含本机路径，不能无序执行来重建整个工程；本项目尚无经过全流程验证的一键重建命令。
 
 后续每个稳定施工批次提交代码和记录；先检查暂存内容、凭据与大文件，再推送。场景资产许可沿用各自来源，详见 `DATA_SOURCES.md`，不统一改写第三方许可。
+
+## 轻量副本核验
+
+H 盘仓库只做快进同步，不覆盖其中未提交的修改。F/H 同一提交且工作区干净后，在 F 盘工程运行：
+
+```powershell
+.venv/Scripts/python.exe tools/verify_code_mirror.py --mirror H:/MyWorld/ZurichWorld --receipt evidence/storage/code_only_sync_025r1.json
+```
+
+核验逐个读取跟踪文件，检查 UTF-8 文本、大小及资产扩展名，比较内容和 SHA256；仅允许 Windows 换行差异并单独列出。另检查 H 盘有无跟踪列表之外的文件及 Git 对象完整性。收据只保存在 F 盘，不复制场景资产。GitHub 推送结果及远端提交仍需另行核对；本命令不声称已联网确认远端。

@@ -2,7 +2,7 @@ import bpy,json,struct,math
 from mathutils import Vector
 from pathlib import Path
 ROOT=Path('F:/MyWorld/ZurichWorld');scene=bpy.context.scene
-assert str(scene['version']).startswith(('G1_005','G1_006','G1_007','G1_008','G1_009','G1_010','G1_011','G1_012','G1_013','G1_014','G1_015','G1_016','G1_017','G1_018','G1_019','G1_020','G1_021','G1_022','G1_023','G1_024'))
+assert str(scene['version']).startswith(('G1_005','G1_006','G1_007','G1_008','G1_009','G1_010','G1_011','G1_012','G1_013','G1_014','G1_015','G1_016','G1_017','G1_018','G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025'))
 camera=globals().get('REVIEW_CAMERA','BE_QA_ENTRY')
 scene.camera=bpy.data.objects[camera]
 scene.cycles.samples=globals().get('REVIEW_SAMPLES',32)
