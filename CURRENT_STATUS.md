@@ -16,7 +16,7 @@ Bellevue—Sechseläutenplatz—Stadelhofen连续区域约0.312km²，外接约6
 
 8849处同类边界采样，95分位差1.244毫米、最大12.058毫米；3953标线面心均在铺面以上。原40处对接最大差3.351毫米，474桥面和358下穿探针没有新增阻挡。极窄坡面仍有24.61%，周边还有旧陡面，不是无障碍或完整碰撞验收。
 
-已实际看过BD_QA_JUNCTION与BD_QA_EAST：白线恢复连续、部分折痕减轻，但细暗缝、过渡起伏、单调铺面和失真周边仍在。QB_QA_SOUTH.png为零字节；原fresh_view_batch.json错误列入其空文件哈希，不可信为完成证据。已补PNG完整性检查，能拒绝该失败文件；第三视角必须补渲染。详细复现与事实见planning/BRIDGE_SURFACE_REFINEMENT_CN.md。
+已实际看过BD_QA_JUNCTION与BD_QA_EAST：白线恢复连续、部分折痕减轻，但细暗缝、过渡起伏、单调铺面和失真周边仍在。QB_QA_SOUTH.png为零字节。已重新解码核验两张有效图，并将F盘fresh_view_batch.json纠正为两张有效、一张失败、退出1。PNG完整性检查也已同步回F，可拒绝空图；第三视角必须补渲染。详细复现与事实见planning/BRIDGE_SURFACE_REFINEMENT_CN.md。
 
 ## 存储故障优先处理
 

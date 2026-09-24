@@ -1,0 +1,86 @@
+{
+  "original": {
+    "version": "G1_027r2",
+    "native": "F:\\MyWorld\\ZurichWorld\\native\\G1_027r2_bridge_surface_refinement_working.blend",
+    "camera_sequence": [
+      "BD_QA_JUNCTION",
+      "BD_QA_EAST",
+      "QB_QA_SOUTH"
+    ],
+    "completed": [
+      {
+        "camera": "BD_QA_JUNCTION",
+        "file": "evidence\\G1_027r2\\BD_QA_JUNCTION.png",
+        "sha256": "285187b63e058407be8ffa59f5859c8d79c5d63761b480f4d8a33386db5453fa"
+      },
+      {
+        "camera": "BD_QA_EAST",
+        "file": "evidence\\G1_027r2\\BD_QA_EAST.png",
+        "sha256": "f90425271165ab56fb902f03b693a8acaec172cdb0d15dda700ead8823af6f51"
+      },
+      {
+        "camera": "QB_QA_SOUTH",
+        "file": "evidence\\G1_027r2\\QB_QA_SOUTH.png",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "full_geometry_checks_before_first_render": true,
+    "same_scene_without_construction_edits": true,
+    "native_saved": false,
+    "visual_acceptance": false
+  },
+  "corrected": {
+    "version": "G1_027r2",
+    "native": "F:\\MyWorld\\ZurichWorld\\native\\G1_027r2_bridge_surface_refinement_working.blend",
+    "camera_sequence": [
+      "BD_QA_JUNCTION",
+      "BD_QA_EAST",
+      "QB_QA_SOUTH"
+    ],
+    "completed": [
+      {
+        "camera": "BD_QA_JUNCTION",
+        "file": "evidence\\G1_027r2\\BD_QA_JUNCTION.png",
+        "bytes": 1290948,
+        "sha256": "285187b63e058407be8ffa59f5859c8d79c5d63761b480f4d8a33386db5453fa",
+        "size": [
+          1280,
+          840
+        ],
+        "decoded_scanlines_verified": true
+      },
+      {
+        "camera": "BD_QA_EAST",
+        "file": "evidence\\G1_027r2\\BD_QA_EAST.png",
+        "bytes": 1692986,
+        "sha256": "f90425271165ab56fb902f03b693a8acaec172cdb0d15dda700ead8823af6f51",
+        "size": [
+          1280,
+          840
+        ],
+        "decoded_scanlines_verified": true
+      }
+    ],
+    "full_geometry_checks_before_first_render": true,
+    "same_scene_without_construction_edits": true,
+    "native_saved": false,
+    "visual_acceptance": false,
+    "failed": [
+      {
+        "camera": "QB_QA_SOUTH",
+        "file": "evidence\\G1_027r2\\QB_QA_SOUTH.png",
+        "bytes": 0,
+        "reason": "('Missing PNG signature', 'F:\\\\MyWorld\\\\ZurichWorld\\\\evidence\\\\G1_027r2\\\\QB_QA_SOUTH.png', 0)"
+      }
+    ],
+    "process_exit_code": 1,
+    "batch_complete": false,
+    "integrity_rechecked_at": "2026-09-25T05:06:31.390124+08:00"
+  },
+  "render_exit": {
+    "finished": "2026-09-25T04:49:29.7837852+08:00",
+    "pid": 2780,
+    "exit_code": 1
+  },
+  "heavy_assets_copied": false
+}
