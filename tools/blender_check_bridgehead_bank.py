@@ -6,7 +6,7 @@ import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith(('G1_025','G1_026'))
+R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith(('G1_025','G1_026','G1_027'))
 P=json.loads((R/'derived/bellevue/bridgehead_bank/build_input.json').read_text(encoding='utf-8'))
 C=bpy.data.collections['40_BRIDGEHEAD_BANK'];trees=bpy.data.collections['41_BRIDGEHEAD_TREES']
 assert C['geometry_complete'] and len(trees.objects)==36

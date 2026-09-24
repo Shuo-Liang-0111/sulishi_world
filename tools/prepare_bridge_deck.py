@@ -34,8 +34,20 @@ old=json.loads((D/'existing_approaches.json').read_text());old_tri=np.array([q f
 old_polys=[Polygon(t[:,:2]) for t in old_tri];tree=STRtree(old_polys)
 old_plan=unary_union(old_polys)
 old_edge=old_plan.boundary
-def retained_z(p):
-    i=int(tree.nearest(Point(p)));tri=old_tri[i];q=np.array(nearest_points(old_polys[i],Point(p))[0].coords[0])
+# Existing road meshes intentionally omit their real rail grooves. Those are
+# already occupied by the old track assembly; do not fill or duplicate them.
+old_road_path=R/'derived/bellevue/transport/road_input.json'
+old_road=json.loads(old_road_path.read_text())
+old_coverage=unary_union([old_plan,shape(old_road['road_mask'])])
+reference={}
+for raised in [False,True]:
+    rows=[row for row in old['surfaces'] if row['object'].startswith('BE_PAVING_')!=raised]
+    triangles=np.array([q for row in rows for q in row['triangles']])+O
+    polygons=[Polygon(t[:,:2]) for t in triangles]
+    reference[raised]=dict(triangles=triangles,polygons=polygons,tree=STRtree(polygons),plan=unary_union(polygons))
+def retained_z(p,raised):
+    ref=reference[raised];i=int(ref['tree'].nearest(Point(p)));tri=ref['triangles'][i]
+    q=np.array(nearest_points(ref['polygons'][i],Point(p))[0].coords[0])
     uv=np.linalg.solve((tri[1:,:2]-tri[0,:2]).T,q-tri[0,:2]);return float(tri[0,2]+uv@(tri[1:,2]-tri[0,2]))
 def raw_deck(x,y):
     st,d=(np.array([x,y])-A)@np.array([T,N]).T
@@ -44,14 +56,21 @@ def raw_deck(x,y):
 def level(x,y,raised=False):
     nominal=raw_deck(x,y)+(.12 if raised else 0.)
     if station([x,y])>5:return nominal
-    distance=old_plan.distance(Point(x,y));t=min(1.,distance/2.5);w=t*t*(3-2*t)
-    return retained_z([x,y])*(1-w)+nominal*w
+    point=Point(x,y);distance=reference[raised]['plan'].distance(point)
+    if not raised:
+        # Road and upper promenade are different elevations. Blend only to
+        # road faces across the full approach between actual boundaries.
+        if bridge.covers(point):return nominal
+        w=distance/max(1e-9,distance+bridge.distance(point))
+    else:
+        t=min(1.,distance/2.5);w=t*t*(3-2*t)
+    return retained_z([x,y],raised)*(1-w)+nominal*w
 
 features={f['id']:f for f in json.loads((R/'sources/features/av_bo_boflaeche_a.geojson').read_text())['features']}
 ids=[5939,5940,5941,5942,5943,5944,36555,549]
 zones=[]
 for ident in ids:
-    f=features[f'av_bo_boflaeche_a.{ident}'];g=shape(f['geometry']).intersection(region).difference(old_plan.buffer(.00002))
+    f=features[f'av_bo_boflaeche_a.{ident}'];g=shape(f['geometry']).intersection(region).difference(old_coverage.buffer(.00002))
     if g.area<.001:continue
     kind='walk' if ident in [5939,5943] else 'cycle' if ident in [5940,5944] else 'track' if ident==36555 else 'road'
     zones.append(dict(id=f['id'],kind=kind,geometry=g,raised=kind in ['walk','cycle']))
@@ -71,7 +90,10 @@ channels=unary_union([r['line'].buffer(.0825,cap_style=2,join_style=2) for r in 
 parts=[];beams=[];pipes=[]
 def solid(name,g,top,bottom,role,source):
     for k,p in enumerate(polys(g)):
-        p=orient(p.segmentize(1.),1);v=[];faces=[]
+        # Preserve the existing ground's changing boundary height. A metre-
+        # long edge can interpolate over a kerb transition and create a step.
+        spacing=.08 if p.distance(old_edge)<.02 and station(p.centroid.coords[0])<5 else 1.
+        p=orient(p.segmentize(spacing),1);v=[];faces=[]
         for tri in constrained_delaunay_triangles(p).geoms:
             pts=list(orient(tri,1).exterior.coords)[:3]
             for fn,rev in [(top,False),(bottom,True)]:
@@ -210,6 +232,6 @@ report=dict(version='G1_027',source_surface_area_m2=surface.area,plan_overlap_m2
 out=dict(version='G1_027',origin=O.tolist(),parts=parts,beams=beams,pipes=pipes,masts=masts,guards=guards,
          surface=mapping(surface),region=mapping(region),bridge=mapping(bridge),heads=mapping(heads),channels=mapping(channels),
          zones=[dict(id=z['id'],kind=z['kind'],raised=z['raised'],geometry=mapping(z['geometry'])) for z in zones],
-         report=report,source_sha256={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [D/'existing_approaches.json',infra/'receipt.json']})
+         report=report,source_sha256={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [D/'existing_approaches.json',infra/'receipt.json',old_road_path]})
 (D/'build_input.json').write_text(json.dumps(out,separators=(',',':')),encoding='utf-8')
 print(json.dumps(dict(parts=len(parts),beams=len(beams),pipes=len(pipes),report=report)),flush=True)

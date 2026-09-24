@@ -7,7 +7,7 @@ from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
 R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
-assert s['version'].startswith(('G1_024','G1_025','G1_026'))
+assert s['version'].startswith(('G1_024','G1_025','G1_026','G1_027'))
 P=json.loads((R/'derived/bellevue/quaibruecke_water/build_input.json').read_text(encoding='utf-8'))
 C=bpy.data.collections['39_BRIDGE_WATER_CONTEXT'];assert len(C.objects)==802
 invalid=[]

@@ -15,7 +15,7 @@ if len(args)==2:
         REVIEW_SAMPLES=48
         REVIEW_RESOLUTION=(1600,1050)
 s=bpy.context.scene
-assert s['version'].startswith(('G1_015','G1_016','G1_017','G1_018','G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026'))
+assert s['version'].startswith(('G1_015','G1_016','G1_017','G1_018','G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
 s.render.threads_mode='FIXED';s.render.threads=10
 s.render.use_sequencer=False
 s.render.use_compositing=False
@@ -30,25 +30,27 @@ if s['version'].startswith(('G1_016','G1_017')):
     exec(compile((R/'tools/blender_check_east_facilities.py').read_text(encoding='utf-8'),'check_east_contacts','exec'))
 if s['version'].startswith('G1_018r'):
     exec(compile((R/'tools/blender_check_fountain59.py').read_text(encoding='utf-8'),'check_fountain_connections','exec'))
-if s['version'].startswith(('G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026')):
+if s['version'].startswith(('G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     import runpy
     runpy.run_path(str(R/'tools/blender_check_utoquai_kiosk.py'))
-if s['version'].startswith(('G1_021','G1_022','G1_023','G1_024','G1_025','G1_026')):
+if s['version'].startswith(('G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_riviera_quay.py'))
     if '34_RIVIERA_TREES' in bpy.data.collections:
         runpy.run_path(str(R/'tools/blender_check_riviera_trees.py'))
-if s['version'].startswith(('G1_023','G1_024','G1_025','G1_026')):
+if s['version'].startswith(('G1_023','G1_024','G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_quaibruecke.py'))
-if s['version'].startswith(('G1_024','G1_025','G1_026')):
+if s['version'].startswith(('G1_024','G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_quaibruecke_water.py'))
-if s['version'].startswith(('G1_025','G1_026')):
+if s['version'].startswith(('G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_bridgehead_bank.py'))
-if s['version'].startswith('G1_026'):
+if s['version'].startswith(('G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_verify_bank_sharing.py'))
     runpy.run_path(str(R/'tools/blender_check_bridgehead_portal.py'))
-if s['version'].startswith(('G1_022','G1_023','G1_024','G1_025','G1_026')):
+if s['version']=='G1_027':
+    runpy.run_path(str(R/'tools/blender_check_bridge_deck.py'))
+if s['version'].startswith(('G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_riviera_lower.py'))
-if s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026')):
+if s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     exec(compile((R/'tools/blender_check_limmat_sidewalk.py').read_text(encoding='utf-8'),'check_limmat_geometry','exec'))
     # Temporary render process only: release encoded image copies only when an
     # external file has exactly identical bytes. Pixel data/resolution, all

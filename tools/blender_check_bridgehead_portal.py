@@ -6,7 +6,7 @@ import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith('G1_026')
+R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith(('G1_026','G1_027'))
 P=json.loads((R/'derived/bellevue/bridgehead_portal/build_input.json').read_text())
 C=bpy.data.collections['42_BRIDGEHEAD_PORTAL'];assert len(C.objects)==len(P['parts'])
 assert C['input_sha256']==hashlib.sha256((R/'derived/bellevue/bridgehead_portal/build_input.json').read_bytes()).hexdigest()
