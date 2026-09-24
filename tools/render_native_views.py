@@ -12,6 +12,8 @@ import time
 import bpy
 
 root = Path('F:/MyWorld/ZurichWorld')
+sys.path.insert(0,str(root/'tools'))
+from png_integrity import verify_png
 args = sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
 assert len(args) >= 1 and len(args) == len(set(args))
 scene = bpy.context.scene
@@ -38,7 +40,9 @@ try:
             runpy.run_path(str(root/'tools/blender_render_bellevue.py'),init_globals={'REVIEW_CAMERA':camera,'REVIEW_DEVICE':'CPU','REVIEW_SAMPLES':24,'REVIEW_RESOLUTION':(1280,840)})
         path = evidence/f'{camera}.png'
         assert path.is_file() and path.stat().st_mtime >= started
-        completed.append({'camera':camera,'file':str(path.relative_to(root)),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+        verified=verify_png(path,(scene.render.resolution_x*scene.render.resolution_percentage//100,
+                                 scene.render.resolution_y*scene.render.resolution_percentage//100))
+        completed.append({'camera':camera,'file':str(path.relative_to(root)),**verified})
         (evidence/'fresh_view_batch.json').write_text(json.dumps({'version':version,'native':str(native),'camera_sequence':args,'completed':completed,'full_geometry_checks_before_first_render':True,'same_scene_without_construction_edits':True,'native_saved':False,'visual_acceptance':False},indent=2),encoding='utf-8')
         print('NATIVE_VIEW_COMPLETE',camera,flush=True)
 finally:

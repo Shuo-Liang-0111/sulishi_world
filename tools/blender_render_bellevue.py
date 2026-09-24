@@ -38,6 +38,11 @@ try:
             if node.type=='TEX_IMAGE':changed.append((node,node.image));node.image=image
     result=bpy.ops.render.render(write_still=True,scene=scene.name)
     assert 'FINISHED' in result, f'Render operator did not finish: {result}'
+    import sys
+    sys.path.insert(0,str(ROOT/'tools'))
+    from png_integrity import verify_png
+    verify_png(scene.render.filepath,(scene.render.resolution_x*scene.render.resolution_percentage//100,
+                                    scene.render.resolution_y*scene.render.resolution_percentage//100))
 finally:
     for node,image in changed:node.image=image
 (out/(camera+'_render_settings.json')).write_text(json.dumps({'version':scene['version'],'camera':camera,'device':scene.cycles.device,'resolution':[scene.render.resolution_x,scene.render.resolution_y],'resolution_percentage':scene.render.resolution_percentage,'samples':scene.cycles.samples,'denoising':scene.cycles.use_denoising,'background_texture_tiers':counts,'authored_textures_downscaled':False,'geometry_hidden_or_decimated':False,'original_links_restored':True},indent=2))

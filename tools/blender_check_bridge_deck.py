@@ -6,7 +6,7 @@ import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 R=Path('F:/MyWorld/ZurichWorld');D=R/'derived/bellevue/bridge_deck';s=bpy.context.scene
-assert s['version'] in ['G1_027','G1_027r1'];C=bpy.data.collections['43_BRIDGE_DECK']
+assert s['version'] in ['G1_027','G1_027r1','G1_027r2'];C=bpy.data.collections['43_BRIDGE_DECK']
 P=json.loads((D/'build_input.json').read_text());O=np.array(P['origin'])
 assert C['geometry_complete'] and C['input_sha256']==hashlib.sha256((D/'build_input.json').read_bytes()).hexdigest()
 areas={};invalid=[]

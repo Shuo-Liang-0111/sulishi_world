@@ -64,3 +64,29 @@ class Grade:
     def delta(self,xy,kind):
         old,_=self.surfaces[kind].sample(xy)
         return weight(xy)*(self.target(xy,kind)-old)
+
+
+class RefinedGrade(Grade):
+    """Continuous extension of the retained bank at polygon nearest-edge ties.
+
+Outside a triangulated bank, selecting just one nearest face creates Voronoi
+height jumps. Blend nearest projected heights in a distance-scaled local band;
+the band tends to zero at the bank boundary. Existing bank geometry is fixed.
+    """
+    def target(self,xy,kind):
+        xy=np.atleast_2d(xy);bank=self.surfaces['bank']
+        h,d=bank.sample(xy)
+        active=np.flatnonzero((d>1e-6)&(d<1.5))
+        if len(active):
+            p=points(xy[active]);scale=np.minimum(.08,d[active]*.20)
+            pairs=bank.tree.query(p,predicate='dwithin',distance=d[active]+12*scale)
+            at,face=pairs
+            q=get_coordinates(get_point(shortest_line(bank.poly[face],p[at]),0))
+            dist=np.linalg.norm(q-xy[active[at]],axis=1)
+            z=bank.t[face,0,2]+((q-bank.t[face,0,:2])*bank.gradient[face]).sum(1)
+            w=np.exp(-(dist-d[active[at]])/scale[at])
+            total=np.bincount(at,weights=w,minlength=len(active))
+            h[active]=np.bincount(at,weights=w*z,minlength=len(active))/total
+        tie=smoothstep(1-d/1.5)
+        z=self.raw(xy)+(.12 if kind=='walk' else 0)
+        return z*(1-tie)+(h-(.03 if kind=='road' else 0))*tie
