@@ -13,7 +13,9 @@ assert s['version'].startswith('G1_025')
 collection=bpy.data.collections['10_BELLEVUE_RECONSTRUCTION']
 overrides=[];materials={};groups={};copy_samples=[]
 deps=bpy.context.evaluated_depsgraph_get()
-for ob in collection.all_objects:
+# Temporary mesh creation/removal invalidates Blender's live all_objects
+# iterator. Snapshot object references before probing the export primitive.
+for ob in list(collection.all_objects):
     if ob.type!='MESH':continue
     group=ob.get('construction_batch','older')
     record=groups.setdefault(group,dict(objects=0,vertices=0,faces=0))

@@ -7,7 +7,7 @@ from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
 R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
-assert s['version'].startswith(('G1_023','G1_024','G1_025'))
+assert s['version'].startswith(('G1_023','G1_024','G1_025','G1_026'))
 P=json.loads((R/'derived/bellevue/quaibruecke_connection/build_input.json').read_text())
 C=bpy.data.collections['37_QUAIBRUECKE_CONNECTION'];O=np.array(P['origin'])
 assert len(C.objects)>=815
