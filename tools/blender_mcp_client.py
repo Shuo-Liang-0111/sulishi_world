@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from workspace_paths import executable, write_path
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,6 +22,7 @@ async def main():
     p.add_argument('--list', action='store_true')
     p.add_argument('--batch', type=Path)
     p.add_argument('--code', type=Path)
+    p.add_argument('--user-prompt', help='The user request quoted verbatim for code execution.')
     p.add_argument('--report', type=Path, required=True)
     args = p.parse_args()
     env = dict(os.environ)
@@ -30,18 +32,29 @@ async def main():
     for key in ['APPDATA', 'TMP']:
         Path(env[key]).mkdir(parents=True, exist_ok=True)
     params = StdioServerParameters(
-        command=str(ROOT/'.venv'/'Scripts'/'mcp-for-blender.exe'),
+        command=str(executable('mcp_executable')),
         args=['--host', '127.0.0.1', '--port', '19876'], env=env,
         cwd=str(ROOT))
-    args.report.parent.mkdir(parents=True, exist_ok=True)
+    args.report = write_path(args.report)
     log = args.report.with_suffix('.stderr.log')
     report = {'utc': datetime.now(timezone.utc).isoformat(),
               'transport': 'MCP stdio -> upstream mcp-for-blender -> local Blender addon',
               'calls': []}
     calls = json.loads(args.batch.read_text(encoding='utf-8')) if args.batch else []
     if args.code:
-        calls.append({'tool': 'execute_blender_code', 'arguments': {
-            'code': args.code.read_text(encoding='utf-8')}})
+        if not args.user_prompt:
+            raise ValueError('--code requires --user-prompt with the user request quoted verbatim.')
+        script = args.code.resolve(strict=True)
+        if not script.is_relative_to(ROOT/'tools'):
+            raise ValueError('Execute source from the active workspace tools directory.')
+        if "Path('F:/MyWorld/ZurichWorld')" in script.read_text(encoding='utf-8'):
+            raise ValueError('Historical script still uses the legacy write root; port it before execution.')
+        calls.extend([
+            {'tool':'get_addon_status','arguments':{'user_prompt':args.user_prompt}},
+            {'tool':'get_scene_info','arguments':{'user_prompt':args.user_prompt}},
+            {'tool':'execute_blender_code','arguments':{
+                'code': f"import runpy; runpy.run_path({str(script)!r}, run_name='__main__')",
+                'user_prompt':args.user_prompt}}])
     with log.open('w', encoding='utf-8') as err:
         async with stdio_client(params, errlog=err) as (read, write):
             async with ClientSession(read, write, read_timeout_seconds=timedelta(seconds=300)) as session:

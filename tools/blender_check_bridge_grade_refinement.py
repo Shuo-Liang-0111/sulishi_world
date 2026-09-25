@@ -1,5 +1,9 @@
 """Independent surface rays across tile boundaries and through painted lines."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 from collections import Counter
 import hashlib,json,sys
 import bpy
@@ -7,19 +11,19 @@ import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
-R=Path('F:/MyWorld/ZurichWorld');D=R/'derived/bellevue/bridge_grade'
+R=WORKSPACE;D=R/'derived/bellevue/bridge_grade'
 s=bpy.context.scene;assert s['version'] in ['G1_027r1','G1_027r2']
 prospective=s['version']=='G1_027r1'
-meta=json.loads((D/'027r2_refined_objects.json').read_text());report=json.loads((D/'027r2_refinement.json').read_text())
-for name,digest in report['inputs'].items():assert hashlib.sha256((D/name).read_bytes()).hexdigest()==digest,name
+meta=json.loads((read_path(D/'027r2_refined_objects.json')).read_text());report=json.loads((read_path(D/'027r2_refinement.json')).read_text())
+for name,digest in report['inputs'].items():assert hashlib.sha256((read_path(D/name)).read_bytes()).hexdigest()==digest,name
 assert not report['unresolved']
-assert hashlib.sha256((D/'027r2_refined_patch.npz').read_bytes()).hexdigest()==report['payload_sha256']
-patch=np.load(D/'027r2_refined_patch.npz');ref=np.load(D/'027r2_refined_reference.npz')
+assert hashlib.sha256((read_path(D/'027r2_refined_patch.npz')).read_bytes()).hexdigest()==report['payload_sha256']
+patch=np.load(read_path(D/'027r2_refined_patch.npz'));ref=np.load(read_path(D/'027r2_refined_reference.npz'))
 byname={r['name']:r for r in meta['objects']}
 if not prospective:
     sys.path.insert(0,str(R/'tools'))
     from blender_geometry_fingerprint import mesh_digest
-    built=json.loads((R/'evidence/G1_027r2/construction.json').read_text())
+    built=json.loads((read_path(R/'evidence/G1_027r2/construction.json')).read_text())
     for row in built['after_fingerprints']:
         assert json.loads(json.dumps(mesh_digest(bpy.data.objects[row['name']].data)))==row['mesh_fingerprint'],row['name']
 
@@ -84,7 +88,7 @@ result=dict(version='G1_027r2',prospective=prospective,surface_objects=len(surfa
     buried_paint=[q for q in paint if q['clearance_m']<0],floating_paint=[q for q in paint if q['clearance_m']>.012],
     camera_or_lighting_changed=False,visual_acceptance=False,natural_use_verified=False)
 path=D/('027r2_prospective_checks.json' if prospective else '027r2_actual_checks.json')
-path.write_text(json.dumps(result,indent=2),encoding='utf-8')
+write_path(path).write_text(json.dumps(result,indent=2),encoding='utf-8')
 print('REFINEMENT_RAYS',json.dumps({k:v for k,v in result.items() if k not in ['seam_worst','buried_paint','floating_paint']}),flush=True)
 if not globals().get('DIAGNOSTIC_ONLY',False):
     assert result['seam_quantiles_m'][-1]<.025,result['seam_worst'][:3]

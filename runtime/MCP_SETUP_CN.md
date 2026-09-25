@@ -1,5 +1,21 @@
 # Blender MCP 配置与验证
 
+## 当前入口：H盘（2026-09-25）
+
+活动代码目录已改为 `H:/MyWorld/ZurichWorld`。从该目录运行 `tools/start_blender.ps1`，默认读取配置中的027r2原生；Blender的工作目录、用户配置、日志与临时目录均在H。Blender和Python可执行文件暂保留F安装，F模型、三份链接库与纹理仍是读取依赖。
+
+本机Codex配置中仅修改blender_zurich的cwd及路径环境，其余配置和推理设置保持。已经实测Blender4.5.13、插件1.7/协议9、遥测false及完整027r2重开。修改配置不保证已缓存的桌面MCP子进程自动重启；可使用下面的H入口启动新的stdio客户端：
+
+```powershell
+Set-Location H:/MyWorld/ZurichWorld
+./tools/python.ps1 tools/blender_mcp_client.py --list --report runtime/mcp_tools.json
+# 执行源码时另加 --code tools/具体脚本.py --user-prompt '用户的完整原话'
+```
+
+当前核验脚本耗时可能超过MCP回包等待；先查H输出与进程，不能重复提交。迁移实测见 `planning/H_WORKSPACE_MIGRATION_CN.md`。
+
+## 初次配置的历史记录（以下F盘入口已被上面的H入口替代）
+
 2026-09-21 已配置并实测。此处只记录工具联通，不代表城市建成。
 
 - MCP 名称：`blender_zurich`，Codex 配置位于 `C:/Users/34384/.codex/config.toml`。其余配置经 TOML 等值比较保持不变，未更改用户的 `max` 推理设置。

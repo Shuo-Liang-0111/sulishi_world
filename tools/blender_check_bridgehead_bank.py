@@ -1,13 +1,17 @@
 """Check actual G1_025 paving, tree support, rail bases and prior passage."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import json
 import bpy
 import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith(('G1_025','G1_026','G1_027'))
-P=json.loads((R/'derived/bellevue/bridgehead_bank/build_input.json').read_text(encoding='utf-8'))
+R=WORKSPACE;s=bpy.context.scene;assert s['version'].startswith(('G1_025','G1_026','G1_027'))
+P=json.loads((read_path(R/'derived/bellevue/bridgehead_bank/build_input.json')).read_text(encoding='utf-8'))
 C=bpy.data.collections['40_BRIDGEHEAD_BANK'];trees=bpy.data.collections['41_BRIDGEHEAD_TREES']
 assert C['geometry_complete'] and len(trees.objects)==36
 invalid=[];areas={'paving':0.,'soil':0.};slopes=[]
@@ -58,7 +62,7 @@ for ob in C.objects:
         supports.append(float(hit.z-bottom))
 
 allnew=bvh(C.objects)
-route=json.loads((R/'evidence'/s['version']/'connection_geometry_checks.json').read_text(encoding='utf-8'))['route_samples']
+route=json.loads((read_path(R/'evidence'/s['version']/'connection_geometry_checks.json')).read_text(encoding='utf-8'))['route_samples']
 blocked=[]
 for q in route:
     p=Vector((*q['xy_local'],q['floor_ln02_m']-400+.08))
@@ -74,5 +78,5 @@ report=dict(version=s['version'],ground_and_rail_objects=len(C.objects),tree_obj
     rail_base_embed_range_m=[min(supports),max(supports)],old_route_probes=len(route),new_geometry_headroom_obstructions=blocked,
     source_photos_retained=2039,missing_images=missing,geometry_checks_passed=True,
     visual_acceptance=False,natural_use_verified=False,runtime_exported=False)
-(R/'evidence'/s['version']/'upper_bank_checks.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+(write_path(R/'evidence'/s['version']/'upper_bank_checks.json')).write_text(json.dumps(report,indent=2),encoding='utf-8')
 print('UPPER_BANK_CHECKS',json.dumps({k:v for k,v in report.items() if k!='trees'}),flush=True)

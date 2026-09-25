@@ -1,0 +1,7 @@
+{
+  "legacy_asset_root": "F:/MyWorld/ZurichWorld",
+  "blender_executable": "F:/MyWorld/runtime/blender-4.5.13-windows-x64/blender.exe",
+  "python_executable": "F:/MyWorld/ZurichWorld/.venv/Scripts/python.exe",
+  "mcp_executable": "F:/MyWorld/ZurichWorld/.venv/Scripts/mcp-for-blender.exe",
+  "working_native": "F:/MyWorld/ZurichWorld/native/G1_027r2_bridge_surface_refinement_working.blend"
+}

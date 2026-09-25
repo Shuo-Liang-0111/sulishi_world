@@ -1,13 +1,17 @@
 """Source identity, pit openings, actual root/soil and image-dependency checks."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import json
 import bpy
 import numpy as np
 from mathutils import Vector
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
+R=WORKSPACE;s=bpy.context.scene
 assert str(s['version']).startswith(('G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
-p=json.loads((R/'derived/bellevue/riviera_quay/tree_build_input.json').read_text())
+p=json.loads((read_path(R/'derived/bellevue/riviera_quay/tree_build_input.json')).read_text())
 c=bpy.data.collections['34_RIVIERA_TREES'];soilcol=bpy.data.collections['35_RIVIERA_TREE_PITS']
 assert len(c.objects)==27 and len(soilcol.objects)==9
 assert {o['source_id'] for o in c.objects}=={e['source']['id'] for e in p['trees']}
@@ -63,6 +67,6 @@ assert len(bpy.data.collections['03_I3S_PHOTOGRAPHIC_REFERENCE'].objects)==2039
 record={'version':s['version'],'inventory_trees_checked':records,'soil_area_m2':soil_area,'paved_area_m2':asphalt_area,
         'coverage_error_m2':asphalt_area+soil_area-p['paving_area_before_m2'],'missing_images':missing,
         'geometry_checks_passed':True,'actual_walking_verified':False,'visual_acceptance':False}
-out=R/'evidence'/s['version'];out.mkdir(exist_ok=True)
-(out/'tree_geometry_check.json').write_text(json.dumps(record,indent=2))
+out=R/'evidence'/s['version'];out.mkdir(parents=True,exist_ok=True)
+(write_path(out/'tree_geometry_check.json')).write_text(json.dumps(record,indent=2))
 print(json.dumps({k:v for k,v in record.items() if k!='inventory_trees_checked'}),flush=True)

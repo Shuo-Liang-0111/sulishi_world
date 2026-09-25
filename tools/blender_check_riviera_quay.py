@@ -1,13 +1,17 @@
 """Inspect actual source coverage, shared walking seam and physical stair rises."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import json
 import numpy as np
 import bpy
 from mathutils import Vector
 
-R=Path('F:/MyWorld/ZurichWorld');D=R/'derived/bellevue/riviera_quay';s=bpy.context.scene
+R=WORKSPACE;D=R/'derived/bellevue/riviera_quay';s=bpy.context.scene
 assert str(s['version']).startswith(('G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
-p=json.loads((D/'build_input.json').read_text());C=bpy.data.collections['33_RIVIERA_QUAY']
+p=json.loads((read_path(D/'build_input.json')).read_text());C=bpy.data.collections['33_RIVIERA_QUAY']
 O=np.array(p['origin']);A=np.array(p['anchor']);T=np.array(p['along']);N=np.array(p['across'])
 assert len(C.objects)==len(p['parts'])
 areas={};missing=[]
@@ -62,6 +66,6 @@ rec={'version':s['version'],'source_pavement_m2':p['report']['footprint_m2'],'au
      'sum_top_projected_area_including_wall_surfaces_m2':sum(areas.values()),'source_scope_note':'Overlapping official wall/step/pavement footprints are distinct records, not additive land area.',
      'join_samples':join,'max_shared_seam_delta_m':max(abs(x['delta_m']) for x in join),'sampled_stair_rises':rises,
      'missing_images':missing,'original_photo_nodes':2039,'geometry_checks_passed':True,'visual_acceptance':False,'actual_walk_use_verified':False}
-out=R/'evidence'/s['version'];out.mkdir(exist_ok=True)
-(out/'quay_geometry_check.json').write_text(json.dumps(rec,indent=2),encoding='utf-8')
+out=R/'evidence'/s['version'];out.mkdir(parents=True,exist_ok=True)
+(write_path(out/'quay_geometry_check.json')).write_text(json.dumps(rec,indent=2),encoding='utf-8')
 print(json.dumps({k:v for k,v in rec.items() if k not in ['join_samples']}),flush=True)

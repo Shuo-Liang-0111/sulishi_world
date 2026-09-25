@@ -1,4 +1,4 @@
-请以 H:/MyWorld/ZurichWorld 为唯一活动代码目录，先阅读 AGENTS.md、CURRENT_STATUS.md、README.md、G1_SCOPE.md 和 planning/H_WORKSPACE_MIGRATION_CN.md，再读取其余项目背景。接续既有未完成G1，不重复创建Goal。历史资产和软件按workspace.local.json从F读取，所有新增代码、原生、导出、渲染及缓存写H；当前基底027r2，质量与验收边界不变。原始综合目标仍保留于GOAL.md，但当前按G1_SCOPE.md完成连续区域和自然使用；完整乘车网络留后续G2。
+请以 F:/MyWorld/ZurichWorld 为项目目录，阅读 README.md、PROJECT_CONTEXT.md、DATA_SOURCES.md、GOAL.md 和 WORKING_NOTES.md，然后按照 GOAL.md 创建 Codex Goal 并立即开始实现。
 
 本轮只负责真实可交互场景的构建，验收止于真实世界基底及其自然交互可用。具体研究任务场景留到下一阶段再设定；本轮不为任务布置空间、道具、事件或评分，也不接入后续具身 Agent。请利用公开数据，借助 Blender MCP 和你的自主规划、视觉判断与建模能力，尽可能真实地复原苏黎世一个完整、连续的城市区域，让人能够实际游览、步行、乘车换乘、进入选定建筑并使用其中的日常设施。不要求每栋楼每个房间都开放。
 

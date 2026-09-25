@@ -1,9 +1,13 @@
 """Physical construction checks for the native G1_019 batch; not use acceptance."""
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
 import bpy,json,numpy as np
 from pathlib import Path
 from mathutils import Vector
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
-p=json.loads((R/'derived/bellevue/limmat_sidewalk/ground_input.json').read_text(encoding='utf-8'));E=R/'evidence'/s['version'];E.mkdir(exist_ok=True)
+R=WORKSPACE;s=bpy.context.scene;assert s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
+p=json.loads((read_path(R/'derived/bellevue/limmat_sidewalk/ground_input.json')).read_text(encoding='utf-8'));E=R/'evidence'/s['version'];E.mkdir(parents=True,exist_ok=True)
 ground=bpy.data.collections['30_LIMMAT_SIDEWALK_GROUND'];trees=bpy.data.collections['31_LIMMAT_SIDEWALK_TREES'];assert len(trees.objects)==45
 area=0
 for key in ['ASPHALT','CURB_TOP','SOIL']:
@@ -30,4 +34,4 @@ for col in [ground,trees]:
 assert not missing,missing
 assert len(bpy.data.collections['03_I3S_PHOTOGRAPHIC_REFERENCE'].objects)==2039
 rec={'version':s['version'],'ground_plan_area_m2':float(area),'source_area_m2':p['report']['area_m2'],'trees':report,'original_photo_nodes':2039,'missing_material_images':missing,'native_geometry_checks_passed':True,'visual_acceptance':False,'runtime_use_verified':False}
-(E/'geometry_check.json').write_text(json.dumps(rec,indent=2));print(json.dumps({'version':s['version'],'trees':len(report),'ground_area_m2':float(area),'geometry_checks':'passed'}),flush=True)
+(write_path(E/'geometry_check.json')).write_text(json.dumps(rec,indent=2));print(json.dumps({'version':s['version'],'trees':len(report),'ground_area_m2':float(area),'geometry_checks':'passed'}),flush=True)

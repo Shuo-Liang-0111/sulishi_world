@@ -1,34 +1,42 @@
-# GitHub 同步范围与恢复说明
+# 代码仓库与本机资产
 
-仓库：<https://github.com/Shuo-Liang-0111/sulishi_world>。
+仓库：https://github.com/Shuo-Liang-0111/sulishi_world 。同步场景构建与检查代码、Three.js查看器、计划、数据来源和必要记录。推送代码不代表G1已验收。
 
-这里同步场景制作与核验代码、Three.js 查看器、阶段计划、数据来源和施工记录。当前工程仍在施工；代码执行成功、局部渲染或仓库推送均不表示 G1 已完成。当前版本和限制见 `CURRENT_STATUS.md`。
+2026-09-25起，H:/MyWorld/ZurichWorld是唯一活动代码仓库；后续新原生、导出、渲染与缓存均写H。F:/MyWorld/ZurichWorld保留历史原生、链接库、纹理、源数据及旧代码快照，作为依赖读取，不再同步为活动工作树。本次只迁移源码，没有进行127GiB整库迁移，也没有删除F原件。
 
-大型 Blender 检查点、城市源数据、贴图、导出、历史证据和运行缓存由本地完整项目保存，未上传 GitHub。仓库不是这些大型资产的异地备份，也不是克隆后立即可运行的完整场景。`LOCAL_ASSET_INVENTORY.json` 记录本次迁移前的目录规模与关键检查点指纹。
+## 配置与启动
 
-## 本机代码副本与场景资产
-
-2026-09-23用户改为仅复制和上传构建代码，完整资产迁移已取消。完整场景继续位于 `F:/MyWorld/ZurichWorld`；`H:/MyWorld/ZurichWorld` 用作轻量代码仓库副本，与 GitHub 同步。H盘副本只包含代码、配置和必要记录，不包含场景、原始地图、贴图、渲染、Python环境或历史缓存，不能独立打开完整场景。
-
-现有 Blender MCP 和模型资产引用继续使用 F 盘，不把路径批量改到缺少资产的 H 盘。只复制代码并不会释放 F 盘的大型场景占用。后续构建仍须先确保资产工作盘有足够空间；F盘原件未因本次复制而删除。
-
-## 开发依赖
-
-- Blender 4.5.13 LTS，Windows 当前使用独立安装与独立用户配置。
-- Python 3.12，本机版本记录见 `runtime/requirements-lock.txt`。
-- Three.js 0.180.0，依赖见 `web/package.json`；在 `web` 中安装依赖。
-- MCP 服务 `mcp-for-blender==2.0.3`。当前插件来自 `ahujasid/mcp-for-blender` 提交 `7cc602252386b92829bc7364e3a897253610be38` 的 `addon.py`，SHA256 `4900048de7b7a61cc6aeaccadeacdd1afec364410e651574416bdf0a1ecdad58`；源许可证为 MIT。本机插件路径 `tools/vendor/mcp-for-blender/addon.py`，上游代码未重复纳入本仓库。
-
-运行场景时继续从 F 盘完整工程启动。仅有 H 盘或 GitHub 代码时，必须先恢复匹配的本地资产及版本指针，再运行 `tools/start_blender.ps1` 或 `tools/serve_review.py`。部分历史制作脚本依赖明确的前置版本且含本机路径，不能无序执行来重建整个工程；本项目尚无经过全流程验证的一键重建命令。
-
-后续每个稳定施工批次提交代码和记录；先检查暂存内容、凭据与大文件，再推送。场景资产许可沿用各自来源，详见 `DATA_SOURCES.md`，不统一改写第三方许可。
-
-## 轻量副本核验
-
-H 盘仓库只做快进同步，不覆盖其中未提交的修改。F/H 同一提交且工作区干净后，在 F 盘工程运行：
+本机使用被Git忽略的workspace.local.json，示例为workspace.example.json。配置实际的历史资产根目录、Blender/Python/MCP安装和当前原生路径。代码不包含大型资产，不能只克隆仓库就打开完整城市。资产许可见DATA_SOURCES.md。
 
 ```powershell
-.venv/Scripts/python.exe tools/verify_code_mirror.py --mirror H:/MyWorld/ZurichWorld --receipt evidence/storage/code_only_sync_025r1.json
+Set-Location H:/MyWorld/ZurichWorld
+./tools/python.ps1 tools/verify_workspace.py
+./tools/start_blender.ps1 -CheckOnly
+./tools/start_blender.ps1
+./tools/python.ps1 tools/serve_review.py
 ```
 
-核验逐个读取跟踪文件，检查 UTF-8 文本、大小及资产扩展名，比较内容和 SHA256；仅允许 Windows 换行差异并单独列出。另检查 H 盘有无跟踪列表之外的文件及 Git 对象完整性。收据只保存在 F 盘，不复制场景资产。GitHub 推送结果及远端提交仍需另行核对；本命令不声称已联网确认远端。
+只运行一个Blender。网页代码来自H，历史资源按文件从F回读；网页目前仍为旧实时版本，不能把它称为027r2同版导出。工作原生选择以workspace.local.json为准，不从旧实时指针推断最新建模稿。
+
+当前原生渲染入口（先确认作者实例已退出）：
+
+```powershell
+./tools/start_blender.ps1 -Background -Script tools/render_native_views.py -ScriptArgs QB_QA_SOUTH
+```
+
+启动命令返回作业PID及独立日志路径；返回starting不等于渲染完成。检查进程结束、日志、PNG完整解码及画面之后才报告结果。原生、链接库、纹理和前置数据目前必须保持F盘可读；新版本保存到H/native的新名称并核对跨盘链接，禁止覆盖F旧稿。
+
+## 依赖
+
+- Blender4.5.13LTS，现有可执行文件暂从F读取，独立配置及临时目录在H。
+- Python3.12，依赖锁定见runtime/requirements-lock.txt；通过tools/python.ps1复用F安装，工作目录与缓存切H。
+- Three.js0.180.0，web/package.json及锁文件；现有node_modules可只读回用F。
+- MCP服务mcp-for-blender==2.0.3。插件源为ahujasid/mcp-for-blender提交7cc602252386b92829bc7364e3a897253610be38，addon.py的SHA256为4900048de7b7a61cc6aeaccadeacdd1afec364410e651574416bdf0a1ecdad58，MIT许可证。小型vendor源码及许可证已本机复制到H，未重新纳入Git；克隆到新机器时须从匹配来源恢复它。
+
+## 开发和核验边界
+
+新脚本使用tools/workspace_paths.py：read_path逐文件读取本地或历史输入，write_path只写活动工作区。当前启动、027r2几何核验、原生渲染和网页链路已适配。历史制作脚本保留原版和明确的前置版本，有固定F写路径的文件须逐项移植后运行；本仓库尚不是一键从零重建全城的工具。
+
+tools/legacy_runtime额外归档原runtime中未被Git跟踪的局部诊断源码。tools/verify_code_mirror.py是旧的双工作树镜像核验器，本次改为H主工作区后不再用于F/H验收，不能用它覆盖新稿。
+
+每个稳定批次在H审查差异、凭据与大文件后提交推送。大模型、地图、贴图、导出、渲染、环境与本机凭据均不入Git；LOCAL_ASSET_INVENTORY.json是旧资产规模/指纹记录，不是资产备份。迁移实测与限制见planning/H_WORKSPACE_MIGRATION_CN.md。

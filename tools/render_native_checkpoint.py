@@ -1,8 +1,12 @@
 """Fresh-process Cycles review; native construction remains untouched."""
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
 import bpy
 from pathlib import Path
 import sys
-R=Path('F:/MyWorld/ZurichWorld')
+R=WORKSPACE
 args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
 assert len(args) in [1,2]
 REVIEW_CAMERA=args[0]
@@ -15,7 +19,7 @@ if len(args)==2:
         REVIEW_SAMPLES=48
         REVIEW_RESOLUTION=(1600,1050)
 s=bpy.context.scene
-assert s['version'].startswith(('G1_015','G1_016','G1_017','G1_018','G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
+assert s['version'].startswith(('G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')), 'Older checkpoint review recipes need an explicit path migration first.'
 s.render.threads_mode='FIXED';s.render.threads=10
 s.render.use_sequencer=False
 s.render.use_compositing=False
@@ -25,11 +29,11 @@ if hasattr(s.cycles,'denoising_use_gpu'):
 print('CPU_DENOISING',getattr(s.cycles,'denoising_use_gpu','property_absent'),flush=True)
 bpy.context.view_layer.update()
 if s['version'] in ['G1_015r1','G1_015r2','G1_015r3','G1_016','G1_016r1','G1_017','G1_017r1']:
-    exec(compile((R/'tools/blender_check_pit_edges.py').read_text(encoding='utf-8'),'check_pit_seams','exec'))
+    exec(compile((read_path(R/'tools/blender_check_pit_edges.py')).read_text(encoding='utf-8'),'check_pit_seams','exec'))
 if s['version'].startswith(('G1_016','G1_017')):
-    exec(compile((R/'tools/blender_check_east_facilities.py').read_text(encoding='utf-8'),'check_east_contacts','exec'))
+    exec(compile((read_path(R/'tools/blender_check_east_facilities.py')).read_text(encoding='utf-8'),'check_east_contacts','exec'))
 if s['version'].startswith('G1_018r'):
-    exec(compile((R/'tools/blender_check_fountain59.py').read_text(encoding='utf-8'),'check_fountain_connections','exec'))
+    exec(compile((read_path(R/'tools/blender_check_fountain59.py')).read_text(encoding='utf-8'),'check_fountain_connections','exec'))
 if s['version'].startswith(('G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     import runpy
     runpy.run_path(str(R/'tools/blender_check_utoquai_kiosk.py'))
@@ -55,7 +59,7 @@ if s['version'].startswith('G1_027'):
 if s['version'].startswith(('G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_riviera_lower.py'))
 if s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
-    exec(compile((R/'tools/blender_check_limmat_sidewalk.py').read_text(encoding='utf-8'),'check_limmat_geometry','exec'))
+    exec(compile((read_path(R/'tools/blender_check_limmat_sidewalk.py')).read_text(encoding='utf-8'),'check_limmat_geometry','exec'))
     # Temporary render process only: release encoded image copies only when an
     # external file has exactly identical bytes. Pixel data/resolution, all
     # visible geometry and sampling remain unchanged; never save this session.
@@ -92,11 +96,11 @@ if s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024
         valid={item.identifier for item in method.enum_items}
         if 'REMOVE' not in valid:continue
         packed=bytes(im.packed_file.data)
-        if hashlib.sha256(packed).hexdigest()!=hashlib.sha256(external.read_bytes()).hexdigest():continue
+        if hashlib.sha256(packed).hexdigest()!=hashlib.sha256(read_path(external).read_bytes()).hexdigest():continue
         count=len(packed);del packed
         im.unpack(method='REMOVE');released.append({'image':im.name,'bytes':count,'external':str(external)})
     gc.collect()
-    (R/'evidence'/s['version']/f'{REVIEW_CAMERA}_render_memory.json').write_text(json.dumps({'exact_encoded_image_copies_released':released,'bytes_released':sum(x['bytes'] for x in released),'invisible_reference_meshes_unloaded':hidden_refs,'visible_mesh_counts_identical':True,'native_file_modified':False,'render_pixels_downscaled':False,'visible_geometry_removed':False},indent=2))
+    (write_path(R/'evidence'/s['version']/f'{REVIEW_CAMERA}_render_memory.json')).write_text(json.dumps({'exact_encoded_image_copies_released':released,'bytes_released':sum(x['bytes'] for x in released),'invisible_reference_meshes_unloaded':hidden_refs,'visible_mesh_counts_identical':True,'native_file_modified':False,'render_pixels_downscaled':False,'visible_geometry_removed':False},indent=2))
     print('EXACT_IMAGE_COPIES_RELEASED',sum(x['bytes'] for x in released),flush=True)
-exec(compile((R/'tools/blender_render_bellevue.py').read_text(encoding='utf-8'),'fresh_native_review','exec'))
+exec(compile((read_path(R/'tools/blender_render_bellevue.py')).read_text(encoding='utf-8'),'fresh_native_review','exec'))
 print('FRESH_REVIEW_FINISHED',s['version'],REVIEW_CAMERA,flush=True)

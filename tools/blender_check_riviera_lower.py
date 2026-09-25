@@ -1,13 +1,17 @@
 """Inspect actual low deck coverage, steel rises, joins and bench bearing."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import json
 import bpy
 import numpy as np
 from mathutils import Vector
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
+R=WORKSPACE;s=bpy.context.scene
 assert s['version'].startswith(('G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
-P=json.loads((R/'derived/bellevue/riviera_lower/build_input.json').read_text())
+P=json.loads((read_path(R/'derived/bellevue/riviera_lower/build_input.json')).read_text())
 C=bpy.data.collections['36_RIVIERA_LOWER_APPROACH'];O=np.array(P['origin'])
 assert C['construction_complete']
 missing=[];area=0
@@ -92,5 +96,5 @@ result={'version':s['version'],'objects_in_batch':len(C.objects),'measured_deck_
         'seat_slats_with_two_pier_bearings':len(bearings),'missing_images':[],
         'geometry_checks_passed':True,'bridge_underpass_complete':False,
         'actual_walking_collision_verified':False,'visual_acceptance':False}
-(R/'evidence'/s['version']/'lower_geometry_checks.json').write_text(json.dumps(result,indent=2))
+(write_path(R/'evidence'/s['version']/'lower_geometry_checks.json')).write_text(json.dumps(result,indent=2))
 print('LOWER_APPROACH_CHECKS',json.dumps(result),flush=True)

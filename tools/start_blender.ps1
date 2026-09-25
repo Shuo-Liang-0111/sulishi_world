@@ -1,32 +1,51 @@
-param([string]$NativePath = '')
-$ErrorActionPreference = 'Stop'
-$projectRoot = Split-Path -Parent $PSScriptRoot
-$blenderExe = 'F:/MyWorld/runtime/blender-4.5.13-windows-x64/blender.exe'
-$runtimeDir = Join-Path $projectRoot 'runtime'
+param(
+    [string]$NativePath = '',
+    [switch]$Background,
+    [string]$Script = '',
+    [string[]]$ScriptArgs = @(),
+    [switch]$CheckOnly
+)
+. (Join-Path $PSScriptRoot 'workspace_env.ps1')
+$blenderExe = (Resolve-Path -LiteralPath $workspaceConfig.blender_executable).Path
 $logDir = Join-Path $runtimeDir 'logs'
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
-$listener = Get-NetTCPConnection -State Listen -LocalPort 19876 -ErrorAction SilentlyContinue
-if ($listener) {
-    $owner = Get-Process -Id $listener[0].OwningProcess
-    if ($owner.Path -ne $blenderExe.Replace('/', '\')) { throw 'Port 19876 belongs to another program.' }
-    [pscustomobject]@{status='already_running';pid=$owner.Id;port=19876} | ConvertTo-Json
-    exit 0
+if (-not $NativePath) { $NativePath = $workspaceConfig.working_native }
+$requestedNative = (Resolve-Path -LiteralPath $NativePath).Path
+$allowedNative = $false
+foreach ($base in @($projectRoot, $workspaceConfig.legacy_asset_root)) {
+    if (-not $base) { continue }
+    $nativeRoot = [IO.Path]::GetFullPath((Join-Path $base 'native')) + [IO.Path]::DirectorySeparatorChar
+    if ($requestedNative.StartsWith($nativeRoot,[StringComparison]::OrdinalIgnoreCase)) { $allowedNative = $true }
 }
-$env:BLENDER_USER_CONFIG = Join-Path $runtimeDir 'blender_profile/config'
-$env:BLENDER_USER_SCRIPTS = Join-Path $runtimeDir 'blender_profile/scripts'
-$env:TMP = Join-Path $runtimeDir 'tmp'
-$env:TEMP = $env:TMP
-$env:DISABLE_TELEMETRY = 'true'
-if ($NativePath) {
-    $requestedNative = (Resolve-Path -LiteralPath $NativePath).Path
-    $nativeRoot = [IO.Path]::GetFullPath((Join-Path $projectRoot 'native')) + [IO.Path]::DirectorySeparatorChar
-    if (-not $requestedNative.StartsWith($nativeRoot,[StringComparison]::OrdinalIgnoreCase) -or [IO.Path]::GetExtension($requestedNative) -ne '.blend') { throw 'Requested native must be a Blender file inside this project native directory.' }
-    $env:ZURICH_NATIVE_FILE = $requestedNative
-} else { $env:ZURICH_NATIVE_FILE = '' }
-New-Item -ItemType Directory -Force -Path $env:BLENDER_USER_CONFIG,$env:BLENDER_USER_SCRIPTS,$env:TMP | Out-Null
-$addonDir = Join-Path $env:BLENDER_USER_SCRIPTS 'addons'
-New-Item -ItemType Directory -Force -Path $addonDir | Out-Null
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'vendor/mcp-for-blender/addon.py') -Destination (Join-Path $addonDir 'blender_mcp.py')
-$bootstrap = Join-Path $PSScriptRoot 'blender_bootstrap.py'
-$proc = Start-Process -FilePath $blenderExe -ArgumentList @('--factory-startup','--python', $bootstrap) -WorkingDirectory $projectRoot -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $logDir 'blender-stdout.log') -RedirectStandardError (Join-Path $logDir 'blender-stderr.log')
-[pscustomobject]@{status='starting';pid=$proc.Id;port=19876;project=$projectRoot} | ConvertTo-Json | Tee-Object -FilePath (Join-Path $runtimeDir 'blender_process.json')
+if (-not $allowedNative -or [IO.Path]::GetExtension($requestedNative) -ne '.blend') {
+    throw 'Native must be a .blend inside an explicitly configured Zurich native directory.'
+}
+$env:ZURICH_NATIVE_FILE = $requestedNative
+$arguments = @('--factory-startup')
+if ($Background) {
+    if (-not $Script) { throw 'Background mode needs an explicit script.' }
+    $scriptPath = (Resolve-Path -LiteralPath (Join-Path $projectRoot $Script)).Path
+    $toolsRoot = [IO.Path]::GetFullPath($PSScriptRoot) + [IO.Path]::DirectorySeparatorChar
+    if (-not $scriptPath.StartsWith($toolsRoot,[StringComparison]::OrdinalIgnoreCase)) { throw 'Use a script in the active tools directory.' }
+    if ((Get-Content -LiteralPath $scriptPath -Raw).Contains("Path('F:/MyWorld/ZurichWorld')")) {
+        throw 'Historical script still uses the legacy write root. Port and review it before running.'
+    }
+    $arguments += @('--background', ('"' + $requestedNative + '"'), '--python-exit-code', '1', '--python', ('"' + $scriptPath + '"'))
+    if ($ScriptArgs.Count) { $arguments += '--'; $arguments += $ScriptArgs }
+} else {
+    if ($Script) { throw 'Custom scripts require Background mode.' }
+    $addonDir = Join-Path $env:BLENDER_USER_SCRIPTS 'addons'
+    New-Item -ItemType Directory -Force -Path $addonDir | Out-Null
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'vendor/mcp-for-blender/addon.py') -Destination (Join-Path $addonDir 'blender_mcp.py')
+    $arguments += @('--python', ('"' + (Join-Path $PSScriptRoot 'blender_bootstrap.py') + '"'))
+}
+$record = [ordered]@{project=$projectRoot;native=$requestedNative;executable=$blenderExe;temporary=$env:TMP;logs=$logDir;background=[bool]$Background;arguments=$arguments}
+if ($CheckOnly) { $record.status='configuration_verified'; $record | ConvertTo-Json -Depth 4; exit 0 }
+$existing = @(Get-Process -Name blender -ErrorAction SilentlyContinue)
+if ($existing.Count) { throw 'A Blender process already exists. Inspect it before starting another author or render process.' }
+$stamp = Get-Date -Format 'yyyyMMdd_HHmmss_fff'
+$stdout = Join-Path $logDir ('blender-' + $stamp + '.stdout.log')
+$stderr = Join-Path $logDir ('blender-' + $stamp + '.stderr.log')
+$proc = Start-Process -FilePath $blenderExe -ArgumentList $arguments -WorkingDirectory $projectRoot -WindowStyle Hidden -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
+$record.status='starting';$record.pid=$proc.Id;$record.port=19876;$record.stdout=$stdout;$record.stderr=$stderr
+$record | ConvertTo-Json -Depth 4 | Tee-Object -FilePath (Join-Path $runtimeDir 'blender_process.json')

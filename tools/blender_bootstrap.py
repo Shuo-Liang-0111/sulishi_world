@@ -1,11 +1,14 @@
 """Start the upstream MCP addon in the isolated Zurich Blender profile."""
 import json
 import os
+import sys
 from pathlib import Path
 import bpy
 import addon_utils
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT/'tools'))
+from workspace_paths import CONFIG, validate_native
 PORT = 19876
 bpy.utils.refresh_script_paths()
 addon_utils.modules_refresh()
@@ -13,12 +16,9 @@ addon_utils.enable('blender_mcp', default_set=True, persistent=True)
 native = ROOT / 'native'
 native.mkdir(exist_ok=True)
 empty = native / 'G1_000_empty.blend'
-pointer = ROOT/'runtime/current_scene.json'
 restored = None
-if os.environ.get('ZURICH_NATIVE_FILE') or pointer.exists():
-    saved = Path(os.environ.get('ZURICH_NATIVE_FILE') or json.loads(pointer.read_text(encoding='utf-8'))['native']).resolve()
-    if not saved.is_relative_to(native.resolve()) or saved.suffix != '.blend':
-        raise RuntimeError('Current scene pointer is outside the Zurich native directory')
+if os.environ.get('ZURICH_NATIVE_FILE') or CONFIG.get('working_native'):
+    saved = validate_native(os.environ.get('ZURICH_NATIVE_FILE') or CONFIG['working_native'])
     if not saved.is_file():
         raise FileNotFoundError(f'Current scene is missing; refusing to replace it: {saved}')
     bpy.ops.wm.open_mainfile(filepath=str(saved))
@@ -48,7 +48,7 @@ if restored is None:
     scene['quality_status'] = 'empty_project_not_a_completed_scene'
 scene['geographic_crs'] = 'EPSG:2056'
 scene['vertical_crs'] = 'EPSG:5728'
-if not empty.exists():
+if restored is None and not empty.exists():
     bpy.ops.wm.save_as_mainfile(filepath=str(empty))
 devices = []
 try:

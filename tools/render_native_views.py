@@ -4,6 +4,10 @@ The first view runs all original geometry/memory checks. Further views reuse the
 same visible scene and original image buffers, with no construction mutations.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import hashlib
 import json
 import runpy
@@ -11,7 +15,7 @@ import sys
 import time
 import bpy
 
-root = Path('F:/MyWorld/ZurichWorld')
+root = WORKSPACE
 sys.path.insert(0,str(root/'tools'))
 from png_integrity import verify_png
 args = sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
@@ -20,11 +24,11 @@ scene = bpy.context.scene
 version = scene['version']
 assert version.startswith(('G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
 native = Path(bpy.data.filepath)
-assert native.resolve().parent == root/'native'
+validate_native(native)
 for camera in args:
     assert bpy.data.objects[camera].type == 'CAMERA'
 evidence = root/'evidence'/version
-evidence.mkdir(exist_ok=True)
+evidence.mkdir(parents=True,exist_ok=True)
 stat = native.stat()
 started = time.time()
 saved_argv = sys.argv[:]
@@ -43,7 +47,7 @@ try:
         verified=verify_png(path,(scene.render.resolution_x*scene.render.resolution_percentage//100,
                                  scene.render.resolution_y*scene.render.resolution_percentage//100))
         completed.append({'camera':camera,'file':str(path.relative_to(root)),**verified})
-        (evidence/'fresh_view_batch.json').write_text(json.dumps({'version':version,'native':str(native),'camera_sequence':args,'completed':completed,'full_geometry_checks_before_first_render':True,'same_scene_without_construction_edits':True,'native_saved':False,'visual_acceptance':False},indent=2),encoding='utf-8')
+        (write_path(evidence/'fresh_view_batch.json')).write_text(json.dumps({'version':version,'native':str(native),'camera_sequence':args,'completed':completed,'full_geometry_checks_before_first_render':True,'same_scene_without_construction_edits':True,'native_saved':False,'visual_acceptance':False},indent=2),encoding='utf-8')
         print('NATIVE_VIEW_COMPLETE',camera,flush=True)
 finally:
     sys.argv = saved_argv

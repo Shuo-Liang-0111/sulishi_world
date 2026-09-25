@@ -1,14 +1,18 @@
 """Inspect actual024 water solids, source pier positions and support joints."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import json
 import bpy,bmesh
 import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
+R=WORKSPACE;s=bpy.context.scene
 assert s['version'].startswith(('G1_024','G1_025','G1_026','G1_027'))
-P=json.loads((R/'derived/bellevue/quaibruecke_water/build_input.json').read_text(encoding='utf-8'))
+P=json.loads((read_path(R/'derived/bellevue/quaibruecke_water/build_input.json')).read_text(encoding='utf-8'))
 C=bpy.data.collections['39_BRIDGE_WATER_CONTEXT'];assert len(C.objects)==802
 invalid=[]
 for ob in C.objects:
@@ -59,7 +63,7 @@ for j in range(4):
         bearings.append(dict(pier_index=j,girder=k,interface_gap_m=gaps))
 
 water_bvh=BVHTree.FromPolygons([Vector(q) for q in v],[list(f.vertices) for f in water.data.polygons],all_triangles=False)
-route=json.loads((R/'evidence'/s['version']/'connection_geometry_checks.json').read_text(encoding='utf-8'))['route_samples']
+route=json.loads((read_path(R/'evidence'/s['version']/'connection_geometry_checks.json')).read_text(encoding='utf-8'))['route_samples']
 flooded=[]
 for p in route:
     xy=p['xy_local'];floor=p['floor_ln02_m']-400
@@ -76,5 +80,5 @@ record=dict(version=s['version'],objects=len(C.objects),water_vertices=len(water
     public_passage_water_intersections=flooded,source_photo_objects_retained=2039,missing_images=missing,
     geometry_checks_passed=True,visual_acceptance=False,natural_use_verified=False,
     water_depth_and_steel_fabrication_inferred=True,g1_walking_scope_expanded=False)
-(R/'evidence'/s['version']/'water_structure_checks.json').write_text(json.dumps(record,indent=2),encoding='utf-8')
+(write_path(R/'evidence'/s['version']/'water_structure_checks.json')).write_text(json.dumps(record,indent=2),encoding='utf-8')
 print('BRIDGE_WATER_CHECKS',json.dumps({k:v for k,v in record.items() if k!='bearing_interfaces'}),flush=True)

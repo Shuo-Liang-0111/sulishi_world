@@ -1,6 +1,7 @@
 # Reproducible source and records live in Git; heavy local assets are inventoried.
 /.cache/
 /.venv/
+/workspace.local.json
 /native/
 /sources/
 /derived/

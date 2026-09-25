@@ -1,14 +1,18 @@
 """Inspect actual027 meshes, source masts, seam rays and underpass clearance."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import hashlib,json
 import bpy
 import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
-R=Path('F:/MyWorld/ZurichWorld');D=R/'derived/bellevue/bridge_deck';s=bpy.context.scene
+R=WORKSPACE;D=R/'derived/bellevue/bridge_deck';s=bpy.context.scene
 assert s['version'] in ['G1_027','G1_027r1','G1_027r2'];C=bpy.data.collections['43_BRIDGE_DECK']
-P=json.loads((D/'build_input.json').read_text());O=np.array(P['origin'])
-assert C['geometry_complete'] and C['input_sha256']==hashlib.sha256((D/'build_input.json').read_bytes()).hexdigest()
+P=json.loads((read_path(D/'build_input.json')).read_text());O=np.array(P['origin'])
+assert C['geometry_complete'] and C['input_sha256']==hashlib.sha256((read_path(D/'build_input.json')).read_bytes()).hexdigest()
 areas={};invalid=[]
 for ob in C.objects:
     assert ob.type=='MESH' and ob.get('source_id'),ob.name
@@ -30,7 +34,7 @@ def bvh(objects):
     return BVHTree.FromPolygons(v,f,all_triangles=False)
 ground=bvh([o for o in C.objects if o.get('surface_role') in ['asphalt_walk','asphalt_road','asphalt_track','rail']])
 solid=bvh(list(C.objects))
-joins=json.loads((D/'join_probes.json').read_text());old=bvh([bpy.data.objects[n] for n in joins['old_objects']])
+joins=json.loads((read_path(D/'join_probes.json')).read_text());old=bvh([bpy.data.objects[n] for n in joins['old_objects']])
 differences=[];level_transitions=[]
 for row in joins['samples']:
     a,_,_,_=ground.ray_cast(Vector((*row['new_xy'],30)),Vector((0,0,-1)),30)
@@ -46,7 +50,7 @@ for guard in P['guards']:
     p=np.array(guard['path']);length=np.linalg.norm(np.diff(p,axis=0),axis=1);st=np.r_[0,np.cumsum(length)]
     n=np.array([-1.,0.])
     # Source bridge across direction; north outer guard is entered southwards.
-    frame=json.loads((R/'derived/bellevue/quaibruecke_connection/build_input.json').read_text())
+    frame=json.loads((read_path(R/'derived/bellevue/quaibruecke_connection/build_input.json')).read_text())
     n=np.array(frame['bridge_across'])*(-1 if guard['source'].endswith('.5939') else 1)
     for t in np.arange(1.5,st[-1]-1.5,.5):
         xy=np.array([np.interp(t,st,p[:,i]) for i in range(2)])+n*1.25-O[:2]
@@ -55,7 +59,7 @@ for guard in P['guards']:
         overhead,_,_,_=solid.ray_cast(hit+Vector((0,0,.1)),Vector((0,0,1)),2.02)
         assert overhead is None,('walkway obstacle',xy.tolist())
         walk_samples+=1
-blocked=[];oldroute=json.loads((R/'evidence/G1_026/connection_geometry_checks.json').read_text())['route_samples']
+blocked=[];oldroute=json.loads((read_path(R/'evidence/G1_026/connection_geometry_checks.json')).read_text())['route_samples']
 for row in oldroute:
     p=Vector((*row['xy_local'],row['floor_ln02_m']-400+.08))
     hit,_,_,distance=solid.ray_cast(p,Vector((0,0,1)),2.04)
@@ -73,6 +77,6 @@ report=dict(version=s['version'],meshes=len(C.objects),actual_raised_plan_m2=are
     original_source_nodes=2039,level_transitions=level_transitions,
     unresolved_large_level_transitions=[q for q in level_transitions if abs(q['difference_m'])>.17],
     geometry_globally_accepted=False,all_photo_collisions_checked=False,visual_acceptance=False,natural_use_verified=False)
-(R/'evidence'/s['version']/'deck_checks.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+(write_path(R/'evidence'/s['version']/'deck_checks.json')).write_text(json.dumps(report,indent=2),encoding='utf-8')
 print('BRIDGE_DECK_CHECKS',json.dumps({k:v for k,v in report.items() if k not in ['level_transitions','unresolved_large_level_transitions']}),
       'UNRESOLVED_LARGE_TRANSITIONS',len(report['unresolved_large_level_transitions']),flush=True)

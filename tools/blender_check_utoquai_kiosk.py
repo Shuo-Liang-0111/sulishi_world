@@ -1,13 +1,17 @@
 """Read the authored kiosk geometry; these checks do not accept runtime use."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import json
 import bpy
 import numpy as np
 from mathutils import Vector
 
-ROOT=Path('F:/MyWorld/ZurichWorld');scene=bpy.context.scene
+ROOT=WORKSPACE;scene=bpy.context.scene
 assert scene['version'].startswith(('G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
-plan=json.loads((ROOT/'derived/bellevue/utoquai_kiosk/build_input.json').read_text())
+plan=json.loads((read_path(ROOT/'derived/bellevue/utoquai_kiosk/build_input.json')).read_text())
 collection=bpy.data.collections['32_UTOQUAI_RIVIERA_KIOSK']
 floor=plan['floor_local_inferred'];roof=plan['roof_local'];origin=np.array(plan['source']['origin'])
 ring=np.array(plan['source']['footprint_ccw_lv95']['coordinates'][0])[:-1]-origin[:2]
@@ -120,6 +124,6 @@ if scene['version'] in ['G1_020r1','G1_020r2','G1_020r3','G1_020r4'] or scene['v
         cowl_support.append({'stay':idx,'top_relative_to_cowl_outer_surface_m':delta})
     assert bpy.data.objects['UR_FRIDGE_BODY'].data.materials[0].name=='UR | aged warm pale enamel'
     rec['refinement_checks']={'counter_seams':seams,'six_stay_anchor_checks':stays,'cowl_support':cowl_support,'cowl_top_faces_outward':True,'fridge_coating_not_weathered':True}
-out=ROOT/'evidence'/scene['version'];out.mkdir(exist_ok=True)
-(out/'kiosk_geometry_check.json').write_text(json.dumps(rec,indent=2),encoding='utf-8')
+out=ROOT/'evidence'/scene['version'];out.mkdir(parents=True,exist_ok=True)
+(write_path(out/'kiosk_geometry_check.json')).write_text(json.dumps(rec,indent=2),encoding='utf-8')
 print(json.dumps(rec))

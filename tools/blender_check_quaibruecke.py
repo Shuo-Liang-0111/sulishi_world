@@ -1,14 +1,18 @@
 """Independent mesh rays/contact checks for the actual023 connection."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import json
 import bpy
 import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene
+R=WORKSPACE;s=bpy.context.scene
 assert s['version'].startswith(('G1_023','G1_024','G1_025','G1_026','G1_027'))
-P=json.loads((R/'derived/bellevue/quaibruecke_connection/build_input.json').read_text())
+P=json.loads((read_path(R/'derived/bellevue/quaibruecke_connection/build_input.json')).read_text())
 C=bpy.data.collections['37_QUAIBRUECKE_CONNECTION'];O=np.array(P['origin'])
 assert len(C.objects)>=815
 floors=[ob for ob in C.objects if ob.get('surface_role')=='paving']
@@ -101,5 +105,5 @@ record=dict(version=s['version'],objects=len(C.objects),actual_floor_plan_area_m
             hidden_floor_profile_inferred=True,geometry_checks_passed=True,
             photo_context_collision_not_included=True,actual_walking_not_verified=True,
             visual_acceptance=False,route_samples=samples)
-(R/'evidence'/s['version']/'connection_geometry_checks.json').write_text(json.dumps(record,indent=2))
+(write_path(R/'evidence'/s['version']/'connection_geometry_checks.json')).write_text(json.dumps(record,indent=2))
 print('UNDERPASS_CHECKS',json.dumps({k:v for k,v in record.items() if k!='route_samples'}),flush=True)

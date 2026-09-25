@@ -1,15 +1,19 @@
 """Measure both bridgehead levels and actual route clearance in the saved mesh."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from workspace_paths import ROOT as WORKSPACE, read_path, write_path, validate_native
+from pathlib import Path
 import hashlib,json
 import bpy
 import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
-R=Path('F:/MyWorld/ZurichWorld');s=bpy.context.scene;assert s['version'].startswith(('G1_026','G1_027'))
-P=json.loads((R/'derived/bellevue/bridgehead_portal/build_input.json').read_text())
+R=WORKSPACE;s=bpy.context.scene;assert s['version'].startswith(('G1_026','G1_027'))
+P=json.loads((read_path(R/'derived/bellevue/bridgehead_portal/build_input.json')).read_text())
 C=bpy.data.collections['42_BRIDGEHEAD_PORTAL'];assert len(C.objects)==len(P['parts'])
-assert C['input_sha256']==hashlib.sha256((R/'derived/bellevue/bridgehead_portal/build_input.json').read_bytes()).hexdigest()
+assert C['input_sha256']==hashlib.sha256((read_path(R/'derived/bellevue/bridgehead_portal/build_input.json')).read_bytes()).hexdigest()
 def bvh(objects):
     vertices=[];faces=[]
     for ob in objects:
@@ -29,7 +33,7 @@ assert not bad,bad[:4]
 actual=sum(v for k,v in areas.items() if k.startswith('BP_PAVING'))
 assert abs(actual-P['report']['restored_upper_paving_m2'])<.002
 solid=bvh(list(C.objects))
-rows=json.loads((R/'evidence/G1_025r1/connection_geometry_checks.json').read_text())['route_samples']
+rows=json.loads((read_path(R/'evidence/G1_025r1/connection_geometry_checks.json')).read_text())['route_samples']
 clearances=[];blocked=[]
 for row in rows:
     floor=row['floor_ln02_m']-400;p=Vector((*row['xy_local'],floor+.08))
@@ -58,5 +62,5 @@ report=dict(version=s['version'],objects=len(C.objects),actual_new_paving_m2=act
     added_route_obstructions=blocked,shared_surface_probe_count=len(seams),shared_surface_max_difference_m=max(seams),
     original_photo_sources=len(bpy.data.collections['03_I3S_PHOTOGRAPHIC_REFERENCE'].objects),missing_images=missing,
     geometry_checks_passed=True,all_photo_collision_checked=False,natural_use_verified=False,runtime_equivalent=False)
-(R/'evidence'/s['version']/'portal_checks.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+(write_path(R/'evidence'/s['version']/'portal_checks.json')).write_text(json.dumps(report,indent=2),encoding='utf-8')
 print('PORTAL_GEOMETRY_CHECKS',json.dumps(report),flush=True)
