@@ -1,10 +1,12 @@
 """Verify real read fallback, H writes, source syntax and loopback serving."""
 from pathlib import Path
 import ast
+from datetime import datetime, timezone
 import hashlib
 import http.client
 import json
 import os
+import re
 import shutil
 import threading
 import uuid
@@ -20,7 +22,14 @@ for path in sorted((ROOT/'tools').glob('*.py')):
     syntax.append(path.name)
 native=validate_native(CONFIG['working_native'])
 with native.open('rb') as stream:native_hash=hashlib.file_digest(stream,'sha256').hexdigest()
-checkpoint=json.loads(read_path('evidence/G1_027r2/checkpoint.json').read_text())
+version_match=re.match(r'^(G\d+_\d+(?:r\d+)?)_',native.name)
+assert version_match, f'Unrecognized versioned native: {native.name}'
+version=version_match.group(1)
+checkpoint_path=read_path(f'evidence/{version}/checkpoint.json')
+checkpoint=json.loads(checkpoint_path.read_text())
+assert checkpoint['version']==version
+assert validate_native(read_path(checkpoint['native']))==native
+assert native.stat().st_size==checkpoint['native_bytes']
 assert native_hash==checkpoint['native_sha256']
 assert read_path('derived/bellevue/bridge_grade/027r2_refined_patch.npz').is_relative_to(LEGACY_ROOT)
 
@@ -63,9 +72,11 @@ try:
 finally:
     server.shutdown();server.server_close();thread.join(timeout=5)
 
-report={'workspace':str(ROOT),'legacy_asset_root':str(LEGACY_ROOT),'syntax_files':len(syntax),
+report={'verified_utc':datetime.now(timezone.utc).isoformat(),
+        'workspace':str(ROOT),'legacy_asset_root':str(LEGACY_ROOT),'syntax_files':len(syntax),
+        'native':str(native),'version':version,'checkpoint':str(checkpoint_path),
         'write_roundtrip_bytes':len(data),'write_roundtrip_verified':True,'source_native_sha256':native_hash,
         'http_checks':checks,'disk_free':{str(p):shutil.disk_usage(p).free for p in (ROOT,LEGACY_ROOT)},
         'assets_copied':False,'scene_visual_acceptance':False}
-write_path('runtime/migration/workspace_checks.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+write_path(f'runtime/migration/workspace_checks_{version}.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print(json.dumps(report,indent=2))
