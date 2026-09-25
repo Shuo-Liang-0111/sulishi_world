@@ -177,3 +177,9 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 2026-09-26，使用缓存AV50487、EGID302060199及地址14571，官方屋面24239/95927/112929/150419/214646。沿街宽13.236m、屋面包络及身份沿用测绘。[业主PSP项目页](https://www.psp.info/portfolio/objekt/zuerich-theaterstr-22)与[Sternen Grill自身联系页](https://www.sternengrill.ch/kontakt-lage)确认地址和用途。PSP两张外观与两张室内照片均已实际查看，缓存于sources/references/sternen_grill并记录URL和SHA256；仅作参照，不用作模型贴图或分发资产。网页列2013建成、2025翻新，照片拍摄日期未明确。
 
 两侧街面按照片重建开口、退入餐厅带、阳台及石材/金属层次。窗洞精确尺寸、楼层划分、门窗制造、材质光学参数和室内浅景是推断；入口8.57m由现有摄影地面与邻接铺面约束，不是实测施工标高。屋面采用保留洞口的约束三角化，源非平面最大残差0.404mm；高度裁切交点另作面内插值。原始扫描保留。详见planning/STERNEN_GRILL_FRONTAGES_CN.md。
+
+## Theaterstrasse 20 / UBS下一块立面约束
+
+2026-09-26，缓存AV23105、地址2505与官方屋面/墙体/底面共五条通过EGID2372625相互对应。沿街边21.645394m、平面364.0742745m²；模型底面405.103m不作为实际入口地坪。[UBS地点页](https://www.ubs.com/standorte/schweiz/zurich/theaterstrasse-20/ubs-geschaeftsstelle-224.html)确认地址和用途；[MML建筑师项目页](https://www.mmlarchitekten.ch/kopie-von-kendris)提供天然石立面及后侧增建资料。已实际查看其两张外观和一张接待空间照片，原图、源URL及SHA256在sources/references/ubs_theaterstrasse20；仅作参考，不作为分发贴图。图像关联2014改造、拍摄日期未明确，不将历史交通状态直接搬入当前场景。
+
+下一批实体尚未建成，当前只提取官方包络与身份。细节、源版本差异及待补地面检查见planning/UBS_THEATERSTRASSE20_CN.md。原始摄影工作块将保留到实体及边界连接具备替换条件；不能整块删除混在一起的楼体、车辆与街面。
