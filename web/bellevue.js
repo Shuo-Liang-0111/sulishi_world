@@ -6,6 +6,7 @@ import {applyNativeDiffuse} from './native-diffuse-lighting.js';
 import {alignNativePanorama} from './native-panorama.js';
 import {applyNearBackingTransmission} from './native-case-transmission.js';
 import {createNativeFountainWater} from './native-fountain-water.js';
+import {preparePhotoGeometryDelta} from './native-context-delta.js';
 
 // The construction delta retains the original source geometry and source texture LODs.
 export async function loadBellevue({scene,renderer,photoRoot,version}) {
@@ -30,27 +31,8 @@ export async function loadBellevue({scene,renderer,photoRoot,version}) {
     new HDRLoader(manager).loadAsync(`./assets/${version}_sky.hdr`)
   ]);
   if(errors.length||renderer.getContext().isContextLost())throw new Error('亭体纹理加载或渲染失败，未接受当前场景');
-  photoRoot.updateMatrixWorld(true);patch.scene.updateMatrixWorld(true);
-  const originals=new Map();photoRoot.traverse(o=>{if(o.isMesh)originals.set(String(o.userData.source_node),o);});
-  const replacements=[];
-  patch.scene.traverse(p=>{
-    if(!p.isMesh)return;
-    const id=String(p.userData.source_node),original=originals.get(id);
-    if(!original)throw new Error(`摄影差分找不到原始分块 ${id}`);
-    const error=Math.max(...p.matrixWorld.elements.map((v,i)=>Math.abs(v-original.matrixWorld.elements[i])));
-    if(error>.002)throw new Error(`摄影差分发生位移 ${id}: ${error} m`);
-    replacements.push({original,base:original.geometry,refined:p.geometry});
-  });
-  // A fully replaced photographic tile has no triangles; glTF exports only its
-  // identity node. Retain the source object and switch to an explicit empty mesh.
-  for(const id of metadata.context_empty_nodes||[]){
-    const original=originals.get(String(id));
-    if(!original||replacements.some(r=>r.original===original))throw new Error(`空摄影差分身份冲突 ${id}`);
-    const refined=new THREE.BufferGeometry();
-    refined.setAttribute('position',new THREE.Float32BufferAttribute([],3));
-    replacements.push({original,base:original.geometry,refined});
-  }
-  if(replacements.length!==metadata.changed_nodes.length)throw new Error('摄影替换分块数量不一致');
+  const photoDelta=preparePhotoGeometryDelta({photoRoot,patchRoot:patch.scene,
+    changedNodes:metadata.changed_nodes,emptyNodes:metadata.context_empty_nodes||[],version});
   const root=authored.scene;root.visible=false;root.name='Bellevue editable native export';
   const identities=new Set(),doors=[];
   const invalidOcclusion=new Set(metadata.indirect_occlusion?.invalid_scalar_ao_receivers||[]);
@@ -145,8 +127,8 @@ export async function loadBellevue({scene,renderer,photoRoot,version}) {
       });
     },
     setActive(value){
+      photoDelta.setActive(value);
       active=value;root.visible=value;lighting.visible=value;
-      for(const r of replacements)r.original.geometry=value?r.refined:r.base;
       scene.environment=value?env:null;
     },
     toggleDoor(){targetOpen=targetOpen>.5?0:1;return targetOpen>.5;},

@@ -36,11 +36,13 @@ def area(poly):
     v=np.array([p[:3] for p in poly]);return sum(np.linalg.norm(np.cross(v[j]-v[0],v[j+1]-v[0]))/2 for j in range(1,len(v)-1))
 
 
-def cut_object(ob, to_clip, boxes, remove_faces=()):
+def cut_object(ob, to_clip, boxes, remove_faces=(), eligible_faces=None):
     old=ob.data
     assert all(len(p.vertices)==3 for p in old.polygons), ob.name
     assert all(a.data_type=='FLOAT2' or a.name.startswith('.') or a.name in {'position','sharp_face','material_index'} for a in old.attributes),ob.name
-    remove_faces=set(remove_faces);vertices=[list(v.co) for v in old.vertices]
+    remove_faces=set(remove_faces)
+    eligible_faces=None if eligible_faces is None else set(eligible_faces)
+    vertices=[list(v.co) for v in old.vertices]
     world=[np.array(ob.matrix_world@v.co) for v in old.vertices]
     local=[np.array(to_clip(p)) for p in world]
     layers=list(old.uv_layers);faces=[];uvs=[[] for _ in layers];smooth=[];materials=[]
@@ -55,6 +57,8 @@ def cut_object(ob, to_clip, boxes, remove_faces=()):
         poly=[np.r_[local[index],world[index],*[uv[k] for uv in uv_values]] for k,index in enumerate(face.vertices)]
         original_area=area(poly);parts=[poly]
         if face.index in remove_faces:parts=[]
+        elif eligible_faces is not None and face.index not in eligible_faces:
+            append(list(face.vertices),uv_values,face);kept.append(face.index);continue
         else:
             for box in boxes:
                 nxt=[]

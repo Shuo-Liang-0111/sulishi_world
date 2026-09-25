@@ -9,7 +9,7 @@ from workspace_paths import read_path,write_path
 from blender_geometry_fingerprint import mesh_digest
 from blender_photo_clip import subtract_box,area
 
-s=bpy.context.scene;assert s['version'] in ['G1_027r5','G1_027r6']
+s=bpy.context.scene;assert s['version'] in ['G1_027r5','G1_027r6','G1_027r7']
 version=s['version']
 d=json.loads(read_path('derived/sternen_grill/build_input.json').read_text())
 r=json.loads(read_path(f'evidence/{version}/build_report.json').read_text())
@@ -80,7 +80,7 @@ for row in r['cameras']:
     assert p is not None and abs(distance-1.7)<.0001,(camera.name,distance)
     camera_rows.append(dict(name=camera.name,ground=floor.name,eye_height_m=distance))
 repairs={}
-if version=='G1_027r6':
+if version in ['G1_027r6','G1_027r7']:
     ground=[]
     # Fresh evaluation of every old missing-ground location, not saved reports.
     samples=json.loads(read_path('evidence/G1_027r5/followup_probe.json').read_text())['ground']
@@ -101,6 +101,46 @@ if version=='G1_027r6':
     assert not hit or (p-Vector(corner_pixel['point'])).length>.05
     repairs=dict(ground_samples=ground,balcony_corner_supported=corner,former_corner_spike_new_hit=ob.name if hit else None,
         glass_roughness=next(n for n in bpy.data.materials['SG | clear double glazing'].node_tree.nodes if n.type=='BSDF_PRINCIPLED').inputs['Roughness'].default_value)
+if version=='G1_027r7':
+    sign=bpy.data.objects['SG_RESTAURANT_LETTERING']
+    vertices=np.array([Q(np.array(sign.matrix_world@v.co)) for v in sign.data.vertices])
+    # Check against the third opening's physical pier limits, not only the
+    # target center stored by the builder.
+    assert vertices[:,0].min()>W/2+.30 and vertices[:,0].max()<W*3/4-.30
+    assert 10.8<vertices[:,2].min()<vertices[:,2].max()<11.10
+    assert not any(o.type=='LIGHT' for o in C.objects)
+    emitters=[]
+    for level in ['GROUND','RESTAURANT']:
+        ob=bpy.data.objects['SG_R6_'+level+'_OPAL_GLOBE']
+        bs=next(n for n in ob.data.materials[0].node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+        strength=bs.inputs['Emission Strength'].default_value
+        assert 10<strength<35
+        assert ob.visible_camera and ob.visible_glossy and ob.visible_transmission
+        emitters.append(dict(object=ob.name,emission_strength=strength))
+    approach=bpy.data.objects['SG_R7_CONTINUOUS_STREET_APPROACH']
+    tree=BVHTree.FromObject(approach,deps);walk_contacts=[];outer_obstructions=[]
+    # Fresh independent samples on both sides of the formerly open corner.
+    for offset in [.46,.78,1.22,1.6,2.0]:
+        for v in [-15.6,-10.2,-5.1,-1.0,-.15,.08,.31,.52,.94,1.47,2.25,3.9]:
+            u=W+offset
+            point,normal,_,_=tree.ray_cast(P(u,v,9.15),Vector((0,0,-1)),1.3)
+            assert point is not None and 8.35<point.z<8.8 and normal.z>.98,(u,v)
+            hit,p,n,face,ob,m=s.ray_cast(deps,P(u,v,9.15),Vector((0,0,-1)),distance=1.3)
+            assert hit
+            row=dict(u=u,v=v,support_z=point.z,top_z=p.z,object=ob.name)
+            if abs(p.z-point.z)>.02 or n.z<.98:
+                assert offset>1.5,('inner approach remains obstructed',row)
+                outer_obstructions.append(row)
+            else:walk_contacts.append(row)
+    assert len(walk_contacts)>=40
+    local_mat=approach.data.materials[0]
+    assert local_mat.name=='SG | r7 neutral street asphalt'
+    assert local_mat!=bpy.data.materials['asphalt_03']
+    assert any(n.type=='HUE_SAT' and abs(n.inputs['Saturation'].default_value-.06)<1e-6 for n in local_mat.node_tree.nodes)
+    repairs['r7']=dict(sign_bounds=[vertices.min(0).tolist(),vertices.max(0).tolist()],
+        physical_emitters=emitters,inner_approach_contacts=walk_contacts,
+        retained_outer_scan_obstructions=outer_obstructions,whole_lane_clear=False,
+        runtime_collision_checked=False)
 report=dict(version=s['version'],new_meshes=sum(o.type=='MESH' for o in C.objects),upper_recessed_glazed_openings=len(openings),
     retained_photo_faces_checked=photo_faces,max_raw_boundary_sliver_m2=max_overlap,
     floating_point_inset_tolerance_m=.0001,max_replacement_overlap_beyond_tolerance_m2=max_inset_overlap,

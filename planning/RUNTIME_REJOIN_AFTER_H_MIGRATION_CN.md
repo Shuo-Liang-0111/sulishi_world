@@ -10,4 +10,36 @@
 4. 相机不能只导出BE/HB前缀；桥面、岸边和新建筑相机都在`90_REVIEW_CAMERAS`。保留原机位、实际眼高、色彩设置及原生文件身份，避免默认首页指向旧版。
 5. 在副本中评估/导出几何，保持原生可继续编辑。链接库与纹理应先核验；实时碰撞、门和设施状态另需实际使用核验，不能用原生几何检查或视频截图替代。
 
-本轮先完成当前近景修订的独立重开和真实渲染。以上合流仍未实施，G1保持原连续区域和自然使用验收要求，不增加研究任务、评分或Agent接口。
+此清单最初是未实施审计；下面分别更新已完成组件和未完成部分。G1保持原连续区域和自然使用验收要求，不增加研究任务、评分或Agent接口。
+
+## 027r7的实际清点与摄影差分
+
+blender_runtime_inventory.py在保存的027r7场景中清点12,228可见作者对象、38,864,551多边形；其中37,060,208（95.357%）属于树木集合。另有80复查相机、204个材质图（80个复杂图）、21灯、674交互属性标记和一个水面形变对象。交互属性存在不表示设施已可用，材质数量不表示导出已保持。
+
+对2039个保留源节点与当前摄影网格逐一核对，116块有累计变化、其中12块无表面。其余1923块保持；所有对象的源身份、变换与材质对应不变。导出器不重新拼接历次photo_cut_file，而是直接导出当前完整差异，避免复活早期裁掉的扫描。
+
+blender_export_context_delta.py在独立进程38904成功运行并实际退出0，未重存原生。生成G1_027r7_context_delta.glb，5,213,816字节、104网格、50,166三角形，SHA256 1615a55d6a00b70806d23236b68deddcaed7840180ab434cf1fc627646d4ce54。其余12空块显式列入清单。原生绑定SHA256 3e2a7284e719a977c5d32e9d68591027e7ce4f67a426011768997d8fe9cb81cf；输出不带新的摄影材质，保留原图对应关系。
+
+check_context_delta_export.py独立解析实际GLB，按世界坐标/UV/三角形绕序与保存前期望数组逐面匹配，104网格全部通过。不是只检查导出日志。check_photo_delta_binding.mjs使用已安装Three.js实际加载源几何与新差分，116项切换/恢复及原材质对象保留通过；身份、版本、变换、UV等7项故障守卫也通过。此Node检查不解码照片、没有浏览器视觉验收，明确保留这些未验收标志。
+
+网页的摄影替换改为先完整检查再整体启用，发现竞争版本修改时在改变第一项前中止。实际浏览器从H读取新代码打开旧007r5，摄影/实体两次切换及恢复成功，错误/警告日志为空。默认007r5、候选018r3没有提升；新摄影组件单独发布会使作者几何不配套，因此尚未接入默认入口。
+
+首次导出进程3228退出1：glTF的export_format是回调枚举，静态RNA列表为空，参数保护在写出前拦截。检查安装版源码后改为调用其get_format_items，实际读取GLB/GLTF_SEPARATE；材质枚举实际包含NONE。保留失败日志和真实退出码，没有删除证据或覆盖原生。
+
+## 树木数据组织的诊断结果
+
+blender_profile_leaf_instances.py只读分析两棵悬铃木、两棵国槐的叶片。逐叶模板能保持拓扑、UV与颜色比例，仿射位置最大误差0.0177–0.0382毫米；这并不自动保持平滑法线。两棵悬铃木法线最大偏差12.59°/13.63°，国槐约0.40°。没有生成或启用实例化资产，也没有性能改善或视觉等价结论。
+
+下一步应解决逐叶法线/局部形变表示后再逐角度比较；不整体减面近景墙体、窗框、栏杆或设施。还须把所有作者集合、材料、灯、相机、水面和设施状态汇合为同一版本，并实际行走检查。当前摄影组件通过不代表整座世界已经实时同步。
+
+## 重放命令
+
+仅在确认没有其他Blender、且目标导出不存在时运行导出。现有r7资产保留，不重复覆盖；若只想复核，直接运行后两条。
+
+```powershell
+./tools/start_blender.ps1 -Background -NativePath H:/MyWorld/ZurichWorld/native/G1_027r7_sternen_street_approaches.blend -Script tools/blender_export_context_delta.py -ScriptArgs @('--profile-leaves') -WaitForExit
+./tools/python.ps1 tools/check_context_delta_export.py G1_027r7
+node tools/check_photo_delta_binding.mjs G1_027r7
+```
+
+证据在evidence/G1_027r7/runtime_inventory.json、context_delta_export.json、context_delta_roundtrip.json、context_delta_binding.json和leaf_instancing_profile.json。几何文件、期望数组、日志及图片在H本地保留，不进代码仓库。

@@ -49,3 +49,7 @@ H约1.90TiB可用，F仍约636MiB；代码迁移已完成，但历史资产和�
 2026-09-26再次实测H写入/flush/回读512KiB、365份顶层Python语法、当前027r4原生哈希及H网页代码/F只读资源HTTP读取通过，收据runtime/migration/workspace_checks_G1_027r4.json。随后027r5、027r6新原生和独立渲染均从H路径运行；这些是继续施工候选，是否提升由独立重开和实际图像决定。没有再次从F覆盖H，没有复制大型历史资产，也没有删除F原件。
 
 027r6完成独立重开与四图实看后，H工作入口已更新。再次运行verify_workspace.py通过：366份Python语法、新原生SHA256与大小匹配、H写入回读和HTTP资源检查；收据runtime/migration/workspace_checks_G1_027r6.json。此为可继续施工的局部改善稿，整段视觉与自然使用仍未验收，具体遗留问题见CURRENT_STATUS.md。
+
+027r7也已在H保存、独立重开并完成四图实看，渲染实际退出0后提升施工入口。verify_workspace.py再次通过372份顶层Python语法、原生大小/SHA256、H写入/flush/回读及真实HTTP检查，收据runtime/migration/workspace_checks_G1_027r7.json。只读F资源回退仍正常；不是整库资产搬迁，没有释放F的模型占用。后续导出与记录继续写H，新稿不能被F旧代码覆盖。
+
+收尾按最新逐文件清单再次核对451份来源代码/文档：H无遗漏、F来源哈希均未改变，保留H后续修改，不重复复制。收据runtime/migration/code_inventory_verified_027r7.json。H网页还完成了实际浏览器核验：旧007r5/1421作者对象能打开，摄影与实体切换/恢复正常，浏览器错误和警告为空；明确不是027r7完整实时验收。临时核验服务已关闭，后续需要查看时重新从H启动并读取新端口。
