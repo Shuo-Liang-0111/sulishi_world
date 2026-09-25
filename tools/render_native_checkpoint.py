@@ -54,10 +54,12 @@ if s['version'].startswith('G1_027'):
     runpy.run_path(str(R/'tools/blender_check_bridge_deck.py'))
     if s['version']=='G1_027r1':
         runpy.run_path(str(R/'tools/blender_check_bridge_grade_patch.py'))
-    if s['version'] in ['G1_027r2','G1_027r3']:
+    if s['version'] in ['G1_027r2','G1_027r3','G1_027r4']:
         runpy.run_path(str(R/'tools/blender_check_bridge_grade_refinement.py'))
     if s['version']=='G1_027r3':
         runpy.run_path(str(R/'tools/blender_check_bridge_photo_cleanup.py'))
+    if s['version']=='G1_027r4':
+        runpy.run_path(str(R/'tools/blender_check_bridge_fittings.py'))
 if s['version'].startswith(('G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_riviera_lower.py'))
 if s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):

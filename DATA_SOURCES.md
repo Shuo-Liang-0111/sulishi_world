@@ -165,3 +165,9 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 使用缓存AV36232人行面、13条与之相交的构造记录和2022树木库存。范围内12棵Platanus x hispanica保留源位、树种和18–26m记录高度；邻接两棵Aesculus仍未替换。源面1,417.323700m²，地下暗渠不作为露天水体。`prepare_bridgehead_bank_context.py`已重新从缓存层提取并与既有上下文逐项一致，源文件指纹记录于`derived/bellevue/bridgehead_bank/context_provenance.json`，未增加网络请求。
 
 地面读取已有SURVEY_TERRAIN；桥角的跨层错误另用023独立摄影桥面拟合约束，保留真实XY。树冠、胸径、每根枝条、树池、压顶、栏杆制造细部、隐蔽基础和材料磨损为推断。沿用已有CC0沥青、forest_ground_05土面、通用树皮和原创斑驳图集；没有新增现场扫描声明。此前已缓存并实际查看的建筑师历史河岸照片支持上下层、座椅与竖向栏杆关系，不能当作当前施工图。详细界限和重放顺序见`planning/BRIDGEHEAD_UPPER_BANK_CN.md`。
+
+## 桥上照明与旗杆027r4（2026-09-25取得，26日施工）
+
+[城市公共照明](https://www.stadt-zuerich.ch/geodaten/download/Oeffentliche_Beleuchtung_der_Stadt_Zuerich?format=10008)WFS图层ewz_brennstelle_p，本次EPSG:2056范围2683300,1246400,2684200,1247250取得1190条；13条在已有12根桥杆0.4米内。官方页列无使用限制、数据日期2026-09-13、每周更新。文件和带请求URL/SHA256收据在sources/features/bridge_fittings；点位只有XY与属性，未提供灯型或高度。37745待查，其余12套灯具外形/连接为源摄影约束下的推断，原始orientierung不擅自解释单位。
+
+[市政府旗帜设置规定](https://www.stadt-zuerich.ch/content/dam/web/de/stadtleben/stadtportraet/dokumente/beflaggung_stadt_zuerich_ausfuehrungsbestimmungen_und_hinweise.pdf)约2016/2017年文件，印刷页9/2、PDF第31页，已实际查看图示。给出Quaibrücke每角3面、每面4×4米和相应挂旗场合；不提供精确旗杆坐标与高度。本次只复原源扫描中东南角挂旗外观，杆锚/细部/布料姿态标为推断。PDF及收据、页图在sources/references/bridge_fittings。不能把这一外观当作当前日期的实际挂旗日历。细节见planning/BRIDGE_FITTINGS_CN.md。

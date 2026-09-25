@@ -3,8 +3,10 @@ param(
     [switch]$Background,
     [string]$Script = '',
     [string[]]$ScriptArgs = @(),
-    [switch]$CheckOnly
+    [switch]$CheckOnly,
+    [switch]$WaitForExit
 )
+if ($WaitForExit -and -not $Background) { throw 'WaitForExit is for finite background jobs, not the author session.' }
 . (Join-Path $PSScriptRoot 'workspace_env.ps1')
 $blenderExe = (Resolve-Path -LiteralPath $workspaceConfig.blender_executable).Path
 $logDir = Join-Path $runtimeDir 'logs'
@@ -49,3 +51,15 @@ $stderr = Join-Path $logDir ('blender-' + $stamp + '.stderr.log')
 $proc = Start-Process -FilePath $blenderExe -ArgumentList $arguments -WorkingDirectory $projectRoot -WindowStyle Hidden -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
 $record.status='starting';$record.pid=$proc.Id;$record.port=19876;$record.stdout=$stdout;$record.stderr=$stderr
 $record | ConvertTo-Json -Depth 4 | Tee-Object -FilePath (Join-Path $runtimeDir 'blender_process.json')
+if ($WaitForExit) {
+    # Retain the Process returned by Start-Process and its native handle.
+    # Reacquiring by PID later can lose ExitCode after the process has ended.
+    $taskProcessHandle = $proc.Handle
+    $proc.WaitForExit()
+    $taskNativeExitCode = $proc.ExitCode
+    if ($null -eq $taskNativeExitCode) { throw 'Background process ended but its exit code was unavailable.' }
+    [ordered]@{ pid=$proc.Id; native=$requestedNative; exit_code=$taskNativeExitCode;
+        completed_utc=[DateTime]::UtcNow.ToString('o'); stdout=$stdout; stderr=$stderr } |
+        ConvertTo-Json | Tee-Object -FilePath (Join-Path $logDir ('blender-' + $stamp + '.exit.json'))
+    exit $taskNativeExitCode
+}
