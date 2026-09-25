@@ -71,7 +71,7 @@ for p in route:
     if hit is not None and hit.z>floor+.015:flooded.append(p['station_m'])
 assert not flooded,('Water intersects public passage',flooded[:10])
 assert len(bpy.data.collections['03_I3S_PHOTOGRAPHIC_REFERENCE'].objects)==2039
-missing=[i.name for i in bpy.data.images if i.source=='FILE' and not i.packed_file and i.filepath and not Path(bpy.path.abspath(i.filepath)).is_file()]
+missing=[i.name for i in bpy.data.images if i.source=='FILE' and not i.packed_file and i.filepath and not Path(bpy.path.abspath(i.filepath,library=i.library)).is_file()]
 assert not missing,missing
 record=dict(version=s['version'],objects=len(C.objects),water_vertices=len(water.data.vertices),water_faces=len(water.data.polygons),
     water_boundary_edges=boundary,water_nonmanifold_edges=nonmanifold,water_volume_m3=volume,water_plan_area_m2=area,

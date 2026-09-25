@@ -30,7 +30,7 @@ for col in [ground,trees]:
   for m in o.data.materials:
    if not m or not m.use_nodes:continue
    for n in m.node_tree.nodes:
-    if n.type=='TEX_IMAGE' and n.image and not n.image.packed_file and not Path(bpy.path.abspath(n.image.filepath)).exists():missing.append(n.image.name)
+    if n.type=='TEX_IMAGE' and n.image and not n.image.packed_file and not Path(bpy.path.abspath(n.image.filepath,library=n.image.library)).exists():missing.append(n.image.name)
 assert not missing,missing
 assert len(bpy.data.collections['03_I3S_PHOTOGRAPHIC_REFERENCE'].objects)==2039
 rec={'version':s['version'],'ground_plan_area_m2':float(area),'source_area_m2':p['report']['area_m2'],'trees':report,'original_photo_nodes':2039,'missing_material_images':missing,'native_geometry_checks_passed':True,'visual_acceptance':False,'runtime_use_verified':False}

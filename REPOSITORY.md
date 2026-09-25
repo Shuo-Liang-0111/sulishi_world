@@ -16,7 +16,7 @@ Set-Location H:/MyWorld/ZurichWorld
 ./tools/python.ps1 tools/serve_review.py
 ```
 
-只运行一个Blender。网页代码来自H，历史资源按文件从F回读；网页目前仍为旧实时版本，不能把它称为027r2同版导出。工作原生选择以workspace.local.json为准，不从旧实时指针推断最新建模稿。
+只运行一个Blender。网页代码来自H，历史资源按文件从F回读；网页目前仍为旧实时版本，不能把它称为最新原生的同版导出。工作原生选择以workspace.local.json为准，不从旧实时指针推断最新建模稿。
 
 当前原生渲染入口（先确认作者实例已退出）：
 
@@ -24,7 +24,7 @@ Set-Location H:/MyWorld/ZurichWorld
 ./tools/start_blender.ps1 -Background -Script tools/render_native_views.py -ScriptArgs QB_QA_SOUTH
 ```
 
-启动命令返回作业PID及独立日志路径；返回starting不等于渲染完成。检查进程结束、日志、PNG完整解码及画面之后才报告结果。原生、链接库、纹理和前置数据目前必须保持F盘可读；新版本保存到H/native的新名称并核对跨盘链接，禁止覆盖F旧稿。
+启动命令返回作业PID及独立日志路径；返回starting不等于渲染完成。检查进程结束、日志、PNG完整解码及画面之后才报告结果。历史原生、链接库、纹理和前置数据目前必须保持F盘可读；新版本保存到H/native的新名称并核对跨盘链接，禁止覆盖F旧稿。链接图像检查必须使用其所属library解析相对路径，不能一律按H主文件解析。
 
 ## 依赖
 

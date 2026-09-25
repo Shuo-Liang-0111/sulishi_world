@@ -8,7 +8,7 @@
 
 GitHub：<https://github.com/Shuo-Liang-0111/sulishi_world>。仅同步构建代码、配置和必要说明。**2026-09-25 起，H:/MyWorld/ZurichWorld 为主工作目录，后续代码与新产物都写 H。** 历史模型、贴图、原始数据和已有软件依赖仍从 F 盘读取，未进行127GiB整库复制，也未删除原资产；详见 [REPOSITORY.md](REPOSITORY.md) 和 [迁移记录](planning/H_WORKSPACE_MIGRATION_CN.md)。
 
-`native` 保留可编辑 Blender 新版本，`sources` 保留来源，`derived` 保留转换结果，`evidence` 保留实际检查记录。旧文件可从配置的 F 盘来源读取。当前建模基底由本机 `workspace.local.json` 中的 `working_native` 指定，为027r2；旧 F 盘实时默认007r5、候选018r3不是最新建模稿。运行入口地址记录在 H 盘 `runtime/review_server.json`。
+`native` 保留可编辑 Blender 新版本，`sources` 保留来源，`derived` 保留转换结果，`evidence` 保留实际检查记录。旧文件可从配置的 F 盘来源读取。当前建模基底由本机 `workspace.local.json` 中的 `working_native` 指定，具体版本和验收差距见 CURRENT_STATUS；旧 F 盘实时默认007r5、候选018r3不是最新建模稿。运行入口地址记录在 H 盘 `runtime/review_server.json`。
 
 | 文件 | 用途 |
 |---|---|

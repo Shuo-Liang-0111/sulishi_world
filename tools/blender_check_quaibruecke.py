@@ -92,7 +92,7 @@ assert .14<min(rises)<=max(rises)<.20
 missing_images=[]
 for image in bpy.data.images:
     if image.source!='FILE' or image.packed_file or not image.filepath:continue
-    if not Path(bpy.path.abspath(image.filepath)).is_file():missing_images.append(image.name)
+    if not Path(bpy.path.abspath(image.filepath,library=image.library)).is_file():missing_images.append(image.name)
 assert not missing_images,missing_images
 assert len(bpy.data.collections['03_I3S_PHOTOGRAPHIC_REFERENCE'].objects)==2039
 record=dict(version=s['version'],objects=len(C.objects),actual_floor_plan_area_m2=area,

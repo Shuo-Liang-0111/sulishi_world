@@ -12,7 +12,7 @@ from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
 R=WORKSPACE;D=R/'derived/bellevue/bridge_grade'
-s=bpy.context.scene;assert s['version'] in ['G1_027r1','G1_027r2']
+s=bpy.context.scene;assert s['version'] in ['G1_027r1','G1_027r2','G1_027r3']
 prospective=s['version']=='G1_027r1'
 meta=json.loads((read_path(D/'027r2_refined_objects.json')).read_text());report=json.loads((read_path(D/'027r2_refinement.json')).read_text())
 for name,digest in report['inputs'].items():assert hashlib.sha256((read_path(D/name)).read_bytes()).hexdigest()==digest,name
@@ -80,14 +80,14 @@ for row in meta['objects']:
         hit=ray(p[:2])
         if hit is not None:paint.append(dict(object=ob.name,face=int(face),xy=p[:2].tolist(),clearance_m=float(p[2]-hit[0]),surface=hit[1][0]))
 assert seams and paint
-result=dict(version='G1_027r2',prospective=prospective,surface_objects=len(surfaces),
+result=dict(version=s['version'],surface_geometry_version='G1_027r2',prospective=prospective,surface_objects=len(surfaces),
     payload_sha256=report['payload_sha256'],
     same_kind_seam_probes=len(seams),seam_quantiles_m=np.quantile([q['difference_m'] for q in seams],[.5,.95,.99,1]).tolist(),
     seam_worst=sorted(seams,key=lambda x:x['difference_m'],reverse=True)[:16],
     painted_face_probes=len(paint),paint_clearance_quantiles_m=np.quantile([q['clearance_m'] for q in paint],[0,.01,.5,.99,1]).tolist(),
     buried_paint=[q for q in paint if q['clearance_m']<0],floating_paint=[q for q in paint if q['clearance_m']>.012],
     camera_or_lighting_changed=False,visual_acceptance=False,natural_use_verified=False)
-path=D/('027r2_prospective_checks.json' if prospective else '027r2_actual_checks.json')
+path=D/('027r2_prospective_checks.json' if prospective else s['version'].removeprefix('G1_')+'_actual_checks.json')
 write_path(path).write_text(json.dumps(result,indent=2),encoding='utf-8')
 print('REFINEMENT_RAYS',json.dumps({k:v for k,v in result.items() if k not in ['seam_worst','buried_paint','floating_paint']}),flush=True)
 if not globals().get('DIAGNOSTIC_ONLY',False):

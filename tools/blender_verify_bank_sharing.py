@@ -14,7 +14,7 @@ sys.path.insert(0, str(R/'tools'))
 from blender_geometry_fingerprint import mesh_digest
 
 s = bpy.context.scene
-assert s['version'] in ['G1_026','G1_027','G1_027r1','G1_027r2']
+assert s['version'] in ['G1_026','G1_027','G1_027r1','G1_027r2','G1_027r3']
 E = R/'evidence'/s['version']
 record = json.loads((read_path(E/'checkpoint.json')).read_text())
 native = Path(bpy.data.filepath).resolve()
@@ -25,7 +25,9 @@ with read_path(native).open('rb') as stream:
 actual_libraries = {}
 for lib in bpy.data.libraries:
     path = Path(bpy.path.abspath(lib.filepath)).resolve()
-    assert path.parent == native.parent and path.is_file(), str(path)
+    # New H checkpoints retain explicitly configured immutable F libraries.
+    # validate_native enforces either project's native directory, not any path.
+    validate_native(path)
     with read_path(path).open('rb') as stream:
         actual_libraries[path.name] = hashlib.file_digest(stream, 'sha256').hexdigest()
 assert actual_libraries == record['required_immutable_libraries']

@@ -54,8 +54,10 @@ if s['version'].startswith('G1_027'):
     runpy.run_path(str(R/'tools/blender_check_bridge_deck.py'))
     if s['version']=='G1_027r1':
         runpy.run_path(str(R/'tools/blender_check_bridge_grade_patch.py'))
-    if s['version']=='G1_027r2':
+    if s['version'] in ['G1_027r2','G1_027r3']:
         runpy.run_path(str(R/'tools/blender_check_bridge_grade_refinement.py'))
+    if s['version']=='G1_027r3':
+        runpy.run_path(str(R/'tools/blender_check_bridge_photo_cleanup.py'))
 if s['version'].startswith(('G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
     runpy.run_path(str(R/'tools/blender_check_riviera_lower.py'))
 if s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):
@@ -89,8 +91,8 @@ if s['version'].startswith(('G1_019','G1_020','G1_021','G1_022','G1_023','G1_024
     print('RENDER_PREP_VERIFY_PACKED_IMAGES',flush=True)
     released=[]
     for im in bpy.data.images:
-        if not im.packed_file or not im.filepath:continue
-        external=Path(bpy.path.abspath(im.filepath))
+        if not im.packed_file or not im.filepath or im.library:continue
+        external=Path(bpy.path.abspath(im.filepath,library=im.library))
         if not external.is_file():continue
         method=im.bl_rna.functions['unpack'].parameters['method']
         valid={item.identifier for item in method.enum_items}
