@@ -45,3 +45,7 @@ G1未完成，后续恢复为active；不能因迁移而标complete或创建替�
 修复verify_workspace.py固定读取旧027r2收据的问题，改为根据配置中的原生版本查找对应收据并严格核对版本、路径、字节数和SHA256。已用当前H/027r3运行通过：352份顶层Python语法、512KiB写入与回读、当前原生哈希、H网页代码及F只读资源HTTP取回均通过；启动配置和正在运行的MCP连接也正常。新收据为runtime/migration/workspace_checks_G1_027r3.json，旧收据保留。本次没有改变或重存场景，没有新视觉验收结论。
 
 H约1.90TiB可用，F仍约636MiB；代码迁移已完成，但历史资产和安装依赖未迁移，不能断开或清空F。后续新增施工、证据和缓存继续写H。
+
+2026-09-26再次实测H写入/flush/回读512KiB、365份顶层Python语法、当前027r4原生哈希及H网页代码/F只读资源HTTP读取通过，收据runtime/migration/workspace_checks_G1_027r4.json。随后027r5、027r6新原生和独立渲染均从H路径运行；这些是继续施工候选，是否提升由独立重开和实际图像决定。没有再次从F覆盖H，没有复制大型历史资产，也没有删除F原件。
+
+027r6完成独立重开与四图实看后，H工作入口已更新。再次运行verify_workspace.py通过：366份Python语法、新原生SHA256与大小匹配、H写入回读和HTTP资源检查；收据runtime/migration/workspace_checks_G1_027r6.json。此为可继续施工的局部改善稿，整段视觉与自然使用仍未验收，具体遗留问题见CURRENT_STATUS.md。

@@ -171,3 +171,9 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 [城市公共照明](https://www.stadt-zuerich.ch/geodaten/download/Oeffentliche_Beleuchtung_der_Stadt_Zuerich?format=10008)WFS图层ewz_brennstelle_p，本次EPSG:2056范围2683300,1246400,2684200,1247250取得1190条；13条在已有12根桥杆0.4米内。官方页列无使用限制、数据日期2026-09-13、每周更新。文件和带请求URL/SHA256收据在sources/features/bridge_fittings；点位只有XY与属性，未提供灯型或高度。37745待查，其余12套灯具外形/连接为源摄影约束下的推断，原始orientierung不擅自解释单位。
 
 [市政府旗帜设置规定](https://www.stadt-zuerich.ch/content/dam/web/de/stadtleben/stadtportraet/dokumente/beflaggung_stadt_zuerich_ausfuehrungsbestimmungen_und_hinweise.pdf)约2016/2017年文件，印刷页9/2、PDF第31页，已实际查看图示。给出Quaibrücke每角3面、每面4×4米和相应挂旗场合；不提供精确旗杆坐标与高度。本次只复原源扫描中东南角挂旗外观，杆锚/细部/布料姿态标为推断。PDF及收据、页图在sources/references/bridge_fittings。不能把这一外观当作当前日期的实际挂旗日历。细节见planning/BRIDGE_FITTINGS_CN.md。
+
+## Theaterstrasse 22 / Sternen Grill 027r5
+
+2026-09-26，使用缓存AV50487、EGID302060199及地址14571，官方屋面24239/95927/112929/150419/214646。沿街宽13.236m、屋面包络及身份沿用测绘。[业主PSP项目页](https://www.psp.info/portfolio/objekt/zuerich-theaterstr-22)与[Sternen Grill自身联系页](https://www.sternengrill.ch/kontakt-lage)确认地址和用途。PSP两张外观与两张室内照片均已实际查看，缓存于sources/references/sternen_grill并记录URL和SHA256；仅作参照，不用作模型贴图或分发资产。网页列2013建成、2025翻新，照片拍摄日期未明确。
+
+两侧街面按照片重建开口、退入餐厅带、阳台及石材/金属层次。窗洞精确尺寸、楼层划分、门窗制造、材质光学参数和室内浅景是推断；入口8.57m由现有摄影地面与邻接铺面约束，不是实测施工标高。屋面采用保留洞口的约束三角化，源非平面最大残差0.404mm；高度裁切交点另作面内插值。原始扫描保留。详见planning/STERNEN_GRILL_FRONTAGES_CN.md。
