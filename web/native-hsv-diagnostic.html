@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>原生 HSV 材质通道核验</title>
+<style>body{font:15px system-ui;margin:28px;background:#1b242b;color:#eef1ed}pre{white-space:pre-wrap}button{padding:10px}canvas{image-rendering:pixelated;width:640px;height:128px}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script></head><body>
+<h1>原生 HSV 材质通道核验</h1><p>使用实际原图和生产材质模块，比较 GPU 输出与独立 HSV 运算。此页不验收整场景材质与光照。</p>
+<p id="status">准备实际源图…</p><canvas id="swatches" width="640" height="128"></canvas><pre id="report"></pre><button id="save" disabled>保存核验记录</button>
+<script type="module" src="./native-hsv-diagnostic.js"></script></body></html>

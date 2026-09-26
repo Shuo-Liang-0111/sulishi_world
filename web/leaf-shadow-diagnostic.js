@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {loadNativeLeafPair} from './native-leaf-instances.js';
+import {loadLeafReviewPair} from './leaf-review-pair.js';
 const canvas=document.querySelector('#canvas'),status=document.querySelector('#status'),metrics=document.querySelector('#metrics');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -60,6 +60,7 @@ async function compare(){
     }
     lastReport={version:pair.metadata.version,native_sha256:pair.metadata.native_sha256,binary_sha256:pair.metadata.sha256,
       object:pair.metadata.native_object,position_policy:pair.metadata.position_policy,views:results,
+      production_pack:pair.metadata.production_pack||false,reference_binary_sha256:pair.metadata.reference_binary_sha256,
       shader_errors:renderer.info.programs.filter(p=>p.diagnostics?.runnable===false).length,
       depth_material:pair.instanced.customDepthMaterial?.type,distance_material:pair.instanced.customDistanceMaterial?.type,
       shadow_type:'PCFShadowMap',map_resolution:1024,self_shadow_tested:true,native_material_equivalence:false,full_runtime_published:false};
@@ -74,7 +75,7 @@ async function compare(){
   }
 }
 try{
-  pair=await loadNativeLeafPair('./assets/G1_027r15_leaf_diagnostic/tree_exact.json');scene.add(pair.group);
+  pair=await loadLeafReviewPair();scene.add(pair.group);
   center=pair.worldBounds.getCenter(new THREE.Vector3());radius=pair.worldBounds.getSize(new THREE.Vector3()).length()/2;
   pair.reference.receiveShadow=pair.instanced.receiveShadow=false;
   ground=new THREE.Mesh(new THREE.PlaneGeometry(radius*12,radius*12),new THREE.MeshStandardMaterial({color:'#b9b5a9',roughness:1}));
@@ -86,7 +87,7 @@ try{
   for(const mode of ['reference','instanced']){const button=document.querySelector('#'+mode);button.disabled=false;button.onclick=()=>{pair.setMode(mode);status.textContent=mode==='reference'?'显示原始投影':'显示紧凑表示投影';};}
   for(const mode of ['sun','point']){const button=document.querySelector('#'+mode);button.disabled=false;button.onclick=()=>{lighting(mode);status.textContent=mode==='sun'?'太阳光投影':'点光源投影';};}
   document.querySelector('#compare').disabled=false;document.querySelector('#compare').onclick=compare;
-  document.querySelector('#save-report').onclick=()=>download(new Blob([JSON.stringify(lastReport,null,2)],{type:'application/json'}),'G1_027r15_leaf_shadow_report.json');
+  document.querySelector('#save-report').onclick=()=>download(new Blob([JSON.stringify(lastReport,null,2)],{type:'application/json'}),pair.metadata.production_pack?'G1_027r15_leaf_production_shadow_report.json':'G1_027r15_leaf_shadow_report.json');
   const saveFrame=document.querySelector('#save-frame');saveFrame.disabled=false;saveFrame.onclick=()=>{renderer.render(scene,camera);canvas.toBlob(blob=>download(blob,'G1_027r15_leaf_shadow_frame.png'),'image/png');};
   await compare();
 }catch(error){status.textContent='核验失败：'+error.message;console.error(error);}

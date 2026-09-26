@@ -24,18 +24,27 @@ export function createNativeLeafPair(metadata,buffer){
   const a=key=>leafArray(metadata,buffer,key),vertices=metadata.vertices_per_leaf;
   const material=()=>new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,
     roughness:metadata.native_material.roughness,metalness:metadata.native_material.metallic,side:THREE.DoubleSide});
-  const referenceGeometry=new THREE.BufferGeometry();
-  referenceGeometry.setAttribute('position',new THREE.BufferAttribute(a('reference_positions'),3));
-  referenceGeometry.setAttribute('normal',new THREE.BufferAttribute(a('reference_normals'),3));
-  referenceGeometry.setAttribute('color',new THREE.BufferAttribute(a('reference_colors'),3));
-  referenceGeometry.setIndex(new THREE.BufferAttribute(a('reference_indices'),1));
-  const reference=new THREE.Mesh(referenceGeometry,material());
-  reference.name='Expanded saved-native leaf geometry';
+  // Production packs omit the expanded diagnostic duplicate. They still carry
+  // every native position and normal; this changes storage, not leaf density.
+  const hasReference=Boolean(metadata.arrays.reference_positions);
+  invariant(hasReference||metadata.format==='exact_native_leaf_runtime_v1','Unknown native leaf pack');
+  let reference=null;
+  if(hasReference){
+    const referenceGeometry=new THREE.BufferGeometry();
+    referenceGeometry.setAttribute('position',new THREE.BufferAttribute(a('reference_positions'),3));
+    referenceGeometry.setAttribute('normal',new THREE.BufferAttribute(a('reference_normals'),3));
+    referenceGeometry.setAttribute('color',new THREE.BufferAttribute(a('reference_colors'),3));
+    referenceGeometry.setIndex(new THREE.BufferAttribute(a('reference_indices'),1));
+    reference=new THREE.Mesh(referenceGeometry,material());
+    reference.name='Expanded saved-native leaf geometry';
+  }
 
   const exact=metadata.position_policy==='exact_native_texture';
   const geometry=exact?new THREE.InstancedBufferGeometry():new THREE.BufferGeometry();
   geometry.setAttribute('position',new THREE.BufferAttribute(a('template_positions'),3));
-  geometry.setAttribute('normal',new THREE.BufferAttribute(a('reference_normals').slice(0,vertices*3),3));
+  const templateNormals=metadata.arrays.template_normals?a('template_normals'):a('reference_normals').slice(0,vertices*3);
+  invariant(templateNormals.length===vertices*3,'Leaf template normal count mismatch');
+  geometry.setAttribute('normal',new THREE.BufferAttribute(templateNormals,3));
   geometry.setAttribute('color',new THREE.BufferAttribute(a('template_colors'),3));
   geometry.setAttribute('nativeLeafVertex',new THREE.Float32BufferAttribute(Array.from({length:vertices},(_,i)=>i),1));
   geometry.setIndex(new THREE.BufferAttribute(a('template_indices'),1));
@@ -120,15 +129,16 @@ vec3 transformed=texelFetch(nativeLeafPositions,ivec2(nativePositionIndex%${widt
   instanced.boundingBox=bounds.clone();instanced.boundingSphere=bounds.getBoundingSphere(new THREE.Sphere());
   if(exact){geometry.boundingBox=bounds.clone();geometry.boundingSphere=bounds.getBoundingSphere(new THREE.Sphere());}
   const group=new THREE.Group();group.rotation.x=-Math.PI/2;
-  for(const ob of [reference,instanced]){
+  const meshes=[reference,instanced].filter(Boolean);
+  for(const ob of meshes){
     ob.matrixAutoUpdate=false;ob.matrix.set(...metadata.object_matrix_world.flat());
     ob.castShadow=true;ob.receiveShadow=true;group.add(ob);
   }
-  instanced.visible=false;group.updateMatrixWorld(true);
-  const worldBounds=bounds.clone().applyMatrix4(reference.matrixWorld);
+  instanced.visible=!hasReference;group.updateMatrixWorld(true);
+  const worldBounds=bounds.clone().applyMatrix4(instanced.matrixWorld);
   return {reference,instanced,group,worldBounds,normalTexture,positionTexture,exact,
-    setMode(mode){invariant(['reference','instanced'].includes(mode),'Unknown leaf mode');reference.visible=mode==='reference';instanced.visible=mode==='instanced';},
-    dispose(){for(const ob of [reference,instanced]){ob.geometry.dispose();ob.material.dispose();ob.customDepthMaterial?.dispose();ob.customDistanceMaterial?.dispose();}normalTexture.dispose();if(positionTexture)positionTexture.dispose();}};
+    setMode(mode){invariant(['reference','instanced'].includes(mode),'Unknown leaf mode');invariant(mode!=='reference'||reference,'Production pack has no expanded reference');if(reference)reference.visible=mode==='reference';instanced.visible=mode==='instanced';},
+    dispose(){for(const ob of meshes){ob.geometry.dispose();ob.material.dispose();ob.customDepthMaterial?.dispose();ob.customDistanceMaterial?.dispose();}normalTexture.dispose();if(positionTexture)positionTexture.dispose();}};
 }
 
 export async function loadNativeLeafPair(metadataURL){

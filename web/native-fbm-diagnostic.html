@@ -1,0 +1,4 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>原生噪声通道核验</title>
+<style>body{background:#152128;color:#eef1ed;font:15px system-ui;margin:30px}pre{font-size:12px;white-space:pre-wrap}button{padding:12px}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script></head>
+<body><h1>原生噪声通道核验</h1><p id="status">正在与实际 Blender 输出比较…</p><canvas id="swatches" width="768" height="128"></canvas><p>上排：本机 Blender 输出；下排：实时算法。</p><button id="save" disabled>保存检查记录</button><pre id="report"></pre><script type="module" src="./native-fbm-diagnostic.js"></script></body></html>

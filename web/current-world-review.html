@@ -1,0 +1,9 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZurichWorld · 当前原生导出核验</title>
+<style>body{margin:0;overflow:hidden;background:#152128;color:#eef1ed;font:14px system-ui}main{display:grid;grid-template-columns:minmax(0,1fr) 320px;height:100vh}canvas{display:block;width:100%;height:100%}aside{box-sizing:border-box;min-height:0;padding:20px;overflow:auto}select,button{max-width:100%;padding:9px;margin:5px 0}p{line-height:1.65}pre{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;color:#c1ddcb}.pending{color:#f5d4a6}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head>
+<body><main><canvas id="canvas"></canvas><aside><h2>当前原生场景核验</h2><p class="pending">r15 同版几何候选。材质、灯光和自然使用尚未验收，正式游览入口保持原版本。</p>
+<label for="camera">原生检查机位</label><select id="camera" disabled></select><br><button id="load-near" disabled>加载当前机位周边</button><button id="refresh">刷新导出进度</button><button id="load-all" disabled>加载已导出的全区</button><br>
+<button id="save-frame" disabled>保存当前画面</button><button id="save-report" disabled>保存检查记录</button>
+<p id="native-reference" hidden>此机位已有同版原生参照：<a id="native-reference-link" target="_blank" rel="noopener" style="color:#b9dbe7">打开 Blender 原图</a></p>
+<p id="status">读取当前候选…</p><pre id="metrics"></pre></aside></main><script type="module" src="./current-world-review.js"></script></body></html>

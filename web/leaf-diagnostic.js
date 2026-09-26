@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {loadNativeLeafPair} from './native-leaf-instances.js';
+import {loadLeafReviewPair} from './leaf-review-pair.js';
 const canvas=document.querySelector('#canvas'),status=document.querySelector('#status'),metrics=document.querySelector('#metrics');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -50,6 +50,7 @@ async function compare(){
     }
     const report={version:pair.metadata.version,native_sha256:pair.metadata.native_sha256,position_policy:pair.metadata.position_policy||'affine',binary_sha256:pair.metadata.sha256,views:results,
       shader_errors:renderer.info.programs.filter(p=>p.diagnostics?.runnable===false).length,
+      production_pack:pair.metadata.production_pack||false,reference_binary_sha256:pair.metadata.reference_binary_sha256,
       full_runtime_published:false,native_material_equivalence:false};
     report.comparison_passed=report.shader_errors===0&&results.every(r=>r.reference_foreground_pixels>1000&&r.instance_foreground_pixels>1000&&r.rms_8bit<.2&&r.pixels_over_2/r.total_pixels<.002);
     lastReport=report;document.querySelector('#save-report').disabled=false;
@@ -61,7 +62,7 @@ async function compare(){
   }
 }
 try{
-  pair=await loadNativeLeafPair('./assets/G1_027r15_leaf_diagnostic/tree_exact.json');scene.add(pair.group);
+  pair=await loadLeafReviewPair();scene.add(pair.group);
   const center=pair.worldBounds.getCenter(new THREE.Vector3()),radius=pair.worldBounds.getSize(new THREE.Vector3()).length()/2;
   camera.position.copy(center).add(new THREE.Vector3(1,.35,1).normalize().multiplyScalar(radius*2.7));controls.target.copy(center);controls.update();
   sun.position.copy(center).add(new THREE.Vector3(25,18,12));sun.target.position.copy(center);
@@ -69,7 +70,7 @@ try{
   document.querySelector('#compare').disabled=false;document.querySelector('#compare').onclick=compare;
   const closeButton=document.querySelector('#close-view');closeButton.disabled=false;
   closeButton.onclick=()=>{camera.position.copy(center).addScaledVector(new THREE.Vector3(-.4,.1,.9).normalize(),radius*1.35);controls.target.copy(center);controls.update();status.textContent='近景检查';};
-  document.querySelector('#save-report').onclick=()=>download(new Blob([JSON.stringify(lastReport,null,2)],{type:'application/json'}),'G1_027r15_leaf_browser_report.json');
+  document.querySelector('#save-report').onclick=()=>download(new Blob([JSON.stringify(lastReport,null,2)],{type:'application/json'}),pair.metadata.production_pack?'G1_027r15_leaf_production_browser_report.json':'G1_027r15_leaf_browser_report.json');
   const saveFrame=document.querySelector('#save-frame');saveFrame.disabled=false;
   saveFrame.onclick=()=>{renderer.render(scene,camera);canvas.toBlob(blob=>download(blob,'G1_027r15_leaf_browser_frame.png'),'image/png');};
   status.textContent='已加载同版原始几何与紧凑表示。';

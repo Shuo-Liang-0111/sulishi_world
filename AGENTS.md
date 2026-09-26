@@ -11,3 +11,4 @@
 - 后续保存新原生时使用 H/native 下的新版本名，并核验跨盘链接库与纹理；不要对当前从 F 打开的旧稿使用覆盖保存。迁移验证与场景交付验收分开；G1 未完成，保持原区域和自然使用验收要求。
 - 2026-09-26用户授权第二个施工对话并行修正Stadelhofen站前区域；主线仍负责Bellevue与整合。遵守planning/PARALLEL_CONSTRUCTION_CN.md；第二条线只写parallel/stadelhofen_01，独立增量由主线审查合入。共享Blender一次只供一条线使用，按runtime/coordination/blender_lease.json及实际进程协调，不能覆盖或停止另一条线的工作。用户已授权主线安排该协作；第二条线用自己的状态文件交接，主线统一Git提交推送。
 - 首块SF1_v07已独立验收并合入r11，parallel/stadelhofen_01冻结。第二任务改用parallel/stadelhofen_02及SF2前缀，以r11只读基底修复旧站房正面上层/两翼；范围见planning/PARALLEL_TASK_SF2_CN.md。后续各批只写明确分派的新目录；SF1源码/规格仍被主线检查器引用，不得改写。
+- 最新主线决定（2026-09-27）覆盖上述SF2施工安排：SF2多次未通过接边/坡面与界外保护检查，已明确结束支线施工，未接受v03、无v04、无第三任务。主线自行接手联合墙脚/铺面，不能依据旧任务卡恢复子线或占用Blender。SF1已接收首块仍冻结；不把未接收parallel/stadelhofen_02整体提交到Git。
