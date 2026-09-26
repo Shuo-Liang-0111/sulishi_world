@@ -9,11 +9,11 @@
 ## 文件和资源
 
 - 活动根目录始终是 `H:/MyWorld/ZurichWorld`。桌面保存的项目标签仍可能指向F，不能据此在F写入。F仅为历史资产和软件输入。
-- 第二条线只写 `parallel/stadelhofen_01/`，其中代码和说明可跟踪；native/evidence/derived/sources/runtime的大型产物不入Git。不要修改共享tools、web、CURRENT_STATUS、工作原生指针或其他施工线文件，不执行Git提交/推送。
-- 第二条线以主线明确指定的已核验r8为只读基底，不覆盖它。独立输出使用 `SF1_` 对象前缀和独立顶层集合，提交可重放、可审查的增量；禁止把整座城市重复append进总工程。
+- 首块只写 `parallel/stadelhofen_01/`，已完成并冻结；其基底是r8、前缀SF1。第二块只写 `parallel/stadelhofen_02/`，基底r11、前缀SF2，详见PARALLEL_TASK_SF2_CN.md。代码和说明可跟踪；native/evidence/derived/sources/runtime及冻结历史副本不入Git。不要修改共享tools、web、CURRENT_STATUS、工作原生指针或其他施工线文件，不执行Git提交/推送。
+- 第二条线以当前任务卡明确指定的已核验原生为只读基底，不覆盖它。各批独立前缀和顶层集合，提交可重放、可审查的增量；禁止把整座城市重复append进总工程。SF1已验收源码、规格和原生保持，不能为了SF2方便改旧包。
 - 空间分区不一定等于摄影网格文件分区。摄影修改必须交付世界坐标下的有界裁切依据和可在当前工作副本重放的操作，主线核验后组合；不能拿第二条线的旧整块CTX网格覆盖主线已修订的同名块。新增材质同样使用SF1前缀，需要改共享材质时先复制局部实例。
 - 本机同时只运行一个Blender。调度记录在 `runtime/coordination/blender_lease.json`；实际进程查询优先于文件记录，过期记录不证明进程停止。主线交出使用权前，第二条线可并行处理参考、测绘、构造方案、源代码和轻量几何，不连接或操控主线MCP，也不自行终止任何进程。
-- 第二条线写 `parallel/stadelhofen_01/STATUS.md` 和 `handoff.json` 供主线读取；不必向其他对话发送消息。主线在用户授权的协作范围内发送后续施工安排。
+- 第二条线在当前任务目录写 `STATUS.md` 和 `handoff.json` 供主线读取；不必向其他对话发送消息。主线在用户授权的协作范围内发送后续施工安排。
 
 ## 合入要求
 

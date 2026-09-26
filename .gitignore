@@ -17,6 +17,7 @@
 /parallel/*/derived/
 /parallel/*/sources/
 /parallel/*/runtime/
+/parallel/*/archive/
 /planning/*.png
 /planning/*.jpg
 /planning/*.pdf

@@ -9,7 +9,7 @@ from workspace_paths import read_path,write_path
 from blender_geometry_fingerprint import mesh_digest
 from blender_photo_clip import subtract_box,area
 
-s=bpy.context.scene;assert s['version'] in ['G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10']
+s=bpy.context.scene;assert s['version'] in ['G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11']
 version=s['version']
 d=json.loads(read_path('derived/sternen_grill/build_input.json').read_text())
 r=json.loads(read_path(f'evidence/{version}/build_report.json').read_text())
@@ -82,7 +82,7 @@ for row in r['cameras']:
     assert p is not None and abs(distance-1.7)<.0001,(camera.name,distance)
     camera_rows.append(dict(name=camera.name,ground=floor.name,eye_height_m=distance))
 repairs={}
-if version in ['G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10']:
+if version in ['G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11']:
     ground=[]
     # Fresh evaluation of every old missing-ground location, not saved reports.
     samples=json.loads(read_path('evidence/G1_027r5/followup_probe.json').read_text())['ground']
@@ -103,7 +103,7 @@ if version in ['G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10']:
     assert not hit or (p-Vector(corner_pixel['point'])).length>.05
     repairs=dict(ground_samples=ground,balcony_corner_supported=corner,former_corner_spike_new_hit=ob.name if hit else None,
         glass_roughness=next(n for n in bpy.data.materials['SG | clear double glazing'].node_tree.nodes if n.type=='BSDF_PRINCIPLED').inputs['Roughness'].default_value)
-if version in ['G1_027r7','G1_027r8','G1_027r9','G1_027r10']:
+if version in ['G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11']:
     sign=bpy.data.objects['SG_RESTAURANT_LETTERING']
     vertices=np.array([Q(np.array(sign.matrix_world@v.co)) for v in sign.data.vertices])
     # Check against the third opening's physical pier limits, not only the

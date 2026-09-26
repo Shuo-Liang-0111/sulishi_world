@@ -12,7 +12,7 @@ from mathutils.bvhtree import BVHTree
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from workspace_paths import read_path,write_path
 
-s=bpy.context.scene;version=s['version'];assert version in ['G1_027r9','G1_027r10']
+s=bpy.context.scene;version=s['version'];assert version in ['G1_027r9','G1_027r10','G1_027r11']
 native=Path(bpy.data.filepath)
 with native.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
 cp=json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text());assert cp['native_sha256']==digest

@@ -1,0 +1,218 @@
+{
+  "schema": 3,
+  "thread_id": "01a0dd2f-d4ef-7ef0-a269-3bbfc3ce4d30",
+  "updated_utc": "2026-09-26T15:10:04.493504+00:00",
+  "status": "v07_local_batch_frozen_resource_returned_awaiting_main_acceptance",
+  "accepted": false,
+  "accepted_by_main": false,
+  "local_visual_passed": true,
+  "acceptance_owner": "main thread 01a08947-06f2-7123-b7c7-c955cfa6c809",
+  "base_native": "H:/MyWorld/ZurichWorld/native/G1_027r8_sternen_entrance_joinery.blend",
+  "base_sha256": "beeec6979340d5edcdfd51b8fae27c3e19f857e96cb7e11b506c4c46f2f5290a",
+  "current_saved_version": "SF1_v07",
+  "current_native": {
+    "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\native\\SF1_v07_stadelhofen_entry.blend",
+    "sha256": "90311677bd16012211931180e883de3e37bc1677f6fa1b11a8fbda4cc0b11db5",
+    "bytes": 4266108
+  },
+  "current_increment": {
+    "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\native\\SF1_v07_author_increment.blend",
+    "sha256": "97b600da998b81e474f35941712894ba83110cc0c518b32fa66aefd4d916efbb",
+    "bytes": 4140333
+  },
+  "build_input_sha256": "978645591a96e05f57dbc48c4dc5731465f9d6410a7cfcdf6f43e6e0e2fb0271",
+  "current_known_issues": [],
+  "work_in_progress": null,
+  "stopped": true,
+  "no_next_area_assigned": true,
+  "resource": {
+    "owner_thread": "01a08947-06f2-7123-b7c7-c955cfa6c809",
+    "owner_role": "main",
+    "main_may_launch": true,
+    "secondary_may_launch": false,
+    "returned_utc": "2026-09-26T15:08:01.1290638Z",
+    "lease_file": "H:/MyWorld/ZurichWorld/runtime/coordination/blender_lease.json",
+    "receipt": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\resource_return.json",
+    "no_blender_observed_at_return": true
+  },
+  "independent_checks": {
+    "passed": true,
+    "process_id": 32652,
+    "actual_exit_code": 0,
+    "report": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\fresh_geometry_checks.json",
+    "summary": {
+      "base_meshes": 271,
+      "author_objects": 280,
+      "route_samples": 294,
+      "stair_levels": 4,
+      "actual_external_boundary": {
+        "total": 209,
+        "missing_author": 0,
+        "missing_retained_context": 0,
+        "ambiguous": 0,
+        "over_20mm": 0,
+        "max_absolute_edge_gap_m": 0.011659264812280412,
+        "passed": true
+      },
+      "rail_posts": 8,
+      "baseplate_samples": 40,
+      "masonry_return_rays": 42,
+      "plinth_support_samples": 824,
+      "west_ground_and_clearance_samples": 460,
+      "wall_foot_connections": 45,
+      "wall_plinth_join_rays": 20,
+      "untouched_context": 49,
+      "verified_context_transforms": 53,
+      "dependencies": 107,
+      "continuous_door_floor_lower_bound_m": 0.008000373840332031,
+      "minimum_door_rail_u_separation_m": 0.5747783062185636
+    },
+    "visual_review": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\visual_review.json",
+    "six_images_actually_viewed": true
+  },
+  "increment_replay": {
+    "process_id": 2348,
+    "actual_exit_code": 0,
+    "passed": true,
+    "report": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\integration_replay.json",
+    "main_native_saved": false
+  },
+  "source_archive": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\archive\\v07",
+  "package_manifest": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\package_manifest.json",
+  "deliverables": [
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\DELIVERY_CN.md",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\README_CN.md",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\SCOPE_AND_SOURCES_CN.md",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\native\\SF1_v07_stadelhofen_entry.blend",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\native\\SF1_v07_author_increment.blend",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\derived\\build_input.json",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\derived\\crop_manifest.json",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\derived\\verified_source_transforms.json",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\visual_review.json",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\integration_replay.json",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\package_manifest.json",
+    "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\resource_return.json"
+  ],
+  "views": [
+    {
+      "camera": "SF1_QA_ENTRY",
+      "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_ENTRY.png",
+      "size": [
+        1400,
+        960
+      ],
+      "sha256": "47505e6e5f7e36e80bbb8eaee095e8fcaa42efa4754a1f7bb4b58d93938457b8",
+      "fully_decoded": true,
+      "actually_viewed": true,
+      "settings": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_ENTRY_settings.json",
+      "observation": "Three arches, canopy brackets, closed doors, supported stair and continuous rail joints remain legible."
+    },
+    {
+      "camera": "SF1_QA_REVERSE",
+      "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_REVERSE.png",
+      "size": [
+        1400,
+        960
+      ],
+      "sha256": "c581d2f3cdaf4b2fd663203d58a1d2063f08789b82908e1675e62b79b1c7c3cc",
+      "fully_decoded": true,
+      "actually_viewed": true,
+      "settings": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_REVERSE_settings.json",
+      "observation": "All visible rail posts meet rails and baseplates; graded apron reaches retained forecourt."
+    },
+    {
+      "camera": "SF1_QA_APPROACH",
+      "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_APPROACH.png",
+      "size": [
+        1400,
+        960
+      ],
+      "sha256": "fddd9e14a09b2b7eca8e97c3d05023b11dd281166dcc442c0b5017660eeddf58",
+      "fully_decoded": true,
+      "actually_viewed": true,
+      "settings": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_APPROACH_settings.json",
+      "observation": "False scan-ramp triangle removed; west plinth sits on continuous side apron and low wall-foot joint is closed. Coping has ordinary contact shadow."
+    },
+    {
+      "camera": "SF1_QA_CONTEXT",
+      "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_CONTEXT.png",
+      "size": [
+        1400,
+        960
+      ],
+      "sha256": "7d68cb507897a2e862b8305291be3f10d21c2673067140735b2c457c5102c140",
+      "fully_decoded": true,
+      "actually_viewed": true,
+      "settings": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_CONTEXT_settings.json",
+      "observation": "Entrance geometry remains located against the old station survey context. Upper floors and surrounding scan distortions remain unfinished."
+    },
+    {
+      "camera": "SF1_QA_DOOR_DETAIL",
+      "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_DOOR_DETAIL.png",
+      "size": [
+        1400,
+        960
+      ],
+      "sha256": "2e8efd7eb04039d8da06866a2e8f14188ea05779fd49b92a8ed0000e2067ff61",
+      "fully_decoded": true,
+      "actually_viewed": true,
+      "settings": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_DOOR_DETAIL_settings.json",
+      "observation": "Panelled leaf, frame, glass, hinges and handle remain separate editable components."
+    },
+    {
+      "camera": "SF1_QA_DOOR_OPEN",
+      "path": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_DOOR_OPEN.png",
+      "size": [
+        1400,
+        960
+      ],
+      "sha256": "4d8cb789d4c2b1b1fcb759f933dca4eeba94bdafa9fe57d71d8531e77e40012b",
+      "fully_decoded": true,
+      "actually_viewed": true,
+      "settings": "H:\\MyWorld\\ZurichWorld\\parallel\\stadelhofen_01\\evidence\\v07\\SF1_QA_DOOR_OPEN_settings.json",
+      "observation": "Central leaves open to a shallow closed recess; no actual station concourse or public passage is represented."
+    }
+  ],
+  "version_history": [
+    {
+      "version": "v01",
+      "status": "failed: detached rail posts and actual outside boundary gaps",
+      "evidence": "evidence/v01"
+    },
+    {
+      "version": "v02",
+      "status": "failed: rail foot support and context-camera grounding; native preserved, render gate stopped",
+      "evidence": "evidence/v02"
+    },
+    {
+      "version": "v03",
+      "status": "failed: 145mm side-wall return depth gap visible in six actual views",
+      "evidence": "evidence/v03"
+    },
+    {
+      "version": "v04",
+      "status": "failed: 7 of 824 plinth underside probes unsupported, maximum27.55mm; six images actually viewed",
+      "evidence": "evidence/v04"
+    },
+    {
+      "version": "v05",
+      "status": "failed visually: foundation support fixed but retained false scan ramp left a triangular visual boundary; six images actually viewed",
+      "evidence": "evidence/v05"
+    },
+    {
+      "version": "v06",
+      "status": "failed visually: false scan ramp removed, new wall-foot endpoint left77mm author joint; APPROACH actually viewed, other five PNGs decoded only",
+      "evidence": "evidence/v06"
+    }
+  ],
+  "limits": [
+    "Independent main acceptance, import into current main scene and its regression checks remain pending.",
+    "Source photo context outside this authored entrance, upper storey, wings, station concourse, platform/underpass links and full G1 remain unfinished.",
+    "Door operation is inferred, saved closed and public_runtime_enabled=false; the shallow recess is not a publicly usable interior.",
+    "Landing absolute elevation retains about +/-0.15m uncertainty. Relative seam/fit results are not field survey accuracy.",
+    "Manufacturing dimensions, optical finishes, buried foundation and low wall-foot closure are inferred. Directory-board contents are not recreated.",
+    "107 linked dependency entries still require their recorded sources, including the read-only F drive. No full asset backup is implied.",
+    "Door floor/rail bounds and sampled standing space do not prove human accessibility or all-scene continuous swept collision."
+  ],
+  "notes": "v07 is the only final local candidate. Older failures are historical only. Local review is complete, main acceptance remains false. Blender is explicitly returned and secondary work is stopped; main owns integration and Git. No shared code, main native or working pointer was edited."
+}

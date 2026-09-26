@@ -8,7 +8,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from workspace_paths import read_path,write_path
 from blender_photo_clip import subtract_box,area
 
-s=bpy.context.scene;assert s['version']=='G1_027r10'
+s=bpy.context.scene;assert s['version'] in ['G1_027r10','G1_027r11']
 version=s['version'];native=Path(bpy.data.filepath)
 with native.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
 cp=json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text())
@@ -40,9 +40,15 @@ for ob in [ground,bpy.data.objects['SG_R7_CONTINUOUS_STREET_APPROACH']]:
         actual=np.array(uv.data[loop.index].uv);expected=np.array([p.x,p.y])/2.05
         error=float(np.max(abs(actual-expected)));uv_errors.append(error)
         assert error<1.5e-5,(ob.name,loop.index,error)
-assert r['before_cameras']=={o.name:{'matrix':[list(row) for row in o.matrix_world],
-                                  'lens':o.data.lens,'sensor_width':o.data.sensor_width}
-                           for o in s.objects if o.type=='CAMERA'}
+current_cameras={o.name:{'matrix':[list(row) for row in o.matrix_world],
+                        'lens':o.data.lens,'sensor_width':o.data.sensor_width}
+                 for o in s.objects if o.type=='CAMERA'}
+assert all(current_cameras.get(name)==state for name,state in r['before_cameras'].items())
+added=set(current_cameras)-set(r['before_cameras'])
+if version=='G1_027r11':
+    merge=json.loads(read_path(f'evidence/{version}/sf1_merge_report.json').read_text())
+    assert added==set(merge['review_cameras'])
+else:assert not added
 bpy.context.view_layer.update();deps=bpy.context.evaluated_depsgraph_get()
 cam=bpy.data.objects['UF_QA_ENTRY'];direction=cam.matrix_world.to_quaternion()@Vector((0,0,-1))
 hit,p,n,fi,ob,m=s.ray_cast(deps,cam.location,direction,distance=8)
