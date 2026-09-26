@@ -12,6 +12,11 @@
 /web/assets/
 /web/node_modules/
 /tools/vendor/
+/parallel/*/native/
+/parallel/*/evidence/
+/parallel/*/derived/
+/parallel/*/sources/
+/parallel/*/runtime/
 /planning/*.png
 /planning/*.jpg
 /planning/*.pdf

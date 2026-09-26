@@ -19,7 +19,7 @@ def set_door_fraction(value):
 
 
 def verify_doors():
-    s=bpy.context.scene;assert s['version']=='G1_027r8'
+    s=bpy.context.scene;assert s['version'] in ['G1_027r8','G1_027r9']
     data=json.loads(read_path('derived/sternen_grill/build_input.json').read_text())
     A,U,N=(np.array(data[k]) for k in ['A','U','N']);W=data['width'];floor=data['floor_z']
     center=W*2.5/4;finish=floor+.010
@@ -108,7 +108,7 @@ if __name__=='__main__':
     with native.open('rb') as stream:digest=hashlib.file_digest(stream,'sha256').hexdigest()
     report.update(native=str(native),native_sha256=digest,process_id=os.getpid(),
                   checked_utc=datetime.now(timezone.utc).isoformat())
-    write_path('evidence/G1_027r8/door_fresh_checks.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+    write_path(f"evidence/{report['version']}/door_fresh_checks.json").write_text(json.dumps(report,indent=2),encoding='utf-8')
     print('STERNEN_DOOR_OPERATION_CHECKED',json.dumps(dict(states=len(report['operation_states']),
         transoms=len(report['transom_panes']),threshold_probes=len(report['continuous_threshold_probes']),
         restored_closed=report['restored_closed'],natural_use_verified=False)),flush=True)

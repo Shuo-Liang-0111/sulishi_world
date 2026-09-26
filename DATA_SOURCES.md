@@ -182,4 +182,9 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 
 2026-09-26，缓存AV23105、地址2505与官方屋面/墙体/底面共五条通过EGID2372625相互对应。沿街边21.645394m、平面364.0742745m²；模型底面405.103m不作为实际入口地坪。[UBS地点页](https://www.ubs.com/standorte/schweiz/zurich/theaterstrasse-20/ubs-geschaeftsstelle-224.html)确认地址和用途；[MML建筑师项目页](https://www.mmlarchitekten.ch/kopie-von-kendris)提供天然石立面及后侧增建资料。已实际查看其两张外观和一张接待空间照片，原图、源URL及SHA256在sources/references/ubs_theaterstrasse20；仅作参考，不作为分发贴图。图像关联2014改造、拍摄日期未明确，不将历史交通状态直接搬入当前场景。
 
-下一批实体尚未建成，当前只提取官方包络与身份。细节、源版本差异及待补地面检查见planning/UBS_THEATERSTRASSE20_CN.md。原始摄影工作块将保留到实体及边界连接具备替换条件；不能整块删除混在一起的楼体、车辆与街面。
+027r9已按上述约束生成两侧实体和门前铺面；实际近景仍被前方摄影粘连遮挡，未通过视觉验收。细节、源版本差异及待补地面检查见planning/UBS_THEATERSTRASSE20_CN.md。原始摄影工作块将保留到实体及边界连接具备替换条件；不能整块删除混在一起的楼体、车辆与街面。
+
+
+## Theaterstrasse20近前人行道与VBZ设施核对027r9
+
+2026-09-26，复用缓存AV26313（befestigt.Trottoir，状态2024-09-27）、VBZ设施和bauten_dachmodell_3d，不重复下载。相机及0.958m前方的扫描遮挡点均位于AV26313；立面外1.18—4.4m拟复查带约70.085m²全部在人行道中。VBZ雨篷73/Typ36和屋面177510（EGID302063028）在立面外约12—17m，广告牌598/1020、座椅562/570、售票机577及信息牌按原点位保留。部分设施几何为MultiPoint，不能只接受Point而误判无设施。单个设施层没有近前记录也不证明实际空无一物；清理对象须结合已有现场照片和实体替换范围判断。原始源、范围及定位结果在derived/ubs_theaterstrasse20/sidewalk_review.json，可由tools/prepare_ubs_sidewalk_review.py复算。
