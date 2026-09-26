@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZurichWorld · 叶片投影核验</title>
+<style>body{margin:0;background:#152128;color:#eef0ee;font:14px system-ui}main{display:grid;grid-template-columns:1fr 350px;height:100vh}canvas{display:block;width:100%;height:100%}aside{padding:22px;overflow:auto}button{padding:10px;margin:6px 4px 6px 0}p{line-height:1.6}pre{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;color:#bce0cd}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body><main><canvas id="canvas"></canvas><aside><h2>叶片投影核验</h2><p>同一棵树的精确位置、法线与实际投影。测试地面仅用来观察树影；原生完整材质与整场景尚未验收。</p><button id="reference" disabled>原始叶片</button><button id="instanced" disabled>紧凑表示</button><button id="sun" disabled>太阳光</button><button id="point" disabled>点光源</button><button id="compare" disabled>重新核验阴影</button><button id="save-report" disabled>保存报告</button><button id="save-frame" disabled>保存当前画面</button><p id="status">加载中</p><pre id="metrics"></pre></aside></main><script type="module" src="./leaf-shadow-diagnostic.js"></script></body></html>

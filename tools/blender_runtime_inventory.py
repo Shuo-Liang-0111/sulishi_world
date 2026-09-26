@@ -64,10 +64,23 @@ def build_inventory():
     assert len({r['node'] for r in photo_rows}) == len(photo_rows)
 
     building = bpy.data.collections['10_BELLEVUE_RECONSTRUCTION']
-    authored = [o for o in building.all_objects if o.name in visible]
+    roots = [building]
+    # Accepted parallel increments are linked as independent scene roots.
+    # Selecting only the original Bellevue root would omit SF1 geometry/materials.
+    if scene.get('sf1_version'):
+        sf1 = bpy.data.collections['SF1_AUTHOR_ENTRANCE']
+        assert sf1 in list(scene.collection.children)
+        assert sf1.get('sf1_version') == scene['sf1_version']
+        roots.append(sf1)
+    authored_by_name = {o.name:o for root in roots for o in root.all_objects if o.name in visible}
+    authored = sorted(authored_by_name.values(), key=lambda o:o.name)
+    sf1_visible = {o.name for o in scene.objects if o.name.startswith('SF1_')
+                   and o.name in visible and o.type != 'CAMERA'}
+    assert sf1_visible <= set(authored_by_name), 'Accepted SF1 objects missing from runtime inventory'
     meshes = [o for o in authored if o.type=='MESH']
     collections = []
-    for col in [building,*list(building.children_recursive)]:
+    author_collections = {col.name:col for root in roots for col in [root,*list(root.children_recursive)]}
+    for col in author_collections.values():
         objects = [o for o in col.objects if o.name in visible]
         if objects:
             collections.append(dict(name=col.name,objects=len(objects),
@@ -87,7 +100,7 @@ def build_inventory():
         material_rows.append(dict(name=name,node_types=node_types,images=images,
             nontrivial_export_nodes=complex_nodes,requires_material_equivalence_review=bool(complex_nodes)))
     cameras = []
-    # SF1's six review cameras belong to its isolated increment collection;
+    # Two bank-fitting and four bridge cameras belong to other scene collections;
     # enumerating only the historic review collection silently dropped them.
     for ob in scene.objects:
         if ob.type!='CAMERA':continue
@@ -117,6 +130,7 @@ def build_inventory():
         values={k:ob[k] for k in ob.keys() if any(word in k.lower() for word in ['interact','door','facility','state'])}
         if values:interactions.append(dict(object=ob.name,properties={k:str(v) for k,v in values.items()}))
     report=dict(version=version,native=str(native),native_sha256=digest,
+        authored_roots=[root.name for root in roots],visible_authored_object_names=sorted(authored_by_name),
         visible_authored_objects=len(authored),authored_types=dict(Counter(o.type for o in authored)),
         authored_polygons=sum(len(o.data.polygons) for o in meshes),
         authored_vertices=sum(len(o.data.vertices) for o in meshes),

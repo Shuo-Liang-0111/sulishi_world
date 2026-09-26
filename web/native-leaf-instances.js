@@ -89,6 +89,26 @@ vec3 transformed=texelFetch(nativeLeafPositions,ivec2(nativePositionIndex%${widt
   instancedMaterial.customProgramCacheKey=()=>`native-leaf-v2-${exact?'exact':'affine'}-${vertices}-${width}`;
   const instanced=exact?new THREE.Mesh(geometry,instancedMaterial):new THREE.InstancedMesh(geometry,instancedMaterial,metadata.leaves);
   instanced.name=exact?'Exact native position and normal textures':'Affine leaves with saved-native normal texture';
+  if(exact){
+    // Shadow passes must fetch the same positions as the visible pass. Without
+    // these materials each repeated leaf would cast a template-origin shadow.
+    const depth=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking,side:THREE.DoubleSide});
+    const distance=new THREE.MeshDistanceMaterial({side:THREE.DoubleSide});
+    for(const shadowMaterial of [depth,distance]){
+      shadowMaterial.onBeforeCompile=shader=>{
+        invariant(shader.vertexShader.includes('#include <begin_vertex>'),'Unsupported Three.js shadow position pipeline');
+        shader.uniforms.nativeLeafPositions={value:positionTexture};
+        shader.vertexShader=`uniform sampler2D nativeLeafPositions;
+attribute float nativeLeafVertex;
+`+shader.vertexShader.replace('#include <begin_vertex>',`
+int nativePositionIndex=gl_InstanceID*${vertices}+int(nativeLeafVertex);
+vec3 transformed=texelFetch(nativeLeafPositions,ivec2(nativePositionIndex%${width},nativePositionIndex/${width}),0).xyz;
+`);
+      };
+      shadowMaterial.customProgramCacheKey=()=>`native-leaf-shadow-v1-${shadowMaterial.type}-${vertices}-${width}`;
+    }
+    instanced.customDepthMaterial=depth;instanced.customDistanceMaterial=distance;
+  }
   const colors=a('instance_colors');
   invariant(colors.length===metadata.leaves*3,'Leaf color count mismatch');
   if(!exact){
@@ -108,7 +128,7 @@ vec3 transformed=texelFetch(nativeLeafPositions,ivec2(nativePositionIndex%${widt
   const worldBounds=bounds.clone().applyMatrix4(reference.matrixWorld);
   return {reference,instanced,group,worldBounds,normalTexture,positionTexture,exact,
     setMode(mode){invariant(['reference','instanced'].includes(mode),'Unknown leaf mode');reference.visible=mode==='reference';instanced.visible=mode==='instanced';},
-    dispose(){for(const ob of [reference,instanced]){ob.geometry.dispose();ob.material.dispose();}normalTexture.dispose();if(positionTexture)positionTexture.dispose();}};
+    dispose(){for(const ob of [reference,instanced]){ob.geometry.dispose();ob.material.dispose();ob.customDepthMaterial?.dispose();ob.customDistanceMaterial?.dispose();}normalTexture.dispose();if(positionTexture)positionTexture.dispose();}};
 }
 
 export async function loadNativeLeafPair(metadataURL){
