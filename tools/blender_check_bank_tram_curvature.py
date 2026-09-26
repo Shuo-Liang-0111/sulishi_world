@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from workspace_paths import read_path, write_path
 
 s = bpy.context.scene
-assert s['version'] in ['G1_027r14','G1_027r15']
+assert s['version'] in ['G1_027r14','G1_027r15','G1_027r16']
 version = s['version']
 cp = json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text())
 with Path(bpy.data.filepath).open('rb') as stream:

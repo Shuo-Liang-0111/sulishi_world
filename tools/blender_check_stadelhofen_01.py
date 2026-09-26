@@ -48,7 +48,7 @@ def bvh(objects, ground_filter=False):
 
 
 s = bpy.context.scene
-assert s['version'] in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']
+assert s['version'] in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15','G1_027r16']
 version = s['version']
 cp = json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text())
 assert sha(bpy.data.filepath) == cp['native_sha256']
@@ -61,7 +61,12 @@ assert s['sf1_version'] == d['version'] == r['package_version']
 assert sha(package / f'evidence/{tag}/actual_boundary_probe.json') == r['package_boundary_receipt_sha256']
 for name, expected in r['author_states'].items():
     assert object_state(bpy.data.objects[name]) == expected, name
+revision = json.loads(read_path('evidence/G1_027r16/wallfoot_build_report.json').read_text()) if version == 'G1_027r16' else None
 for name, expected in r['author_meshes'].items():
+    if revision:
+        if name in revision['changed_old_meshes']:
+            assert revision['changed_old_meshes'][name]['before'] == expected
+            expected = revision['changed_old_meshes'][name]['after']
     assert json.loads(json.dumps(mesh_digest(bpy.data.objects[name].data))) == expected, name
 for name, expected in r['old_cameras'].items():
     o = bpy.data.objects[name]
@@ -70,7 +75,14 @@ for name, expected in r['camera_states'].items():
     assert object_state(bpy.data.objects[name]) == expected
 assert len(bpy.data.collections['03_I3S_PHOTOGRAPHIC_REFERENCE'].objects) == r['source_objects_unchanged'] == 2039
 for row in r['import_report']['bounded_cuts']:
-    assert json.loads(json.dumps(mesh_digest(bpy.data.objects[row['object']].data))) == row['after']
+    expected=row['after']
+    if revision and revision.get('adjacent_photo_repair_file'):
+        photo_revision=json.loads(read_path(revision['adjacent_photo_repair_file']).read_text())
+        assert sha(revision['adjacent_photo_repair_file'])==revision['adjacent_photo_repair_sha256']
+        if row['object']==photo_revision['object']:
+            assert photo_revision['before']==expected
+            expected=photo_revision['after']
+    assert json.loads(json.dumps(mesh_digest(bpy.data.objects[row['object']].data))) == expected
 A, U, N = [np.asarray(d[k]) for k in ['A', 'U', 'N']]
 def P(u, v, z): return Vector((*list(A + U * u + N * v), z))
 author = bpy.data.collections[d['import_collection']]
@@ -119,6 +131,8 @@ returns = check_returns(author, bvh)
 assert returns['passed'], 'Side masonry return still has a ray-visible gap'
 from check_foundations import check as check_foundations
 foundations = check_foundations(author, bvh)
+write_path(f'evidence/{version}/sf1_foundation_readback.json').write_text(json.dumps({
+    'process_id':os.getpid(),'native_sha256':cp['native_sha256'],**foundations},indent=2),encoding='utf-8')
 assert foundations['passed'], 'Cheek foundation is not supported by the actual ground bed'
 from check_left_interface import wall_join_check
 wall_corner = wall_join_check(author, bvh)
@@ -165,6 +179,11 @@ for fraction in [0., .25, .5, .75, 1., 0.]:
     assert all(abs(a - e) < 1e-5 for a, e in zip(angles, [-fraction * math.radians(95), fraction * math.radians(95)]))
     door_states.append(dict(fraction=fraction, actual_angles=angles))
 assert sha(bpy.data.filepath) == cp['native_sha256']
+if version == 'G1_027r16':
+    import runpy
+    # Exact exceptions above are only valid with the independently checked
+    # retained components, old external base and new construction interfaces.
+    runpy.run_path(str(ROOT / 'tools/blender_check_stadelhofen_wallfoot.py'), run_name='__main__')
 result = dict(version=version, package_version=d['version'], process_id=os.getpid(),
               native_sha256=cp['native_sha256'], authored_meshes=len(r['author_meshes']),
               source_objects_preserved=2039, original_cameras_preserved=len(r['old_cameras']),

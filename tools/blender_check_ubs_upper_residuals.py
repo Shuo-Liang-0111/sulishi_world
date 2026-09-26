@@ -13,7 +13,7 @@ from workspace_paths import read_path, write_path
 from blender_geometry_fingerprint import mesh_digest
 
 s = bpy.context.scene
-assert s['version'] == 'G1_027r15'
+assert s['version'] in ['G1_027r15', 'G1_027r16']
 version = s['version']
 cp = json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text())
 with Path(bpy.data.filepath).open('rb') as f:

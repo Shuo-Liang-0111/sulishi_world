@@ -1,0 +1,248 @@
+{
+  "status": "Main-read diagnostic basis only; SF2 construction not accepted",
+  "ground": {
+    "planes": [
+      {
+        "object": "CTX_I3S_32639",
+        "source_face": 85,
+        "archive_triangle_index": 44556,
+        "vertices_uvz": [
+          [
+            13.24999910763795,
+            0.3683907413266905,
+            10.81419563293457
+          ],
+          [
+            13.620926448094009,
+            -0.918352196893812,
+            10.876001358032227
+          ],
+          [
+            13.250001282155118,
+            -0.24145924426413146,
+            10.846677780151367
+          ]
+        ],
+        "uv": [
+          [
+            0.1103646382689476,
+            0.4594153165817261
+          ],
+          [
+            0.14649690687656403,
+            0.4866803288459778
+          ],
+          [
+            0.12295672297477722,
+            0.47617700695991516
+          ]
+        ],
+        "plane_c_u_v": [
+          11.074204495175387,
+          -0.018142447945176166,
+          -0.053262584955860386
+        ],
+        "gradient_percent": [
+          -1.8142447945176166,
+          -5.326258495586038
+        ],
+        "slope_deg": 3.2205044673968133
+      },
+      {
+        "object": "CTX_I3S_32639",
+        "source_face": 144,
+        "archive_triangle_index": 44615,
+        "vertices_uvz": [
+          [
+            13.430917042019148,
+            1.5399995969862,
+            10.731316566467285
+          ],
+          [
+            13.620926448094009,
+            -0.918352196893812,
+            10.876001358032227
+          ],
+          [
+            13.24999910763795,
+            0.3683907413266905,
+            10.81419563293457
+          ]
+        ],
+        "uv": [
+          [
+            0.09082464873790741,
+            0.4231557250022888
+          ],
+          [
+            0.14649690687656403,
+            0.4866803288459778
+          ],
+          [
+            0.1103646382689476,
+            0.4594153165817261
+          ]
+        ],
+        "plane_c_u_v": [
+          11.516973101016175,
+          -0.05129325337497052,
+          -0.06281891491641592
+        ],
+        "gradient_percent": [
+          -5.129325337497051,
+          -6.281891491641592
+        ],
+        "slope_deg": 4.636541693035906
+      }
+    ],
+    "shared_edge_uvz": [
+      [
+        13.24999910763795,
+        0.3683907413266905,
+        10.81419563293457
+      ],
+      [
+        13.620926448094009,
+        -0.918352196893812,
+        10.876001358032227
+      ]
+    ],
+    "side85_reference_uv": [
+      13.373642279295693,
+      -0.263806899943751
+    ]
+  },
+  "components": [
+    {
+      "object": "SF1_APRON_GRANITE.004",
+      "raw_mesh_digest": {
+        "sha256": "013bfd6cb021ec5946187299b48c7137c769ee5ab9cb69fcadbec93ed4fab3bb",
+        "vertices": 2964,
+        "loops": 15580,
+        "polygons": 4888,
+        "attributes": [
+          [
+            "position",
+            "POINT",
+            "FLOAT_VECTOR",
+            2964
+          ],
+          [
+            ".select_vert",
+            "POINT",
+            "BOOLEAN",
+            2964
+          ],
+          [
+            ".edge_verts",
+            "EDGE",
+            "INT32_2D",
+            7790
+          ],
+          [
+            ".select_edge",
+            "EDGE",
+            "BOOLEAN",
+            7790
+          ],
+          [
+            ".select_poly",
+            "FACE",
+            "BOOLEAN",
+            4888
+          ],
+          [
+            "sharp_face",
+            "FACE",
+            "BOOLEAN",
+            4888
+          ],
+          [
+            ".corner_vert",
+            "CORNER",
+            "INT",
+            15580
+          ],
+          [
+            ".corner_edge",
+            "CORNER",
+            "INT",
+            15580
+          ]
+        ],
+        "uv_layers": []
+      }
+    },
+    {
+      "object": "SF1_APRON_GRANITE.010",
+      "raw_mesh_digest": {
+        "sha256": "61bd765cefdda7f7fa2dfb2370405cfefe1c0449aa1cf5915ccd27a0de48c715",
+        "vertices": 2996,
+        "loops": 15772,
+        "polygons": 4952,
+        "attributes": [
+          [
+            "position",
+            "POINT",
+            "FLOAT_VECTOR",
+            2996
+          ],
+          [
+            ".select_vert",
+            "POINT",
+            "BOOLEAN",
+            2996
+          ],
+          [
+            ".edge_verts",
+            "EDGE",
+            "INT32_2D",
+            7886
+          ],
+          [
+            ".select_edge",
+            "EDGE",
+            "BOOLEAN",
+            7886
+          ],
+          [
+            ".select_poly",
+            "FACE",
+            "BOOLEAN",
+            4952
+          ],
+          [
+            "sharp_face",
+            "FACE",
+            "BOOLEAN",
+            4952
+          ],
+          [
+            ".corner_vert",
+            "CORNER",
+            "INT",
+            15772
+          ],
+          [
+            ".corner_edge",
+            "CORNER",
+            "INT",
+            15772
+          ]
+        ],
+        "uv_layers": []
+      }
+    }
+  ],
+  "provenance": [
+    {
+      "relative_path": "parallel/stadelhofen_02/derived/SF2_joint_interface_input_01/candidate_surface_definition.json",
+      "sha256": "02f5aacf01ebba2614a462cef0d9a794e1ce535f29458e0d2bce94f98e297b87"
+    },
+    {
+      "relative_path": "parallel/stadelhofen_02/derived/SF2_joint_interface_audit/whole_stone_components.json",
+      "sha256": "009c70afa3883bf3051e139afe2f77d49fa0d1785c06d7ca23020b0a5e809bf2"
+    }
+  ],
+  "current_native_validation": "Main r15 actual_fabric_audit plus r16 current_adjacent_ground and fresh independent geometry checks; no source-data claim from an unaccepted native."
+}
