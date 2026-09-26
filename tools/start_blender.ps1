@@ -43,6 +43,16 @@ if ($Background) {
 }
 $record = [ordered]@{project=$projectRoot;native=$requestedNative;executable=$blenderExe;temporary=$env:TMP;logs=$logDir;background=[bool]$Background;arguments=$arguments}
 if ($CheckOnly) { $record.status='configuration_verified'; $record | ConvertTo-Json -Depth 4; exit 0 }
+# An idle instant between two secondary jobs is not a resource handoff.
+# Check the owner as well as the actual process before starting main work.
+$taskLeasePath = Join-Path $runtimeDir 'coordination/blender_lease.json'
+if (Test-Path -LiteralPath $taskLeasePath) {
+    $taskBlenderLease = Get-Content -LiteralPath $taskLeasePath -Raw | ConvertFrom-Json
+    if ($taskBlenderLease.owner_role -ne 'main' -or $taskBlenderLease.secondary_may_launch -eq $true -or
+        (($taskBlenderLease.PSObject.Properties.Name -contains 'main_may_launch') -and $taskBlenderLease.main_may_launch -eq $false)) {
+        throw 'Blender is assigned to the secondary construction thread. Explicit lease handoff is required, even when no process is running.'
+    }
+}
 $existing = @(Get-Process -Name blender -ErrorAction SilentlyContinue)
 if ($existing.Count) { throw 'A Blender process already exists. Inspect it before starting another author or render process.' }
 $stamp = Get-Date -Format 'yyyyMMdd_HHmmss_fff'

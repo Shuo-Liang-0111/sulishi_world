@@ -2,9 +2,17 @@
 
 G1未完成，Goal保持active。H:/MyWorld/ZurichWorld是唯一活动代码与新产物目录。F历史资产及Blender/Python/Three.js仍为只读依赖；没有整库复制或删除F原件，原Goal的旧F目录由用户后续迁移指令替代。
 
-## 当前可接续施工稿
+## 当前可接续施工稿：r10，局部修复已核验
 
-H/native/G1_027r8_sternen_entrance_joinery.blend，97,242,858字节，17,200对象，SHA256为beeec6979340d5edcdfd51b8fae27c3e19f857e96cb7e11b506c4c46f2f5290a。workspace.local.json已指向此稿；旧r7及其之前版本保留。这是局部改善后的施工基底，不是整栋、整段或G1验收。
+H/native/G1_027r10_ubs_nearfront_repair.blend，98,400,518字节，18,260对象，SHA256为71dcd1c6c5d3dd62b407707839c4649516525b67cccce9e5380870c8c9dd3c0e。workspace.local.json已指向此稿，仅作为继续施工的基底；整栋、整段、运行时和G1均未验收。
+
+从r9仅替换AV26313已重建近前人行带上方的三块工作摄影局部，并把该铺面UV周期与邻面统一为2.05m。2039原摄影源、572咖啡店网格、90机位及旧对象状态保持，未删除外侧真实VBZ站棚。144个地面支持点的1.9m净空由116处提高至144处；另96点近前净空、1598残留面与裁切体无交检查通过。数值检查不代表完整步行验收。
+
+独立PID17976从保存原生重开，完成旧场所/桥面/库/门/立面和本次修复检查，渲染入口UF_QA_ENTRY、转角SG_QA_CORNER及远处BF_QA_FLAGS。三张1280×840原PNG已完整解码并实际查看；2026-09-26 11:07:48 UTC实际退出0，stderr为空，原生SHA未变。入口遮挡消除，可见真实石材、玻璃、框及浅景；角部残片、邻楼摄影失真和远处站棚仍待处理。visual_acceptance=false，nearfront_repair_visual_verified=true；银行未开放自然进入。记录见evidence/G1_027r10/visual_review.json。
+
+## r8保留基底及门构造历史
+
+H/native/G1_027r8_sternen_entrance_joinery.blend，97,242,858字节，17,200对象，SHA256为beeec6979340d5edcdfd51b8fae27c3e19f857e96cb7e11b506c4c46f2f5290a。此稿及更早版本保留，仍是SF1并行首块的只读输入；主线已在其上继续到r10。
 
 独立进程36340完成旧场所/桥面/链接库及当前立面检查，渲染SG_QA_ENTRY、SG_QA_DOOR_OPEN、SG_QA_CORNER、BF_QA_FLAGS；补充独立进程38148完成门扇数值检查和SG_QA_THRESHOLD。五张1280×840/24采样原始PNG均完整解码并实际查看，两进程实际退出0，stderr为空。退出收据为runtime/logs/blender-20260926_052608_646.exit.json和blender-20260926_055751_734.exit.json。当前资源归属见下文并行施工及实际进程，不依据历史记录直接启动Blender。
 
@@ -18,7 +26,7 @@ Sternen Grill（Theaterstrasse22，EGID302060199）正面和侧巷八个开间�
 
 原24上层窗、165桥灯/旗杆、2039源摄影及既有工作摄影网格保持。曝光、整体灯光和原机位未改。实际图像确认连续亮窗、门体和门槛改善；邻楼及前景扫描楔片仍明显，上层窗重复及真实完整室内仍待处理。详见planning/STERNEN_GRILL_FRONTAGES_CN.md。
 
-## 下一块：Theaterstrasse20及门前街面
+## 已开展：Theaterstrasse20及门前街面
 
 已用AV23105、地址2505及EGID2372625确认UBS Bellevue身份；取得并实际查看MML建筑师两外观及一室内照片，资料足够进入具体建造。官方沿街边21.645394m、平面364.0742745m²、五条包络面保留，103个三角形使用原测量顶点。405.103m模型底面不能作为入口地坪。
 
@@ -32,19 +40,27 @@ H/native/G1_027r9_ubs_frontages_working.blend，98,419,546字节，18,260对象�
 
 独立进程14972从该原生完成48个透明开口、144处地面支持、41处咖啡店接缝及旧场景检查，并渲染五张1280×840图。2026-09-26 10:21:14 UTC实际退出0；文件原SHA256未变。五张图均完整解码并实际查看。r9可重新打开，但不能据此通过视觉验收：入口与正面被大块旧扫描遮挡，角部也残留变形前景；144处地面支持中28处的1.9m净空仍被摄影阻挡。故workspace.local.json仍指向r8，没有冒充最新实时场景。
 
-下一修订优先处理AV26313近前人行带的摄影粘连，保留实际VBZ站棚和设施；同时把新铺面UV周期与邻面2.05m统一。保留入口原机位复查，不通过移动机位掩盖问题。记录见evidence/G1_027r9/visual_review.json及derived/ubs_theaterstrasse20/sidewalk_review.json。
+上述近前摄影粘连及铺面UV已在r10处理并保持原机位复核，r9失败证据保留。更远处真实站棚与设施分开施工，不能扩展裁切框一并抹除。记录见evidence/G1_027r9/visual_review.json及derived/ubs_theaterstrasse20/sidewalk_review.json。
+
+## 下一块：银行侧电车站棚及AV355站台
+
+EGID302063028 / VBZ站棚73，官方89.679921m²屋面投影完整位于266.079222m² AV355站台。资料已有：真实屋面包络、VBZ设施点、步行连接线、Immobilia2016施工介绍及建筑师照片。三柱、混凝土底棚和金属咬合屋面的构造类别有依据，制造细节明确推断，不重复泛搜。
+
+PID17976已从r10读出3块当前摄影及9个相关地面对象；已检查1066个站台采样，513处有近水平摄影支持、1066处有粗略地形支持、没有既有作者站台面。不能把屋顶GroundSurface当步行地面，亦不能用误差较大的地形或8.4cm RMS单平面直接当精确站台。下一步按真实边界、七处步行线交点及现有道路连接补连续地面，再落柱和设施。准备见planning/BELLEVUE_BANK_TRAM_SHELTER_CN.md。
 
 ## 两条施工线与资源交接
 
 用户授权试运行第二施工对话“苏黎世并行施工：Stadelhofen站前区域”（01a0dd2f-d4ef-7ef0-a269-3bbfc3ce4d30）。第二条线仅写parallel/stadelhofen_01，从r8只读基底制作SF1增量；主线继续Bellevue并独立验收与整合。当前没有已通过验收的第二条线成果，不能把启动协作算作完成建设。
 
-主线14972实际退出后已于2026-09-26 10:21:50 UTC移交Blender使用权；第二条线可在无存活Blender且租约归属自己时启动。主线在其明确归还前只做源代码、数据和记录工作，不启动另一Blender。租约为runtime/coordination/blender_lease.json，第二条线状态见parallel/stadelhofen_01/STATUS.md。主线先验收实图、原生结构、资料及接缝；达标才派下一块，不达标停止后续分派并接手。完整规则见planning/PARALLEL_CONSTRUCTION_CN.md。
+主线已实际查看SF1 v01六张图，发现扶手柱顶脱开；独立外侧配对探针153处中11处无支持、41处高差超过20mm、最大约100mm，v01未通过。第二条线已准备v02修正，先临时交回资源供主线完成r10；主线PID17976退出后，11:09:27 UTC明确重新交还资源并通知其执行v02。此时仍是首块整改，无第二块任务，未合入总场景。
+
+资源实时归属以runtime/coordination/blender_lease.json及实际进程为准；主线启动器也检查租约，不能趁另一线进程间隙启动。第二条线状态见parallel/stadelhofen_01/STATUS.md。主线先验收实图、原生结构、资料及实际外部接缝；达标才派下一块，不达标停止后续分派并接手。完整规则见planning/PARALLEL_CONSTRUCTION_CN.md，实际审查见planning/PARALLEL_ACCEPTANCE_SF1_CN.md。
 
 ## 完整范围与同版实时合流
 
 G1仍为Bellevue—Sechseläutenplatz—Stadelhofen约0.312km²连续区域、外接682×673m。UBS/Kronenhalle/Haus Bellevue未完成面、广场、站内公共通道与楼层联系、其他街道及边界仍需继续。最终需同版原生与实时游览，分别检查碰撞、开门、楼层及自然设施使用；不编排研究任务、不评分、不接入Agent，完整乘车网络留G2。
 
-查看器默认仍旧007r5、候选018r3，不能据网页推断r8。上一批已从r7实际导出116个累计摄影变化块（104有面、12空块），5,213,816字节GLB、50,166三角形；独立往返验证、Three.js真实几何替换/恢复及7项守卫通过。r8工作摄影未改，但不能单独发布差分而缺少相配作者几何。
+查看器默认仍旧007r5、候选018r3，不能据网页推断r10。上一批已从r7实际导出116个累计摄影变化块（104有面、12空块），5,213,816字节GLB、50,166三角形；独立往返验证、Three.js真实几何替换/恢复及7项守卫通过。r9/r10工作摄影已经再变化，不能使用旧差分或单独发布差分而缺少相配作者几何。
 
 r7清点作者几何约3886万多边形，95.36%属树木；材质、灯、水体和操作状态尚须同版合流。悬铃木逐叶仿射位置拟合准确，但法线最大偏差约13.63°，未应用为实例化。当前没有最新完整实时或自然使用验收。详见planning/RUNTIME_REJOIN_AFTER_H_MIGRATION_CN.md。
 

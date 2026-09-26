@@ -188,3 +188,8 @@ Official identity/approximate dimensions remain in `sources/references/bellevue_
 ## Theaterstrasse20近前人行道与VBZ设施核对027r9
 
 2026-09-26，复用缓存AV26313（befestigt.Trottoir，状态2024-09-27）、VBZ设施和bauten_dachmodell_3d，不重复下载。相机及0.958m前方的扫描遮挡点均位于AV26313；立面外1.18—4.4m拟复查带约70.085m²全部在人行道中。VBZ雨篷73/Typ36和屋面177510（EGID302063028）在立面外约12—17m，广告牌598/1020、座椅562/570、售票机577及信息牌按原点位保留。部分设施几何为MultiPoint，不能只接受Point而误判无设施。单个设施层没有近前记录也不证明实际空无一物；清理对象须结合已有现场照片和实体替换范围判断。原始源、范围及定位结果在derived/ubs_theaterstrasse20/sidewalk_review.json，可由tools/prepare_ubs_sidewalk_review.py复算。
+
+
+## Bellevue银行前站棚：缓存资料复用027r9后续
+
+EGID302063028对应屋面177510、包络底面185848、墙面207031和VBZ站棚73/typ36。完整89.679921m²屋顶投影落在AV355站台，与银行入口AV26313分属不同地面；不能把两者间的交通关系抹平。已实际查看原缓存Immobilia 2016年5月第76页，使用其关于两座2015遮棚的三柱、中央排水、混凝土底棚与金属咬合屋面的施工描述。源PNG、银行MML照片和全部几何/设施输入哈希在derived/bellevue/bank_tram_shelter/build_input.json；未新增网络请求。三柱精确坐标、曲面断面、板缝和材质磨损是推断，近水平摄影地面仍须当前原生核验。准备过程和限制见planning/BELLEVUE_BANK_TRAM_SHELTER_CN.md。
