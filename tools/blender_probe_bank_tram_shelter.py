@@ -12,7 +12,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from workspace_paths import read_path,write_path
 from blender_geometry_fingerprint import mesh_digest
 
-s=bpy.context.scene;assert s['version']=='G1_027r10'
+s=bpy.context.scene;assert s['version'] in ['G1_027r10','G1_027r12']
 native=Path(bpy.data.filepath)
 with native.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
 cp=json.loads(read_path(f'evidence/{s["version"]}/checkpoint.json').read_text());assert digest==cp['native_sha256']

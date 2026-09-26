@@ -15,7 +15,7 @@ if len(args)==2:
     assert args[1]=='surface-check'
     REVIEW_SAMPLES=24
     REVIEW_RESOLUTION=(1280,840)
-    if REVIEW_CAMERA.startswith('SF1_QA_'):
+    if REVIEW_CAMERA.startswith(('SF1_QA_','BST_QA_')):
         REVIEW_SAMPLES=32
         REVIEW_RESOLUTION=(1400,960)
     if REVIEW_CAMERA in ['BE_QA_FOUNTAIN_RIM','BE_QA_FOUNTAIN_OVERFLOW']:
@@ -57,22 +57,24 @@ if s['version'].startswith('G1_027'):
     runpy.run_path(str(R/'tools/blender_check_bridge_deck.py'))
     if s['version']=='G1_027r1':
         runpy.run_path(str(R/'tools/blender_check_bridge_grade_patch.py'))
-    if s['version'] in ['G1_027r2','G1_027r3','G1_027r4','G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11']:
+    if s['version'] in ['G1_027r2','G1_027r3','G1_027r4','G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
         runpy.run_path(str(R/'tools/blender_check_bridge_grade_refinement.py'))
     if s['version']=='G1_027r3':
         runpy.run_path(str(R/'tools/blender_check_bridge_photo_cleanup.py'))
-    if s['version'] in ['G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11']:
+    if s['version'] in ['G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
         runpy.run_path(str(R/'tools/blender_check_sternen_grill.py'))
-    if s['version'] in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11']:
+    if s['version'] in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
         runpy.run_path(str(R/'tools/blender_check_sternen_doors.py'),run_name='__main__')
-    if s['version'] in ['G1_027r9','G1_027r10','G1_027r11']:
+    if s['version'] in ['G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
         runpy.run_path(str(R/'tools/blender_check_ubs_frontages.py'),run_name='__main__')
-    if s['version'] in ['G1_027r10','G1_027r11']:
+    if s['version'] in ['G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
         runpy.run_path(str(R/'tools/blender_check_ubs_nearfront.py'),run_name='__main__')
     if s['version']=='G1_027r10':
         runpy.run_path(str(R/'tools/blender_probe_bank_tram_shelter.py'),run_name='__main__')
-    if s['version']=='G1_027r11':
+    if s['version'] in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
         runpy.run_path(str(R/'tools/blender_check_stadelhofen_01.py'),run_name='__main__')
+    if s['version'] in ['G1_027r12','G1_027r13','G1_027r14']:
+        runpy.run_path(str(R/'tools/blender_check_bank_tram_shelter.py'),run_name='__main__')
     if s['version']=='G1_027r4':
         runpy.run_path(str(R/'tools/blender_check_bridge_fittings.py'))
 if s['version'].startswith(('G1_022','G1_023','G1_024','G1_025','G1_026','G1_027')):

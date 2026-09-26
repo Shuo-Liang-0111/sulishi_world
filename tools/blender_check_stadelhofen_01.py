@@ -48,7 +48,7 @@ def bvh(objects, ground_filter=False):
 
 
 s = bpy.context.scene
-assert s['version'] == 'G1_027r11'
+assert s['version'] in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14']
 version = s['version']
 cp = json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text())
 assert sha(bpy.data.filepath) == cp['native_sha256']

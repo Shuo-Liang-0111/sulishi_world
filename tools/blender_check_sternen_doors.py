@@ -19,7 +19,7 @@ def set_door_fraction(value):
 
 
 def verify_doors():
-    s=bpy.context.scene;assert s['version'] in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11']
+    s=bpy.context.scene;assert s['version'] in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']
     data=json.loads(read_path('derived/sternen_grill/build_input.json').read_text())
     A,U,N=(np.array(data[k]) for k in ['A','U','N']);W=data['width'];floor=data['floor_z']
     center=W*2.5/4;finish=floor+.010
