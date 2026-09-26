@@ -30,7 +30,7 @@ def bvh(objects):
     return BVHTree.FromPolygons(vertices,faces,all_triangles=True)
 
 
-s=bpy.context.scene;version=s['version'];assert version in ['G1_027r12','G1_027r13','G1_027r14']
+s=bpy.context.scene;version=s['version'];assert version in ['G1_027r12','G1_027r13','G1_027r14','G1_027r15']
 bpy.context.view_layer.update()
 r=json.loads(read_path(f'evidence/{version}/bank_shelter_build_report.json').read_text())
 cp=json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text());assert sha(bpy.data.filepath)==cp['native_sha256']
@@ -110,11 +110,11 @@ for row in r['review_cameras']:
     p,_,_,_=ground.ray_cast(Vector((cam.location.x,cam.location.y,9.3)),Vector((0,0,-1)),1.5)
     assert p is not None and abs(cam.location.z-p.z-1.65)<.001
     cameras.append(dict(camera=cam.name,actual_eye_height_m=float(cam.location.z-p.z)))
-if version in ['G1_027r13','G1_027r14']:
+if version in ['G1_027r13','G1_027r14','G1_027r15']:
     runpy.run_path(str(Path(__file__).with_name('blender_check_bank_tram_residuals.py')),run_name='__main__')
     repair_check=json.loads(read_path(f'evidence/{version}/residual_fresh_checks.json').read_text())
     assert repair_check['process_id']==os.getpid() and repair_check['passed']
-if version=='G1_027r14':
+if version in ['G1_027r14','G1_027r15']:
     runpy.run_path(str(Path(__file__).with_name('blender_check_bank_tram_curvature.py')),run_name='__main__')
     curve_check=json.loads(read_path(f'evidence/{version}/curvature_fresh_checks.json').read_text())
     assert curve_check['process_id']==os.getpid() and curve_check['passed']

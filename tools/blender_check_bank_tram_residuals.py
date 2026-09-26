@@ -13,7 +13,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from workspace_paths import read_path,write_path
 
 s = bpy.context.scene
-assert s['version'] in ['G1_027r13','G1_027r14']
+assert s['version'] in ['G1_027r13','G1_027r14','G1_027r15']
 d = json.loads(read_path('derived/bellevue/bank_tram_shelter/residual_repair_r13.json').read_text())
 probe = json.loads(read_path('derived/bellevue/bank_tram_shelter/native_probe_G1_027r12_platform_full.json').read_text())
 names = [r['name'] for r in probe['objects'] if r['kind']=='retained_photo']

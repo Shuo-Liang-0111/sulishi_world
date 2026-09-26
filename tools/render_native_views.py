@@ -24,7 +24,7 @@ assert len(args) >= 1 and len(args) == len(set(args))
 scene = bpy.context.scene
 version = scene['version']
 assert version.startswith(('G1_020','G1_021','G1_022','G1_023','G1_024','G1_025','G1_026','G1_027'))
-if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
     assert args[0] not in ['SG_QA_DOOR_OPEN','SF1_QA_DOOR_OPEN'],'Run the closed architectural checks/view first, then the operated-door comparison.'
 native = Path(bpy.data.filepath)
 validate_native(native)
@@ -39,35 +39,39 @@ completed = []
 try:
     sys.argv = saved_argv[:saved_argv.index('--')]+['--',args[0],'surface-check']
     runpy.run_path(str(root/'tools/render_native_checkpoint.py'),run_name='__main__')
-    if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         door_check=evidence/'door_fresh_checks.json'
         assert door_check.is_file() and door_check.stat().st_mtime>=started,'Door main entry point did not execute in this fresh process'
         assert json.loads(door_check.read_text())['process_id']==os.getpid()
-    if version in ['G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         ubs_check=evidence/'ubs_fresh_checks.json'
         assert ubs_check.is_file() and ubs_check.stat().st_mtime>=started
         assert json.loads(ubs_check.read_text())['process_id']==os.getpid()
-    if version in ['G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         nearfront_check=evidence/'nearfront_fresh_checks.json'
         assert nearfront_check.is_file() and nearfront_check.stat().st_mtime>=started
         assert json.loads(nearfront_check.read_text())['process_id']==os.getpid()
-    if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         sf1_check=evidence/'sf1_fresh_checks.json'
         assert sf1_check.is_file() and sf1_check.stat().st_mtime>=started
         assert json.loads(sf1_check.read_text())['process_id']==os.getpid()
-    if version in ['G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         bank_check=evidence/'bank_shelter_fresh_checks.json'
         assert bank_check.is_file() and bank_check.stat().st_mtime>=started
         assert json.loads(bank_check.read_text())['process_id']==os.getpid()
+    if version == 'G1_027r15':
+        upper_check=evidence/'upper_residual_fresh_checks.json'
+        assert upper_check.is_file() and upper_check.stat().st_mtime>=started
+        assert json.loads(upper_check.read_text())['process_id']==os.getpid()
     visible_signature = sorted((ob.name,len(ob.data.vertices),len(ob.data.polygons)) for ob in scene.objects if ob.type=='MESH')
     for index,camera in enumerate(args):
         if index:
             assert scene['version'] == version
             assert sorted((ob.name,len(ob.data.vertices),len(ob.data.polygons)) for ob in scene.objects if ob.type=='MESH') == visible_signature
-            if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+            if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
                 from blender_check_sternen_doors import set_door_fraction
                 set_door_fraction(1. if camera=='SG_QA_DOOR_OPEN' else 0.)
-            if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+            if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
                 control=bpy.data.objects['SF1_DOOR_CENTRE_CONTROL']
                 control['open_fraction']=1. if camera=='SF1_QA_DOOR_OPEN' else 0.
                 control.update_tag();scene.frame_set(scene.frame_current);bpy.context.view_layer.update()
@@ -78,15 +82,15 @@ try:
         verified=verify_png(path,(scene.render.resolution_x*scene.render.resolution_percentage//100,
                                  scene.render.resolution_y*scene.render.resolution_percentage//100))
         completed.append({'camera':camera,'file':str(path.relative_to(root)),**verified,
-                          'stadelhofen_door_open_fraction':float(bpy.data.objects['SF1_DOOR_CENTRE_CONTROL']['open_fraction']) if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14'] else None,
-                          'sternen_door_open_fraction':float(bpy.data.objects['SG_R8_RESTAURANT_DOOR_CONTROL']['open_fraction']) if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14'] else None})
+                          'stadelhofen_door_open_fraction':float(bpy.data.objects['SF1_DOOR_CENTRE_CONTROL']['open_fraction']) if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15'] else None,
+                          'sternen_door_open_fraction':float(bpy.data.objects['SG_R8_RESTAURANT_DOOR_CONTROL']['open_fraction']) if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15'] else None})
         (write_path(evidence/'fresh_view_batch.json')).write_text(json.dumps({'version':version,'native':str(native),'camera_sequence':args,'completed':completed,'full_geometry_checks_before_first_render':True,'same_scene_without_construction_edits':True,'native_saved':False,'visual_acceptance':False},indent=2),encoding='utf-8')
         print('NATIVE_VIEW_COMPLETE',camera,flush=True)
 finally:
-    if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         from blender_check_sternen_doors import set_door_fraction
         set_door_fraction(0.)
-    if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         control=bpy.data.objects['SF1_DOOR_CENTRE_CONTROL'];control['open_fraction']=0.
         control.update_tag();scene.frame_set(scene.frame_current);bpy.context.view_layer.update()
     sys.argv = saved_argv

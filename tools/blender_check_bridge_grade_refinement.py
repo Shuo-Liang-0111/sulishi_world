@@ -12,7 +12,7 @@ from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
 R=WORKSPACE;D=R/'derived/bellevue/bridge_grade'
-s=bpy.context.scene;assert s['version'] in ['G1_027r1','G1_027r2','G1_027r3','G1_027r4','G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']
+s=bpy.context.scene;assert s['version'] in ['G1_027r1','G1_027r2','G1_027r3','G1_027r4','G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']
 prospective=s['version']=='G1_027r1'
 meta=json.loads((read_path(D/'027r2_refined_objects.json')).read_text());report=json.loads((read_path(D/'027r2_refinement.json')).read_text())
 for name,digest in report['inputs'].items():assert hashlib.sha256((read_path(D/name)).read_bytes()).hexdigest()==digest,name

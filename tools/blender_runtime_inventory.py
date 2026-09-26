@@ -87,10 +87,12 @@ def build_inventory():
         material_rows.append(dict(name=name,node_types=node_types,images=images,
             nontrivial_export_nodes=complex_nodes,requires_material_equivalence_review=bool(complex_nodes)))
     cameras = []
-    for ob in bpy.data.collections['90_REVIEW_CAMERAS'].all_objects:
+    # SF1's six review cameras belong to its isolated increment collection;
+    # enumerating only the historic review collection silently dropped them.
+    for ob in scene.objects:
         if ob.type!='CAMERA':continue
         assert ob.parent is None and not ob.constraints
-        cameras.append(dict(name=ob.name,matrix_basis=[list(row) for row in ob.matrix_basis],
+        cameras.append(dict(name=ob.name,collections=sorted(c.name for c in ob.users_collection),matrix_basis=[list(row) for row in ob.matrix_basis],
             camera_type=ob.data.type,lens_mm=ob.data.lens,sensor_width=ob.data.sensor_width,
             sensor_height=ob.data.sensor_height,sensor_fit=ob.data.sensor_fit,
             shift_x=ob.data.shift_x,shift_y=ob.data.shift_y,

@@ -13,8 +13,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from workspace_paths import read_path, write_path
 
 s = bpy.context.scene
-assert s['version'] == 'G1_027r14'
-cp = json.loads(read_path('evidence/G1_027r14/checkpoint.json').read_text())
+assert s['version'] in ['G1_027r14','G1_027r15']
+version = s['version']
+cp = json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text())
 with Path(bpy.data.filepath).open('rb') as stream:
     assert hashlib.file_digest(stream, 'sha256').hexdigest() == cp['native_sha256']
 source = json.loads(read_path('derived/bellevue/bank_tram_shelter/build_input.json').read_text())
@@ -87,5 +88,5 @@ report = dict(version=s['version'], native_sha256=cp['native_sha256'], process_i
               actual_curved_skins=rows, actual_light_seating=seatings,
               column_seating='Separately checked using actual 192 head points by bank shelter checks in this process.',
               visual_acceptance=False, natural_use_verified=False)
-write_path('evidence/G1_027r14/curvature_fresh_checks.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+write_path(f'evidence/{version}/curvature_fresh_checks.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
 print('BANK_CURVATURE_CHECKED', json.dumps(dict(skins=len(rows), attachment_points=sum(r['actual_points'] for r in seatings))), flush=True)

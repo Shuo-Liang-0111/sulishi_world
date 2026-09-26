@@ -8,7 +8,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from workspace_paths import read_path,write_path
 from blender_photo_clip import subtract_box,area
 
-s=bpy.context.scene;assert s['version'] in ['G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']
+s=bpy.context.scene;assert s['version'] in ['G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']
 version=s['version'];native=Path(bpy.data.filepath)
 with native.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
 cp=json.loads(read_path(f'evidence/{version}/checkpoint.json').read_text())
@@ -45,10 +45,10 @@ current_cameras={o.name:{'matrix':[list(row) for row in o.matrix_world],
                  for o in s.objects if o.type=='CAMERA'}
 assert all(current_cameras.get(name)==state for name,state in r['before_cameras'].items())
 added=set(current_cameras)-set(r['before_cameras'])
-if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14']:
+if version in ['G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
     merge=json.loads(read_path(f'evidence/{version}/sf1_merge_report.json').read_text())
     expected_added=set(merge['review_cameras'])
-    if version in ['G1_027r12','G1_027r13','G1_027r14']:
+    if version in ['G1_027r12','G1_027r13','G1_027r14','G1_027r15']:
         bank=json.loads(read_path(f'evidence/{version}/bank_shelter_build_report.json').read_text())
         expected_added.update(row['name'] for row in bank['review_cameras'])
     assert added==expected_added

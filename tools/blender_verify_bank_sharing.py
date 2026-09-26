@@ -14,7 +14,7 @@ sys.path.insert(0, str(R/'tools'))
 from blender_geometry_fingerprint import mesh_digest
 
 s = bpy.context.scene
-assert s['version'] in ['G1_026','G1_027','G1_027r1','G1_027r2','G1_027r3','G1_027r4','G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14']
+assert s['version'] in ['G1_026','G1_027','G1_027r1','G1_027r2','G1_027r3','G1_027r4','G1_027r5','G1_027r6','G1_027r7','G1_027r8','G1_027r9','G1_027r10','G1_027r11','G1_027r12','G1_027r13','G1_027r14','G1_027r15']
 E = R/'evidence'/s['version']
 record = json.loads((read_path(E/'checkpoint.json')).read_text())
 native = Path(bpy.data.filepath).resolve()

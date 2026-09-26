@@ -20,7 +20,9 @@ before = native.stat()
 digest = hashlib.sha256(native.read_bytes()).hexdigest()
 cp = json.loads(read_path('evidence/G1_027r14/checkpoint.json').read_text())
 assert digest == cp['native_sha256']
-target = write_path('derived/ubs_theaterstrasse20/r14_upper_residual_probe.json')
+include_eave = '--include-eave' in sys.argv
+target = write_path('derived/ubs_theaterstrasse20/r14_upper_residual_probe_with_eave.json' if include_eave
+                    else 'derived/ubs_theaterstrasse20/r14_upper_residual_probe.json')
 assert not target.exists()
 spec = json.loads(read_path('derived/ubs_theaterstrasse20/build_input.json').read_text())
 ring = np.asarray(spec['footprint_local'])
@@ -68,7 +70,7 @@ for x, y in selections:
 hits = {r['object'] for r in rays if r.get('object', '').startswith('CTX_')}
 geometry = []
 for ob in photo:
-    if ob.name not in hits:
+    if ob.name not in hits and not include_eave:
         continue
     me = ob.data
     assert all(len(p.vertices) == 3 for p in me.polygons) and not ob.modifiers
@@ -82,6 +84,21 @@ out = dict(version=s['version'], native_sha256=digest, process_id=os.getpid(),
            diagnosed_current_photo_geometry=geometry, candidates_considered=len(photo),
            native_changed=False, replacement_decided=False,
            limit='Pixel evidence only; each fragment still needs association with a real rebuilt envelope before any replacement.')
+if include_eave:
+    supports = []
+    for ob in s.objects:
+        if ob.type != 'MESH' or not (ob.name.startswith('UF_OFFICIAL_ENVELOPE_') or
+                                    ob.name in ['UF_FRONT_EAVE_SOFFIT', 'UF_LANE_EAVE_SOFFIT']):
+            continue
+        ev = ob.evaluated_get(deps)
+        me = ev.to_mesh()
+        me.calc_loop_triangles()
+        supports.append(dict(object=ob.name, source_mesh_digest=mesh_digest(ob.data),
+                             evaluated_vertices_world=[list(ev.matrix_world @ v.co) for v in me.vertices],
+                             evaluated_triangles=[list(t.vertices) for t in me.loop_triangles]))
+        ev.to_mesh_clear()
+    assert len(supports) >= 3
+    out['actual_rebuilt_upper_surfaces'] = supports
 target.write_text(json.dumps(out, indent=2), encoding='utf-8')
 assert native.stat().st_size == before.st_size and native.stat().st_mtime_ns == before.st_mtime_ns
 print('UBS_UPPER_RESIDUAL_PROBE', json.dumps(dict(photo_hits=sorted(hits), rays=len(rays))), flush=True)

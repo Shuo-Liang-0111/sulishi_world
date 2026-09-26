@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZurichWorld · 树叶表示核验</title>
+<style>body{margin:0;background:#152128;color:#eef0ee;font:14px system-ui}main{display:grid;grid-template-columns:1fr 330px;height:100vh}canvas{display:block;width:100%;height:100%}aside{padding:22px;overflow:auto}button{padding:10px;margin:6px 4px 6px 0}p{line-height:1.6}pre{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;color:#bce0cd}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body><main><canvas id="canvas"></canvas><aside><h2>树叶表示核验</h2><p>同一棵树的原始叶片与紧凑表示。仅检查形状、颜色和法线；完整材质、整场景游览尚未验收。</p><button id="reference" disabled>原始叶片</button><button id="instanced" disabled>紧凑表示</button><button id="compare" disabled>运行四角度对比</button><button id="close-view" disabled>近景</button><button id="save-report" disabled>保存报告</button><button id="save-frame" disabled>保存当前画面</button><p id="status">加载中</p><pre id="metrics"></pre></aside></main><script type="module" src="./leaf-diagnostic.js"></script></body></html>
